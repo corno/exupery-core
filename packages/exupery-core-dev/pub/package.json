@@ -1,0 +1,29 @@
+{
+  "name": "exupery-core-dev",
+  "version": "0.10.2",
+  "license": "ISC",
+  "description": "a exupery package that contains functions that are useful during development",
+  "author": "Corno",
+  "keywords": [
+    "exupery",
+    "development",
+    "log_debug_message",
+    "implement_me"
+  ],
+  "homepage": "https://github.com/corno/exupery-core#readme",
+  "bugs": {
+    "url": "https://github.com/corno/exupery-core/issues"
+  },
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "exupery-core-internals": "^0.23.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corno/exupery-core-dev.git"
+  }
+}

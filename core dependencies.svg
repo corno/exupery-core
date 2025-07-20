@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="636pt" height="188pt" viewBox="0.00 0.00 636.17 188.00">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
+<title>G</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-184 632.17,-184 632.17,4 -4,4"/>
+<!-- exupery&#45;core&#45;types -->
+<g id="node1" class="node">
+<title>exupery-core-types</title>
+<ellipse fill="none" stroke="black" cx="310.01" cy="-18" rx="78.6" ry="18"/>
+<text text-anchor="middle" x="310.01" y="-13.8" font-family="Times,serif" font-size="14.00">exupery-core-types</text>
+</g>
+<!-- exupery&#45;core&#45;internals -->
+<g id="node2" class="node">
+<title>exupery-core-internals</title>
+<ellipse fill="none" stroke="black" cx="310.01" cy="-90" rx="91.47" ry="18"/>
+<text text-anchor="middle" x="310.01" y="-85.8" font-family="Times,serif" font-size="14.00">exupery-core-internals</text>
+</g>
+<!-- exupery&#45;core&#45;internals&#45;&gt;exupery&#45;core&#45;types -->
+<g id="edge1" class="edge">
+<title>exupery-core-internals-&gt;exupery-core-types</title>
+<path fill="none" stroke="black" d="M310.01,-71.7C310.01,-64.41 310.01,-55.73 310.01,-47.54"/>
+<polygon fill="black" stroke="black" points="313.51,-47.62 310.01,-37.62 306.51,-47.62 313.51,-47.62"/>
+</g>
+<!-- exupery&#45;core&#45;alg -->
+<g id="node3" class="node">
+<title>exupery-core-alg</title>
+<ellipse fill="none" stroke="black" cx="70.01" cy="-162" rx="70.01" ry="18"/>
+<text text-anchor="middle" x="70.01" y="-157.8" font-family="Times,serif" font-size="14.00">exupery-core-alg</text>
+</g>
+<!-- exupery&#45;core&#45;alg&#45;&gt;exupery&#45;core&#45;internals -->
+<g id="edge2" class="edge">
+<title>exupery-core-alg-&gt;exupery-core-internals</title>
+<path fill="none" stroke="black" d="M115.15,-147.83C153.17,-136.75 207.88,-120.79 249.65,-108.6"/>
+<polygon fill="black" stroke="black" points="250.45,-112.02 259.07,-105.86 248.49,-105.3 250.45,-112.02"/>
+</g>
+<!-- exupery&#45;core&#45;bin -->
+<g id="node4" class="node">
+<title>exupery-core-bin</title>
+<ellipse fill="none" stroke="black" cx="229.01" cy="-162" rx="70.55" ry="18"/>
+<text text-anchor="middle" x="229.01" y="-157.8" font-family="Times,serif" font-size="14.00">exupery-core-bin</text>
+</g>
+<!-- exupery&#45;core&#45;bin&#45;&gt;exupery&#45;core&#45;internals -->
+<g id="edge3" class="edge">
+<title>exupery-core-bin-&gt;exupery-core-internals</title>
+<path fill="none" stroke="black" d="M248.21,-144.41C258.25,-135.73 270.73,-124.95 281.84,-115.34"/>
+<polygon fill="black" stroke="black" points="283.97,-118.13 289.24,-108.95 279.39,-112.84 283.97,-118.13"/>
+</g>
+<!-- exupery&#45;core&#45;data -->
+<g id="node5" class="node">
+<title>exupery-core-data</title>
+<ellipse fill="none" stroke="black" cx="392.01" cy="-162" rx="74.3" ry="18"/>
+<text text-anchor="middle" x="392.01" y="-157.8" font-family="Times,serif" font-size="14.00">exupery-core-data</text>
+</g>
+<!-- exupery&#45;core&#45;data&#45;&gt;exupery&#45;core&#45;internals -->
+<g id="edge4" class="edge">
+<title>exupery-core-data-&gt;exupery-core-internals</title>
+<path fill="none" stroke="black" d="M372.58,-144.41C362.41,-135.73 349.78,-124.95 338.53,-115.34"/>
+<polygon fill="black" stroke="black" points="340.9,-112.77 331.02,-108.94 336.36,-118.09 340.9,-112.77"/>
+</g>
+<!-- exupery&#45;core&#45;dev -->
+<g id="node6" class="node">
+<title>exupery-core-dev</title>
+<ellipse fill="none" stroke="black" cx="556.01" cy="-162" rx="72.16" ry="18"/>
+<text text-anchor="middle" x="556.01" y="-157.8" font-family="Times,serif" font-size="14.00">exupery-core-dev</text>
+</g>
+<!-- exupery&#45;core&#45;dev&#45;&gt;exupery&#45;core&#45;internals -->
+<g id="edge5" class="edge">
+<title>exupery-core-dev-&gt;exupery-core-internals</title>
+<path fill="none" stroke="black" d="M509.74,-147.83C470.56,-136.69 414.09,-120.62 371.18,-108.41"/>
+<polygon fill="black" stroke="black" points="372.34,-105.1 361.76,-105.73 370.42,-111.83 372.34,-105.1"/>
+</g>
+</g>
+</svg>

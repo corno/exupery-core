@@ -1,0 +1,10 @@
+digraph G {
+    "exupery-core-types"
+
+    "exupery-core-internals" -> "exupery-core-types"
+
+    "exupery-core-alg" -> "exupery-core-internals"
+    "exupery-core-bin" -> "exupery-core-internals"
+    "exupery-core-data" -> "exupery-core-internals"
+    "exupery-core-dev" -> "exupery-core-internals"
+}

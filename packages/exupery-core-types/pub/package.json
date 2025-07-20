@@ -1,0 +1,29 @@
+{
+  "name": "exupery-core-types",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "author": "Corno",
+  "description": "core types for Exupery",
+  "keywords": [
+    "exupery",
+    "type system",
+    "Dictionary",
+    "Array",
+    "Async_Value",
+    "Optional_Value",
+    "Nested",
+    "Computed_Value"
+  ],
+  "homepage": "https://github.com/corno/exupery-core#readme",
+  "bugs": {
+    "url": "https://github.com/corno/exupery-core/issues"
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corno/exupery-core.git"
+  }
+}

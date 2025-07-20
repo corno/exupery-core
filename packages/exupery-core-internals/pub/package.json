@@ -1,0 +1,32 @@
+{
+  "name": "exupery-core-internals",
+  "version": "0.23.2",
+  "license": "ISC",
+  "description": "",
+  "author": "Corno",
+  "keywords": [
+    "exupery",
+    "internals",
+    "wrapRawDictionary",
+    "wrapRawArray"
+  ],
+  "homepage": "https://github.com/corno/exupery-core#readme",
+  "bugs": {
+    "url": "https://github.com/corno/exupery-core/issues"
+  },
+  "dependencies": {
+    "exupery-core-types": "^0.17.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.3"
+  },
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corno/exupery-core-internals.git"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "exupery-core-bin",
+  "version": "0.2.0",
+  "license": "ISC",
+  "description": "this is one of the core packages for Exupery. it provides functionality to create executables",
+  "author": "Corno",
+  "keywords": [
+    "exupery",
+    "exe",
+    "executable",
+    "bin"
+  ],
+  "homepage": "https://github.com/corno/exupery-core#readme",
+  "bugs": {
+    "url": "https://github.com/corno/exupery-core/issues"
+  },
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "exupery-core-internals": "^0.23.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corno/exupery-core.git"
+  }
+}
