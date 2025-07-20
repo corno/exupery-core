@@ -130,7 +130,23 @@ export const temp_resources = {
         },
     },
     'process': {
+        'get instream data': (
+            cb: (data: string) => void,
+        ): void => {
+            const stdin = process.stdin;
+            let data = '';
+            stdin.setEncoding('utf8');
 
+            stdin.on('data', (chunk: string) => {
+                data += chunk;
+            });
+
+            stdin.on('end', () => {
+                cb(data);
+            });
+
+            stdin.resume();
+        },
         'spawn sync': (program: string, args: string[], options: { cwd?: string }): {
             pid: number;
             output: _et.Array<string>;
