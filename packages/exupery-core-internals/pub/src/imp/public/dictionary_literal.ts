@@ -17,12 +17,12 @@ class Dictionary<T> implements pt.Dictionary<T> {
         this.source = source
     }
     public map<NT>(
-        $v: (entry: T) => NT
+        $v: (entry: T, key: string) => NT
     ) {
         return new Dictionary<NT>(this.source.map(($) => {
             return {
                 key: $.key,
-                value: $v($.value)
+                value: $v($.value, $.key)
             }
         }))
     }
@@ -75,7 +75,7 @@ class Dictionary<T> implements pt.Dictionary<T> {
         }))
     }
 
-    __to_array(
+    to_array(
         compare: pt.Compare_Function<T>,
     ): pt.Array<pt.Key_Value_Pair<T>> {
         const sorted_keys = this.source.slice().sort(compare)
