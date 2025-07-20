@@ -14,5 +14,6 @@ export {
     array_literal,
     dictionary_literal,
     block,
+    Error
 } from "exupery-core-internals"
 
