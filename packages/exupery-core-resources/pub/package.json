@@ -1,0 +1,30 @@
+{
+  "name": "exupery-core-resources",
+  "version": "0.1.4",
+  "license": "ISC",
+  "description": "the exupery core package for using resources (filesystem, console, network, etc.)",
+  "author": "Corno",
+  "keywords": [
+    "exupery",
+    "resource management"
+  ],
+  "homepage": "https://github.com/corno/exupery-core#readme",
+  "bugs": {
+    "url": "https://github.com/corno/exupery-core/issues"
+  },
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "exupery-core-internals": "^0.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corno/exupery-core.git"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.15"
+  }
+}
