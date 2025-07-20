@@ -1,9 +1,9 @@
 import { get_location_info, location_to_string } from "./get_location_info"
 
 
-export function panic_for_internal_functions(depth: number, message: string): never {
+export function panic_for_internal_functions(depth: number, ...message: string[]): never {
     const location = get_location_info(depth + 1)
-    console.error(`PANIC: ${message} @ ${location_to_string(location)}`)
+    console.error(`PANIC: ${message.join(" ")} @ ${location_to_string(location)}`)
     const e = new Error()
     console.error(e.stack)
     process.exit(1)
@@ -17,6 +17,6 @@ export function panic_for_internal_functions(depth: number, message: string): ne
  * 
  * @param message message to be printed on stderr
  */
-export function panic(message: string): never {
-    panic_for_internal_functions(1, message)
+export function panic(...message: string[]): never {
+    panic_for_internal_functions(1, ...message)
 }
