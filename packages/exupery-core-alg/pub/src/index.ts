@@ -17,3 +17,5 @@ export {
     Error
 } from "exupery-core-internals"
 
+export { $ as impure } from './impure'
+export { $$ as pure } from './pure'
