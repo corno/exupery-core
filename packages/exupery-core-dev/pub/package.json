@@ -1,6 +1,6 @@
 {
   "name": "exupery-core-dev",
-  "version": "0.10.2",
+  "version": "0.0.2",
   "license": "ISC",
   "description": "a exupery package that contains functions that are useful during development",
   "author": "Corno",
@@ -19,11 +19,11 @@
   "files": [
     "dist"
   ],
-  "dependencies": {
-    "exupery-core-internals": "^0.23.2"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/corno/exupery-core-dev.git"
+    "url": "git+https://github.com/corno/exupery-core.git"
+  },
+  "dependencies": {
+    "exupery-core-internals": "^0.1.2"
   }
 }
