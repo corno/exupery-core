@@ -1,6 +1,6 @@
 {
   "name": "exupery-core-data",
-  "version": "0.8.1",
+  "version": "0.0.1",
   "license": "ISC",
   "description": "the Exupery package used for building datasets",
   "author": "Corno",
@@ -9,23 +9,23 @@
     "dataset",
     "data"
   ],
-  "homepage": "https://github.com/corno/exupery-core-data#readme",
+  "homepage": "https://github.com/corno/exupery-core#readme",
   "bugs": {
-    "url": "https://github.com/corno/exupery-core-data/issues"
+    "url": "https://github.com/corno/exupery-core/issues"
   },
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "dependencies": {
-    "exupery-core-internals": "^0.23.2"
-  },
   "devDependencies": {
     "@types/node": "^18.15.3"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/corno/exupery-core-data.git"
+    "url": "git+https://github.com/corno/exupery-core.git"
+  },
+  "dependencies": {
+    "exupery-core-internals": "^0.1.2"
   }
 }

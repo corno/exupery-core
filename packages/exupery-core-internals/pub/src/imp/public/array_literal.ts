@@ -1,7 +1,6 @@
 import * as pt from "exupery-core-types"
 import { create_async_registry } from "../private/create_async_registry"
 import { cast_to_async_value_imp } from "./cast_to_async_value_imp"
-import { Execute } from "../types/Execute"
 import { not_set } from "./not_set"
 import { set } from "./set"
 
