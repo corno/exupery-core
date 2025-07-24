@@ -29,8 +29,5 @@ export const wrap_list = <T>($: T[]): List<T> => {
 }
 
 export const wrap_state_group = <T>($: T) => {
-    return {
-        'location': _ei.get_location_info(2),
-        'state group': $,
-    }
+    return $
 }
