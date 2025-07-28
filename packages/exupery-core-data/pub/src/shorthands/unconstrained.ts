@@ -3,6 +3,7 @@ import * as _et from 'exupery-core-types'
 import * as pt from 'exupery-core-types'
 
 export type Raw_Or_Normal_Dictionary<T> = { [key: string]: T } | pt.Dictionary<T>
+export type Raw_Or_Normal_Array<T> = T[] | pt.Array<T>
 export type Raw_Dictionary<T> = { [key: string]: T }
 
 export const to_raw_array = <T>($: pt.Array<T>): readonly T[] => $.__get_raw_copy()
@@ -24,8 +25,14 @@ export const wrap_dictionary = <T>($: Raw_Or_Normal_Dictionary<T>): Dictionary<T
     }
 }
 
-export const wrap_list = <T>($: T[]): List<T> => {
-    return _ei.array_literal($)
+export const wrap_list = <T>($: Raw_Or_Normal_Array<T>): List<T> => {
+    if ($ instanceof Array) {
+        return _ei.array_literal($)
+    }
+    if (!($.__for_each instanceof Function)) {
+        throw new Error("invalid input in 'wrap_list'")
+    }
+    return $
 }
 
 export const wrap_state_group = <T>($: T) => {

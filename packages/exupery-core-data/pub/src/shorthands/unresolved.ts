@@ -3,6 +3,7 @@ import * as _et from 'exupery-core-types'
 import * as pt from 'exupery-core-types'
 
 export type Raw_Or_Normal_Dictionary<T> = { [key: string]: T } | pt.Dictionary<T>
+export type Raw_Or_Normal_Array<T> = T[] | pt.Array<T>
 export type Raw_Dictionary<T> = { [key: string]: T }
 
 export type Reference_To_Normal_Dictionary_Entry<G_Source, T_Dictionary_Entry> = {
@@ -60,11 +61,18 @@ export const wrap_dictionary = <T>($: Raw_Or_Normal_Dictionary<T>): Dictionary<_
     }
 }
 
-export const wrap_list = <T>($: T[]): List<_ei.Source_Location, T> => {
+export const wrap_list = <T>($: Raw_Or_Normal_Array<T>): List<_ei.Source_Location, T> => {
     const location = _ei.get_location_info(2)
+    const decorated: _et.Array<T> = $ instanceof Array
+        ? _ei.array_literal($)
+        : $
+
+    if (!(decorated.__for_each instanceof Function)) {
+        throw new Error("invalid input in 'wrap_list'")
+    }
     return {
         'location': location,
-        'list': _ei.array_literal($).map(($) => ({
+        'list': decorated.map(($) => ({
             'location': location,
             'element': $,
         }))
