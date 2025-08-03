@@ -38,7 +38,7 @@ export type List<G_Source, T_L> = {
 
 
 export const wrap_dictionary = <T>($: Raw_Or_Normal_Dictionary<T>): Dictionary<_ei.Source_Location, T> => {
-    const location = _ei.get_location_info(2)
+    const location = _ei.get_location_info(1)
     function is_normal($: Raw_Or_Normal_Dictionary<T>): $ is pt.Dictionary<T> {
         return $.to_array !== undefined && typeof $.to_array === "function"
     }
@@ -62,7 +62,7 @@ export const wrap_dictionary = <T>($: Raw_Or_Normal_Dictionary<T>): Dictionary<_
 }
 
 export const wrap_list = <T>($: Raw_Or_Normal_Array<T>): List<_ei.Source_Location, T> => {
-    const location = _ei.get_location_info(2)
+    const location = _ei.get_location_info(1)
     const decorated: _et.Array<T> = $ instanceof Array
         ? _ei.array_literal($)
         : $
@@ -81,21 +81,21 @@ export const wrap_list = <T>($: Raw_Or_Normal_Array<T>): List<_ei.Source_Locatio
 
 export const wrap_state_group = <T>($: T) => {
     return {
-        'location': _ei.get_location_info(2),
+        'location': _ei.get_location_info(1),
         'state group': $,
     }
 }
 
 export const wrap_reference = <T>($: string): Reference_To_Normal_Dictionary_Entry<_ei.Source_Location, T> => {
     return {
-        'location': _ei.get_location_info(2),
+        'location': _ei.get_location_info(1),
         'key': $,
     }
 }
 
 export const wrap_stack_reference = <T>(up_steps: number, name: string): Reference_To_Stacked_Dictionary_Entry<_ei.Source_Location, T> => {
     return {
-        'location': _ei.get_location_info(2),
+        'location': _ei.get_location_info(1),
         'up steps': up_steps,
         'key': name,
     }
