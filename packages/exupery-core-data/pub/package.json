@@ -1,6 +1,6 @@
 {
   "name": "exupery-core-data",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "ISC",
   "description": "the Exupery package used for building datasets",
   "author": "Corno",
