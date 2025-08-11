@@ -14,7 +14,6 @@ export type Reference_To_Normal_Dictionary_Entry<G_Source, T_Dictionary_Entry> =
 export type Reference_To_Stacked_Dictionary_Entry<G_Source, T_Dictionary_Entry> = {
     readonly 'key': string
     readonly 'location': G_Source
-    readonly 'up steps': number
 }
 
 export const to_raw_array = <T>($: pt.Array<T>): readonly T[] => $.__get_raw_copy()
@@ -93,10 +92,9 @@ export const wrap_reference = <T>($: string): Reference_To_Normal_Dictionary_Ent
     }
 }
 
-export const wrap_stack_reference = <T>(up_steps: number, name: string): Reference_To_Stacked_Dictionary_Entry<_ei.Source_Location, T> => {
+export const wrap_stack_reference = <T>(name: string): Reference_To_Stacked_Dictionary_Entry<_ei.Source_Location, T> => {
     return {
         'location': _ei.get_location_info(1),
-        'up steps': up_steps,
         'key': name,
     }
 }
