@@ -36,8 +36,11 @@ export type List<G_Source, T_L> = {
 }
 
 
-export const wrap_dictionary = <T>($: Raw_Or_Normal_Dictionary<T>): Dictionary<_ei.Source_Location, T> => {
-    const location = _ei.get_location_info(1)
+export const wrap_dictionary = <T>(
+    $: Raw_Or_Normal_Dictionary<T>,
+    depth: number
+): Dictionary<_ei.Source_Location, T> => {
+    const location = _ei.get_location_info(depth)
     function is_normal($: Raw_Or_Normal_Dictionary<T>): $ is pt.Dictionary<T> {
         return $.to_array !== undefined && typeof $.to_array === "function"
     }
@@ -60,8 +63,11 @@ export const wrap_dictionary = <T>($: Raw_Or_Normal_Dictionary<T>): Dictionary<_
     }
 }
 
-export const wrap_list = <T>($: Raw_Or_Normal_Array<T>): List<_ei.Source_Location, T> => {
-    const location = _ei.get_location_info(1)
+export const wrap_list = <T>(
+    $: Raw_Or_Normal_Array<T>,
+    depth: number
+): List<_ei.Source_Location, T> => {
+    const location = _ei.get_location_info(depth)
     const decorated: _et.Array<T> = $ instanceof Array
         ? _ei.array_literal($)
         : $
@@ -78,23 +84,32 @@ export const wrap_list = <T>($: Raw_Or_Normal_Array<T>): List<_ei.Source_Locatio
     }
 }
 
-export const wrap_state_group = <T>($: T) => {
+export const wrap_state_group = <T>(
+    $: T,
+    depth: number
+) => {
     return {
-        'location': _ei.get_location_info(1),
+        'location': _ei.get_location_info(depth),
         'state group': $,
     }
 }
 
-export const wrap_reference = <T>($: string): Reference_To_Normal_Dictionary_Entry<_ei.Source_Location, T> => {
+export const wrap_reference = <T>(
+    $: string,
+    depth: number
+): Reference_To_Normal_Dictionary_Entry<_ei.Source_Location, T> => {
     return {
-        'location': _ei.get_location_info(1),
+        'location': _ei.get_location_info(depth),
         'key': $,
     }
 }
 
-export const wrap_stack_reference = <T>(name: string): Reference_To_Stacked_Dictionary_Entry<_ei.Source_Location, T> => {
+export const wrap_stack_reference = <T>(
+    name: string,
+    depth: number
+): Reference_To_Stacked_Dictionary_Entry<_ei.Source_Location, T> => {
     return {
-        'location': _ei.get_location_info(1),
+        'location': _ei.get_location_info(depth),
         'key': name,
     }
 }
