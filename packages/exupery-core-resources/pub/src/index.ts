@@ -13,6 +13,17 @@ export type Read_Directory_Result =
         | ['node is not a directory', null]
     ]
 
+export type Read_File_Result =
+    | ['success', string]
+    | ['error',
+        | ['file does not exist', null]
+        | ['node is not a file', null]
+        | ['permission denied', null]
+        | ['file too large', null]
+        | ['device not ready', null]
+        | ['unknown error', string]
+    ]
+
 export type Node_Type = 
 | ['file', null]
 | ['directory', null]
@@ -35,8 +46,35 @@ export const temp_resources = {
         'read file sync': (
             path: string,
             escape_spaces_in_path: boolean,
-        ): string => {
-            return fs.readFileSync(possibly_escape_filename(path, escape_spaces_in_path), 'utf-8')
+        ): Read_File_Result => {
+            try {
+                const data = fs.readFileSync(possibly_escape_filename(path, escape_spaces_in_path), 'utf-8')
+                return ['success', data]
+            } catch (error) {
+                const err = error as any
+                
+                if (err.code === 'ENOENT') {
+                    return ['error', ['file does not exist', null]]
+                }
+                
+                if (err.code === 'EACCES' || err.code === 'EPERM') {
+                    return ['error', ['permission denied', null]]
+                }
+                
+                if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
+                    return ['error', ['node is not a file', null]]
+                }
+                
+                if (err.code === 'EFBIG') {
+                    return ['error', ['file too large', null]]
+                }
+                
+                if (err.code === 'EIO' || err.code === 'ENXIO') {
+                    return ['error', ['device not ready', null]]
+                }
+                
+                return ['error', ['unknown error', err.message || 'Unknown filesystem error']]
+            }
         },
         'read dir sync': (
             path: string,
