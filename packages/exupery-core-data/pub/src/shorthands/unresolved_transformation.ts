@@ -2,6 +2,8 @@ import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 import * as pt from 'exupery-core-types'
 
+const depth = 0
+
 export type Raw_Or_Normal_Dictionary<T> = { [key: string]: T } | pt.Dictionary<T>
 export type Raw_Or_Normal_Array<T> = T[] | pt.Array<T>
 export type Raw_Dictionary<T> = { [key: string]: T }
@@ -37,7 +39,6 @@ export type List<G_Source, T_L> = {
 
 
 export const wrap_dictionary = <T>(
-    depth: number,
     $: Raw_Or_Normal_Dictionary<T>,
 ): Dictionary<_ei.Source_Location, T> => {
     const location = _ei.get_location_info(depth + 1)
@@ -64,7 +65,6 @@ export const wrap_dictionary = <T>(
 }
 
 export const wrap_list = <T>(
-    depth: number,
     $: Raw_Or_Normal_Array<T>,
 ): List<_ei.Source_Location, T> => {
     const location = _ei.get_location_info(depth + 1)
@@ -85,7 +85,6 @@ export const wrap_list = <T>(
 }
 
 export const wrap_state_group = <T>(
-    depth: number,
     $: T,
 ) => {
     return {
@@ -95,7 +94,6 @@ export const wrap_state_group = <T>(
 }
 
 export const wrap_reference = <T>(
-    depth: number,
     $: string,
 ): Reference_To_Normal_Dictionary_Entry<_ei.Source_Location, T> => {
     return {
@@ -105,7 +103,6 @@ export const wrap_reference = <T>(
 }
 
 export const wrap_stack_reference = <T>(
-    depth: number,
     name: string,
 ): Reference_To_Stacked_Dictionary_Entry<_ei.Source_Location, T> => {
     return {
