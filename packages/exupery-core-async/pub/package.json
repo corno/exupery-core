@@ -1,0 +1,23 @@
+{
+  "name": "exupery-core-async",
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "author": "Corno",
+  "description": "async types for Exupery",
+  "keywords": [
+    "exupery",
+    "type system"
+  ],
+  "homepage": "https://github.com/corno/exupery-core#readme",
+  "bugs": {
+    "url": "https://github.com/corno/exupery-core/issues"
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corno/exupery-core.git"
+  }
+}

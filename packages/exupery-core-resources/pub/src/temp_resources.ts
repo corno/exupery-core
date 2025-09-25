@@ -241,7 +241,10 @@ export const temp_resources = {
                 }
             })
         },
-        'stat': (path: string, escape_spaces_in_path: boolean): Results.Stat => {
+        'stat': (
+            path: string,
+            escape_spaces_in_path: boolean
+        ): Results.Stat => {
             return _ei.create_Unsafe_Async_Value({
                 'execute': (on_value, on_exception) => {
                     fs.stat(possibly_escape_filename(path, escape_spaces_in_path), (err, stats) => {
@@ -303,9 +306,9 @@ export const temp_resources = {
             })
         },
 
-        'make directory': (
+        'make directory': <T>(
             path: string,
-            escape_spaces_in_path: boolean
+            escape_spaces_in_path: boolean,
         ): Results.Make_Directory => {
 
             return _ei.create_Unsafe_Async_Value({
