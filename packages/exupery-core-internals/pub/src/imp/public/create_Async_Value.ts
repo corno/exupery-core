@@ -16,19 +16,40 @@ class Async_Value_Class<T> implements pt.Async_Value<T> {
     constructor(executer: Executer<T>) {
         this.executer = executer
     }
-    map<NT>(handle_value: ($: T) => Async_Value<NT>): pt.Async_Value<NT> {
+    map<NT>(
+        handle_value: ($: T) => NT
+    ): pt.Async_Value<NT> {
         return create_Async_Value(
             {
                 'execute': (on_value) => {
-                    this.executer.execute((value) => {
-                        handle_value(value).__start(on_value)
-                    })
+                    this.executer.execute(
+                        (value) => {
+                            on_value(handle_value(value))
+                        }
+                    )
+                }
+            }
+        )
+    }
+    then<NT>(
+        handle_value: ($: T) => Async_Value<NT>
+    ): pt.Async_Value<NT> {
+        return create_Async_Value(
+            {
+                'execute': (on_value) => {
+                    this.executer.execute(
+                        (value) => {
+                            handle_value(value).__start(on_value)
+                        }
+                    )
                 }
             }
         )
     }
 
-    __start(on_value: ($: T) => void) {
+    __start(
+        on_value: ($: T) => void
+    ) {
         this.executer.execute(on_value)
     }
 }

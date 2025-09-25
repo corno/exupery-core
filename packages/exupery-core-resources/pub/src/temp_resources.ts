@@ -113,10 +113,10 @@ export const temp_resources = {
             escape_spaces_in_path: boolean,
         ): Results.Read_File => {
             return xx.create_Async_Value_Or_Exception({
-                'execute': (on_value, on_error) => {
+                'execute': (on_value, on_exception) => {
                     fs.readFile(possibly_escape_filename(path, escape_spaces_in_path), { 'encoding': 'utf-8' }, (err, data) => {
                         if (err) {
-                            on_error(_ei.block(() => {
+                            on_exception(_ei.block(() => {
                                 if (err.code === 'ENOENT') {
                                     return ['file does not exist', null]
                                 }
@@ -146,13 +146,13 @@ export const temp_resources = {
             escape_spaces_in_path: boolean,
         ): Results.Read_Directory => {
             return xx.create_Async_Value_Or_Exception({
-                'execute': (on_value, on_error) => {
+                'execute': (on_value, on_exception) => {
                     fs.readdir(possibly_escape_filename(path, escape_spaces_in_path), {
                         'encoding': 'utf-8',
                         'withFileTypes': true,
                     }, (err, files) => {
                         if (err) {
-                            on_error(_ei.block(() => {
+                            on_exception(_ei.block(() => {
                                 if (err.code === 'ENOENT') {
                                     return ['directory does not exist', null]
                                 }
@@ -183,10 +183,10 @@ export const temp_resources = {
             }
         ): Results.Copy => {
             return xx.create_Async_Value_Or_Exception({
-                'execute': (on_value, on_error) => {
+                'execute': (on_value, on_exception) => {
                     fs.cp(possibly_escape_filename(source, escape_spaces_in_path), possibly_escape_filename(target, escape_spaces_in_path), options, (err) => {
                         if (err) {
-                            on_error(_ei.block((): Errors.Copy => {
+                            on_exception(_ei.block((): Errors.Copy => {
                                 if (err.code === 'ENOENT') {
                                     return ['source does not exist', null]
                                 }
@@ -222,11 +222,11 @@ export const temp_resources = {
             }
         ): Results.Remove => {
             return xx.create_Async_Value_Or_Exception({
-                'execute': (on_value, on_error) => {
+                'execute': (on_value, on_exception) => {
                     fs.rm(possibly_escape_filename(path, escape_spaces_in_path), options, (err) => {
 
                         if (err) {
-                            on_error(_ei.block((): Errors.Remove => {
+                            on_exception(_ei.block((): Errors.Remove => {
                                 if (err.code === 'ENOENT') {
                                     return ['node does not exist', null]
                                 }
@@ -247,10 +247,10 @@ export const temp_resources = {
         },
         'stat': (path: string, escape_spaces_in_path: boolean): Results.Stat => {
             return xx.create_Async_Value_Or_Exception({
-                'execute': (on_value, on_error) => {
+                'execute': (on_value, on_exception) => {
                     fs.stat(possibly_escape_filename(path, escape_spaces_in_path), (err, stats) => {
                         if (err) {
-                            on_error(_ei.block(() => {
+                            on_exception(_ei.block(() => {
                                 if (err.code === 'ENOENT') {
                                     return ['node does not exist', null]
                                 }
@@ -271,7 +271,7 @@ export const temp_resources = {
             escape_spaces_in_path: boolean
         ): Results.Write_File => {
             return xx.create_Async_Value_Or_Exception({
-                'execute': (on_value, on_error) => {
+                'execute': (on_value, on_exception) => {
 
                     const fname = possibly_escape_filename(path, escape_spaces_in_path)
                     fs.mkdir(
@@ -281,7 +281,7 @@ export const temp_resources = {
                         },
                         (err, path) => {
                             if (err) {
-                                on_error(_ei.block(() => {
+                                on_exception(_ei.block(() => {
                                     if (err.code === 'EACCES' || err.code === 'EPERM') {
                                         return ['permission denied', null]
                                     }
@@ -291,7 +291,7 @@ export const temp_resources = {
                             }
                             fs.writeFile(fname, data, (err) => {
                                 if (err) {
-                                    on_error(_ei.block(() => {
+                                    on_exception(_ei.block(() => {
                                         if (err.code === 'EACCES' || err.code === 'EPERM') {
                                             return ['permission denied', null]
                                         }
@@ -313,7 +313,7 @@ export const temp_resources = {
         ): Results.Make_Directory => {
 
             return xx.create_Async_Value_Or_Exception({
-                'execute': (on_value, on_error) => {
+                'execute': (on_value, on_exception) => {
                     fs.mkdir(
                         possibly_escape_filename(path, escape_spaces_in_path),
                         {
@@ -321,7 +321,7 @@ export const temp_resources = {
                         },
                         (err, path) => {
                             if (err) {
-                                on_error(_ei.block(() => {
+                                on_exception(_ei.block(() => {
                                     if (err.code === 'EEXIST') {
                                         return ['directory already exists', null]
                                     }
@@ -356,7 +356,7 @@ export const temp_resources = {
         //     stdin.resume();
         // },
         // 'spawn': (program: string, args: string[], options: { cwd?: string }): _et.Async_Value<Spawn_Result> => {
-        //     return xx.cast_to_async_value_or_exception_imp((on_value, on_error) => {
+        //     return xx.cast_to_async_value_or_exception_imp((on_value, on_exception) => {
 
         //         const x = spawnSync(program, args, {
         //             cwd: options.cwd,

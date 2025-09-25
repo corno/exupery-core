@@ -15,7 +15,7 @@
     "url": "https://github.com/corno/exupery-core/issues"
   },
   "dependencies": {
-    "exupery-core-types": "^0.1.3"
+    "exupery-core-types": "^0.1.4"
   },
   "devDependencies": {
     "@types/node": "^18.15.3"

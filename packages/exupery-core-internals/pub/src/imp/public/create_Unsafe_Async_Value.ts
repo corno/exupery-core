@@ -1,8 +1,7 @@
 import * as _et from "exupery-core-types"
-import * as _ei from "exupery-core-internals"
 
 import { Async_Value } from "exupery-core-types"
-import * as x from "./Async_Value_Or_Exception.js"
+import { create_Async_Value } from "./create_Async_Value"
 
 
 /**
@@ -18,15 +17,29 @@ type Executer<T, E> = {
     ) => void
 }
 
-class Async_Value_Or_Exception_Class<T, E> implements x.Async_Value_Or_Exception<T, E> {
+class Unsafe_Async_Value_Class<T, E> implements _et.Unsafe_Async_Value<T, E> {
     private executer: Executer<T, E>
     constructor(executer: Executer<T, E>) {
         this.executer = executer
     }
     map<NT>(
-        handle_value: ($: T) => x.Async_Value_Or_Exception<NT, E>
-    ): x.Async_Value_Or_Exception<NT, E> {
-        return new Async_Value_Or_Exception_Class<NT, E>({
+        handle_value: ($: T) => NT
+    ): _et.Unsafe_Async_Value<NT, E> {
+        return new Unsafe_Async_Value_Class<NT, E>({
+            'execute': (on_value, on_exception) => {
+                this.executer.execute(
+                    ($) => {
+                        on_value(handle_value($))
+                    },
+                    on_exception
+                )
+            }
+        })
+    }
+    then<NT>(
+        handle_value: ($: T) => _et.Unsafe_Async_Value<NT, E>
+    ): _et.Unsafe_Async_Value<NT, E> {
+        return new Unsafe_Async_Value_Class<NT, E>({
             'execute': (new_on_value, new_on_exception) => {
                 this.executer.execute(
                     ($) => {
@@ -40,10 +53,10 @@ class Async_Value_Or_Exception_Class<T, E> implements x.Async_Value_Or_Exception
             }
         })
     }
-    map_exception<NE>(
-        handle_exception: ($: E) => x.Async_Value_Or_Exception<T, NE>
-    ): x.Async_Value_Or_Exception<T, NE> {
-        return new Async_Value_Or_Exception_Class<T, NE>({
+    if_exception_then<NE>(
+        handle_exception: ($: E) => _et.Unsafe_Async_Value<T, NE>
+    ): _et.Unsafe_Async_Value<T, NE> {
+        return new Unsafe_Async_Value_Class<T, NE>({
             'execute': (new_on_value, new_on_exception) => {
                 this.executer.execute(
                     new_on_value,
@@ -57,34 +70,46 @@ class Async_Value_Or_Exception_Class<T, E> implements x.Async_Value_Or_Exception
             }
         })
     }
-    catch(
-        handle_exception: ($: E) => _et.Async_Value<T>
-    ): _et.Async_Value<T> {
-        return _ei.cast_to_async_value_imp<T>({
-            'execute': (new_on_value) => {
+    map_exception<NE>(
+        handle_exception: ($: E) => NE
+    ): _et.Unsafe_Async_Value<T, NE> {
+        return new Unsafe_Async_Value_Class<T, NE>({
+            'execute': (on_value, on_exception) => {
                 this.executer.execute(
-                    new_on_value,
+                    on_value,
                     ($) => {
-                        handle_exception($).__start(
-                            new_on_value,
-                        )
+                        on_exception(handle_exception($))
+                    },
+                )
+            }
+        })
+    }
+    catch(
+        handle_exception: ($: E) => T
+    ): _et.Async_Value<T> {
+        return create_Async_Value<T>({
+            'execute': (on_value) => {
+                this.executer.execute(
+                    on_value,
+                    ($) => {
+                        on_value(handle_exception($))
                     },
                 )
             }
         })
     }
     catch_and_map<NT>(
-        handle_value: ($: T) => _et.Async_Value<NT>,
-        handle_exception: ($: E) => _et.Async_Value<NT>,
+        handle_value: ($: T) => NT,
+        handle_exception: ($: E) => NT,
     ): _et.Async_Value<NT> {
-        return _ei.cast_to_async_value_imp<NT>({
-            'execute': (new_on_value) => {
+        return create_Async_Value<NT>({
+            'execute': (on_value) => {
                 this.executer.execute(
                     ($) => {
-                        handle_value($).__start(new_on_value)
+                        on_value(handle_value($))
                     },
                     ($) => {
-                        handle_exception($).__start(new_on_value)
+                        on_value(handle_exception($))
                     },
                 )
             }
@@ -103,9 +128,9 @@ class Async_Value_Or_Exception_Class<T, E> implements x.Async_Value_Or_Exception
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function create_Async_Value_Or_Exception<T, E>(
+export function create_Unsafe_Async_Value<T, E>(
     executer: Executer<T, E>,
-): x.Async_Value_Or_Exception<T, E> {
-    return new Async_Value_Or_Exception_Class<T, E>(executer)
+): _et.Unsafe_Async_Value<T, E> {
+    return new Unsafe_Async_Value_Class<T, E>(executer)
 
 }

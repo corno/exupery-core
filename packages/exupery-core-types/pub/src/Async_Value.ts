@@ -5,14 +5,18 @@
  */
 export interface Async_Value<T> {
 
-    map<NT>(handle_value: ($: T) => NT): Async_Value<NT>
+    map<NT>(
+        handle_value: ($: T) => NT
+    ): Async_Value<NT>
 
     /**
      * maps the current async value into a new async value
      * @param handle_value callback that transforms the actual value into a new Async_Value
      */
-    then<NT>(handle_value: ($: T) => Async_Value<NT>): Async_Value<NT>
-    
+    then<NT>(
+        handle_value: ($: T) => Async_Value<NT>
+    ): Async_Value<NT>
+
     /**
      * This method is only to be used by resources
      */
