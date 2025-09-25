@@ -6,89 +6,91 @@ import * as fs from "fs"
 import * as pathlib from "path"
 import { spawnSync } from 'child_process'
 
+import * as xx from "./cast_to_async_value_or_exception_imp.js"
+
+export interface Async_Value_Or_Exception<T, E> {
+    map<NT>($v: ($: T) => Async_Value_Or_Exception<NT, E>): Async_Value_Or_Exception<NT, E>
+    map_exception<NE>($e: ($: E) => NE): Async_Value_Or_Exception<T, NE>
+    __execute($i: ($: T) => void, $e: ($: E) => void): void;
+}
+
+
 export namespace Raw_Results {
+    export type Read_Directory = _et.Dictionary<Node_Type>
+
+    export type Read_File = string
+
+    export type Copy = null
+    export type Remove = null
+
+    export type Stat = Node_Type
+
+    export type Access = null
+
+    export type Write_File = null
+
+    export type Make_Directory = null
+
+    // export type Spawn = {
+    //     pid: number;
+    //     output: _et.Array<string>;
+    //     stdout: string;
+    //     stderr: string;
+    //     status: _et.Optional_Value<number>;
+    //     // signal: NodeJS.Signals | null;
+    //     error?: { message: string } | undefined;
+    // }
+}
+
+export namespace Errors {
     export type Read_Directory =
-        | ['success', _et.Dictionary<Node_Type>]
-        | ['error',
-            | ['directory does not exist', null]
-            | ['node is not a directory', null]
-        ]
+        | ['directory does not exist', null]
+        | ['node is not a directory', null]
 
     export type Read_File =
-        | ['success', string]
-        | ['error',
-            | ['file does not exist', null]
-            | ['node is not a file', null]
-            | ['permission denied', null]
-            | ['file too large', null]
-            | ['device not ready', null]
-        ]
+        | ['file does not exist', null]
+        | ['node is not a file', null]
+        | ['permission denied', null]
+        | ['file too large', null]
+        | ['device not ready', null]
 
     export type Copy =
-        | ['success', null]
-        | ['error',
-            | ['source does not exist', null]
-            | ['node is not a file', null]
-            | ['permission denied', null]
-            | ['file too large', null]
-            | ['device not ready', null]
-        ]
+        | ['source does not exist', null]
+        | ['node is not a file', null]
+        | ['permission denied', null]
+        | ['file too large', null]
+        | ['device not ready', null]
 
     export type Remove =
-        | ['success', null]
-        | ['error',
-            | ['node does not exist', null]
-            | ['node is not a directory', null]
-            | ['permission denied', null]
-        ]
+        | ['node does not exist', null]
+        | ['node is not a directory', null]
+        | ['permission denied', null]
 
     export type Stat =
-        | ['success', Node_Type]
-        | ['error',
-            | ['node does not exist', null]
-        ]
+        | ['node does not exist', null]
 
     export type Access =
-        | ['success', null]
-        | ['error',
-            | ['node does not exist', null]
-            | ['permission denied', null]
-        ]
+        | ['node does not exist', null]
+        | ['permission denied', null]
 
     export type Write_File =
-        | ['success', null]
-        | ['error',
-            | ['permission denied', null]
-        ]
+        | ['permission denied', null]
 
     export type Make_Directory =
-        | ['success', null]
-        | ['error',
-            | ['directory already exists', null]
-            | ['permission denied', null]
-        ]
-
-    export type Spawn = {
-        pid: number;
-        output: _et.Array<string>;
-        stdout: string;
-        stderr: string;
-        status: _et.Optional_Value<number>;
-        // signal: NodeJS.Signals | null;
-        error?: { message: string } | undefined;
-    }
+        | ['directory already exists', null]
+        | ['permission denied', null]
 }
 
 export namespace Results {
-    export type Read_Directory = _et.Async_Value<Raw_Results.Read_Directory>
-    export type Read_File = _et.Async_Value<Raw_Results.Read_File>
-    export type Copy = _et.Async_Value<Raw_Results.Copy>
-    export type Remove = _et.Async_Value<Raw_Results.Remove>
-    export type Stat = _et.Async_Value<Raw_Results.Stat>
-    export type Access = _et.Async_Value<Raw_Results.Access>
-    export type Write_File = _et.Async_Value<Raw_Results.Write_File>
-    export type Make_Directory = _et.Async_Value<Raw_Results.Make_Directory>
-    export type Spawn = _et.Async_Value<Raw_Results.Spawn>
+    export type Read_Directory = Async_Value_Or_Exception<Raw_Results.Read_Directory, Errors.Read_Directory>
+    export type Read_File = Async_Value_Or_Exception<Raw_Results.Read_File, Errors.Read_File>
+    export type Copy = Async_Value_Or_Exception<Raw_Results.Copy, Errors.Copy>
+    export type Remove = Async_Value_Or_Exception<Raw_Results.Remove, Errors.Remove>
+    export type Stat = Async_Value_Or_Exception<Raw_Results.Stat, Errors.Stat>
+    export type Access = Async_Value_Or_Exception<Raw_Results.Access, Errors.Access>
+    export type Write_File = Async_Value_Or_Exception<Raw_Results.Write_File, Errors.Write_File>
+    export type Make_Directory = Async_Value_Or_Exception<Raw_Results.Make_Directory, Errors.Make_Directory>
+    // export type Spawn = _et.Async_Value<Raw_Results.Spawn>
 }
 
 
@@ -116,7 +118,7 @@ export const temp_resources = {
             path: string,
             escape_spaces_in_path: boolean,
         ): Results.Read_File => {
-            return _ei.cast_to_async_value_imp(($c) => {
+            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
                 fs.readFile(possibly_escape_filename(path, escape_spaces_in_path), { 'encoding': 'utf-8' }, (err, data) => {
                     $c(_ei.block(() => {
                         if (err) {
@@ -148,7 +150,7 @@ export const temp_resources = {
             path: string,
             escape_spaces_in_path: boolean,
         ): Results.Read_Directory => {
-            return _ei.cast_to_async_value_imp(($c) => {
+            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
                 fs.readdir(possibly_escape_filename(path, escape_spaces_in_path), {
                     'encoding': 'utf-8',
                     'withFileTypes': true,
@@ -182,29 +184,30 @@ export const temp_resources = {
                 errorOnExist?: boolean,
             }
         ): Results.Copy => {
-            return _ei.cast_to_async_value_imp(($c) => {
+            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
                 fs.cp(possibly_escape_filename(source, escape_spaces_in_path), possibly_escape_filename(target, escape_spaces_in_path), options, (err) => {
-                    $c(_ei.block(() => {
-                        if (err) {
+                    if (err) {
+                        $e(_ei.block((): Errors.Copy => {
                             if (err.code === 'ENOENT') {
-                                return ['error', ['source does not exist', null]]
+                                return ['source does not exist', null]
                             }
                             if (err.code === 'EACCES' || err.code === 'EPERM') {
-                                return ['error', ['permission denied', null]]
+                                return ['permission denied', null]
                             }
                             if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
-                                return ['error', ['node is not a file', null]]
+                                return ['node is not a file', null]
                             }
                             if (err.code === 'EFBIG') {
-                                return ['error', ['file too large', null]]
+                                return ['file too large', null]
                             }
                             if (err.code === 'EIO' || err.code === 'ENXIO') {
-                                return ['error', ['device not ready', null]]
+                                return ['device not ready', null]
                             }
                             return _ei.panic(`unhandled fs.cp error code: ${err.code}`)
-                        }
-                        return ['success', null]
-                    }))
+                        }))
+                    } else {
+                        $v(null)
+                    }
                 })
             })
         },
@@ -218,41 +221,43 @@ export const temp_resources = {
                 // errorOnExist?: boolean,
             }
         ): Results.Remove => {
-            return _ei.cast_to_async_value_imp(($c) => {
+            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
                 fs.rm(possibly_escape_filename(path, escape_spaces_in_path), options, (err) => {
-                    $c(_ei.block(() => {
 
-                        if (err) {
+                    if (err) {
+                        $e(_ei.block((): Errors.Remove => {
                             if (err.code === 'ENOENT') {
-                                return ['error', ['node does not exist', null]]
+                                return ['node does not exist', null]
                             }
                             if (err.code === 'EACCES' || err.code === 'EPERM') {
-                                return ['error', ['permission denied', null]]
+                                return ['permission denied', null]
                             }
                             if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
-                                return ['error', ['node is not a directory', null]]
+                                return ['node is not a directory', null]
                             }
                             return _ei.panic(`unhandled fs.rm error code: ${err.code}`)
-                        }
-                        return ['success', null]
-                    }))
+                        }))
+                    } else {
+                        $v(null)
+                    }
                 })
             })
         },
         'stat': (path: string, escape_spaces_in_path: boolean): Results.Stat => {
-            return _ei.cast_to_async_value_imp(($c) => {
+            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
                 fs.stat(possibly_escape_filename(path, escape_spaces_in_path), (err, stats) => {
-                    $c(_ei.block(() => {
-                        if (err) {
+                    if (err) {
+                        $e(_ei.block(() => {
                             if (err.code === 'ENOENT') {
-                                return ['error', ['node does not exist', null]]
+                                return ['node does not exist', null]
                             }
                             return _ei.panic(`unhandled fs.stat error code: ${err.code}`)
-                        }
-                        return stats.isFile()
-                            ? ['success', ['file', null]]
-                            : ['success', ['directory', null]]
-                    }))
+                        }))
+                    }
+                    $v(stats.isFile()
+                        ? ['file', null]
+                        : ['directory', null]
+                    )
                 })
             })
         },
@@ -261,7 +266,7 @@ export const temp_resources = {
             data: string,
             escape_spaces_in_path: boolean
         ): Results.Write_File => {
-            return _ei.cast_to_async_value_imp(($c) => {
+            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
 
                 const fname = possibly_escape_filename(path, escape_spaces_in_path)
                 fs.mkdir(
@@ -301,7 +306,7 @@ export const temp_resources = {
             escape_spaces_in_path: boolean
         ): Results.Make_Directory => {
 
-            return _ei.cast_to_async_value_imp(($c) => {
+            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
                 fs.mkdir(
                     possibly_escape_filename(path, escape_spaces_in_path),
                     {
@@ -341,7 +346,7 @@ export const temp_resources = {
         //     stdin.resume();
         // },
         // 'spawn': (program: string, args: string[], options: { cwd?: string }): _et.Async_Value<Spawn_Result> => {
-        //     return _ei.cast_to_async_value_imp(($c) => {
+        //     return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
 
         //         const x = spawnSync(program, args, {
         //             cwd: options.cwd,
