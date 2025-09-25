@@ -1,17 +1,19 @@
 
 import * as pt from 'exupery-core-types'
-import { create_Async_Value } from './create_Async_Value';
+
+import { run_safe_query } from "./run_safe_query"
+import { Safe_Query_Result } from "./Safe_Query_Result"
 
 export type Sync_Tuple_2<T1, T2> = {
     readonly 'first': T1
     readonly 'second': T2
 };
 
-export function resolve_async_tuple_2<T1, T2>(
-    first: pt.Async_Value<T1>,
-    second: pt.Async_Value<T2>,
-): pt.Async_Value<Sync_Tuple_2<T1, T2>> {
-    return create_Async_Value(
+export function merge_2_safe_query_results<T1, T2>(
+    first: Safe_Query_Result<T1>,
+    second: Safe_Query_Result<T2>,
+): Safe_Query_Result<Sync_Tuple_2<T1, T2>> {
+    return run_safe_query(
         {
             'execute': (on_value) => {
                 let element_1_is_set = false

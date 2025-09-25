@@ -1,8 +1,7 @@
-import * as pt from "exupery-core-types"
+import * as _et from "exupery-core-types"
 
-import { Async_Value } from "exupery-core-types"
-
-
+import { Safe_Query_Result } from "./Safe_Query_Result"
+import { Unsafe_Query_Result } from "./Unsafe_Query_Result"
 
 export type Executer<T> = {
     'execute': (
@@ -11,15 +10,15 @@ export type Executer<T> = {
 }
 
 
-class Async_Value_Class<T> implements pt.Async_Value<T> {
+class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
     private executer: Executer<T>
     constructor(executer: Executer<T>) {
         this.executer = executer
     }
     map<NT>(
         handle_value: ($: T) => NT
-    ): pt.Async_Value<NT> {
-        return create_Async_Value(
+    ): Safe_Query_Result<NT> {
+        return run_safe_query(
             {
                 'execute': (on_value) => {
                     this.executer.execute(
@@ -32,9 +31,9 @@ class Async_Value_Class<T> implements pt.Async_Value<T> {
         )
     }
     then<NT>(
-        handle_value: ($: T) => Async_Value<NT>
-    ): pt.Async_Value<NT> {
-        return create_Async_Value(
+        handle_value: ($: T) => Safe_Query_Result<NT>
+    ): Safe_Query_Result<NT> {
+        return run_safe_query(
             {
                 'execute': (on_value) => {
                     this.executer.execute(
@@ -59,9 +58,9 @@ class Async_Value_Class<T> implements pt.Async_Value<T> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function create_Async_Value<T>(
+export function run_safe_query<T>(
     executer: Executer<T>,
-): pt.Async_Value<T> {
-    return new Async_Value_Class<T>(executer)
+): Safe_Query_Result<T> {
+    return new Safe_Query_Result_Class<T>(executer)
 
 }

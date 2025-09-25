@@ -1,7 +1,8 @@
 import * as _et from "exupery-core-types"
 
-import { Async_Value } from "exupery-core-types"
-import { create_Async_Value } from "./create_Async_Value"
+import { run_safe_query } from "./run_safe_query"
+import { Unsafe_Query_Result } from "./Unsafe_Query_Result"
+import { Safe_Query_Result } from "./Safe_Query_Result"
 
 
 /**
@@ -17,15 +18,15 @@ type Executer<T, E> = {
     ) => void
 }
 
-class Unsafe_Async_Value_Class<T, E> implements _et.Unsafe_Async_Value<T, E> {
+class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
     private executer: Executer<T, E>
     constructor(executer: Executer<T, E>) {
         this.executer = executer
     }
     map<NT>(
         handle_value: ($: T) => NT
-    ): _et.Unsafe_Async_Value<NT, E> {
-        return new Unsafe_Async_Value_Class<NT, E>({
+    ): Unsafe_Query_Result<NT, E> {
+        return new Unsafe_Query_Result_Class<NT, E>({
             'execute': (on_value, on_exception) => {
                 this.executer.execute(
                     ($) => {
@@ -37,9 +38,9 @@ class Unsafe_Async_Value_Class<T, E> implements _et.Unsafe_Async_Value<T, E> {
         })
     }
     then<NT>(
-        handle_value: ($: T) => _et.Unsafe_Async_Value<NT, E>
-    ): _et.Unsafe_Async_Value<NT, E> {
-        return new Unsafe_Async_Value_Class<NT, E>({
+        handle_value: ($: T) => Unsafe_Query_Result<NT, E>
+    ): Unsafe_Query_Result<NT, E> {
+        return new Unsafe_Query_Result_Class<NT, E>({
             'execute': (new_on_value, new_on_exception) => {
                 this.executer.execute(
                     ($) => {
@@ -54,9 +55,9 @@ class Unsafe_Async_Value_Class<T, E> implements _et.Unsafe_Async_Value<T, E> {
         })
     }
     if_exception_then<NE>(
-        handle_exception: ($: E) => _et.Unsafe_Async_Value<T, NE>
-    ): _et.Unsafe_Async_Value<T, NE> {
-        return new Unsafe_Async_Value_Class<T, NE>({
+        handle_exception: ($: E) => Unsafe_Query_Result<T, NE>
+    ): Unsafe_Query_Result<T, NE> {
+        return new Unsafe_Query_Result_Class<T, NE>({
             'execute': (new_on_value, new_on_exception) => {
                 this.executer.execute(
                     new_on_value,
@@ -72,8 +73,8 @@ class Unsafe_Async_Value_Class<T, E> implements _et.Unsafe_Async_Value<T, E> {
     }
     map_exception<NE>(
         handle_exception: ($: E) => NE
-    ): _et.Unsafe_Async_Value<T, NE> {
-        return new Unsafe_Async_Value_Class<T, NE>({
+    ): Unsafe_Query_Result<T, NE> {
+        return new Unsafe_Query_Result_Class<T, NE>({
             'execute': (on_value, on_exception) => {
                 this.executer.execute(
                     on_value,
@@ -86,8 +87,8 @@ class Unsafe_Async_Value_Class<T, E> implements _et.Unsafe_Async_Value<T, E> {
     }
     catch(
         handle_exception: ($: E) => T
-    ): _et.Async_Value<T> {
-        return create_Async_Value<T>({
+    ): Safe_Query_Result<T> {
+        return run_safe_query<T>({
             'execute': (on_value) => {
                 this.executer.execute(
                     on_value,
@@ -101,8 +102,8 @@ class Unsafe_Async_Value_Class<T, E> implements _et.Unsafe_Async_Value<T, E> {
     catch_and_map<NT>(
         handle_value: ($: T) => NT,
         handle_exception: ($: E) => NT,
-    ): _et.Async_Value<NT> {
-        return create_Async_Value<NT>({
+    ): Safe_Query_Result<NT> {
+        return run_safe_query<NT>({
             'execute': (on_value) => {
                 this.executer.execute(
                     ($) => {
@@ -128,9 +129,9 @@ class Unsafe_Async_Value_Class<T, E> implements _et.Unsafe_Async_Value<T, E> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function create_Unsafe_Async_Value<T, E>(
+export function run_unsafe_query<T, E>(
     executer: Executer<T, E>,
-): _et.Unsafe_Async_Value<T, E> {
-    return new Unsafe_Async_Value_Class<T, E>(executer)
+): Unsafe_Query_Result<T, E> {
+    return new Unsafe_Query_Result_Class<T, E>(executer)
 
 }
