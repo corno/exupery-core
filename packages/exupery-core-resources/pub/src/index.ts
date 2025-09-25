@@ -79,7 +79,7 @@ export namespace Raw_Results {
     }
 }
 
-namespace Results {
+export namespace Results {
     export type Read_Directory = _et.Async_Value<Raw_Results.Read_Directory>
     export type Read_File = _et.Async_Value<Raw_Results.Read_File>
     export type Copy = _et.Async_Value<Raw_Results.Copy>
