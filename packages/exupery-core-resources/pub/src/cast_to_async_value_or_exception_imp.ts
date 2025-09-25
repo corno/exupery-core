@@ -60,30 +60,34 @@ class Async_Value_Or_Exception_Class<T, E> implements x.Async_Value_Or_Exception
     catch(
         handle_error: ($: E) => _et.Async_Value<T>
     ): _et.Async_Value<T> {
-        return _ei.cast_to_async_value_imp<T>((new_on_value) => {
-            this.executer.execute(
-                new_on_value,
-                ($) => {
-                    handle_error($).__execute(
-                        new_on_value,
-                    )
-                },
-            )
+        return _ei.cast_to_async_value_imp<T>({
+            'execute': (new_on_value) => {
+                this.executer.execute(
+                    new_on_value,
+                    ($) => {
+                        handle_error($).__start(
+                            new_on_value,
+                        )
+                    },
+                )
+            }
         })
     }
     catch_and_map<NT>(
         handle_value: ($: T) => _et.Async_Value<NT>,
         handle_error: ($: E) => _et.Async_Value<NT>,
     ): _et.Async_Value<NT> {
-        return _ei.cast_to_async_value_imp<NT>((new_on_value) => {
-            this.executer.execute(
-                ($) => {
-                    handle_value($).__execute(new_on_value)
-                },
-                ($) => {
-                    handle_error($).__execute(new_on_value,)
-                },
-            )
+        return _ei.cast_to_async_value_imp<NT>({
+            'execute': (new_on_value) => {
+                this.executer.execute(
+                    ($) => {
+                        handle_value($).__start(new_on_value)
+                    },
+                    ($) => {
+                        handle_error($).__start(new_on_value)
+                    },
+                )
+            }
         })
     }
     __start(

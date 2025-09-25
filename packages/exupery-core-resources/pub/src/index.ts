@@ -7,13 +7,7 @@ import * as pathlib from "path"
 import { spawnSync } from 'child_process'
 
 import * as xx from "./cast_to_async_value_or_exception_imp.js"
-
-export interface Async_Value_Or_Exception<T, E> {
-    map<NT>($v: ($: T) => Async_Value_Or_Exception<NT, E>): Async_Value_Or_Exception<NT, E>
-    map_exception<NE>($e: ($: E) => NE): Async_Value_Or_Exception<T, NE>
-    __execute($i: ($: T) => void, $e: ($: E) => void): void;
-}
-
+import * as xy from "./Async_Value_Or_Exception.js"
 
 export namespace Raw_Results {
     export type Read_Directory = _et.Dictionary<Node_Type>
@@ -82,14 +76,14 @@ export namespace Errors {
 }
 
 export namespace Results {
-    export type Read_Directory = Async_Value_Or_Exception<Raw_Results.Read_Directory, Errors.Read_Directory>
-    export type Read_File = Async_Value_Or_Exception<Raw_Results.Read_File, Errors.Read_File>
-    export type Copy = Async_Value_Or_Exception<Raw_Results.Copy, Errors.Copy>
-    export type Remove = Async_Value_Or_Exception<Raw_Results.Remove, Errors.Remove>
-    export type Stat = Async_Value_Or_Exception<Raw_Results.Stat, Errors.Stat>
-    export type Access = Async_Value_Or_Exception<Raw_Results.Access, Errors.Access>
-    export type Write_File = Async_Value_Or_Exception<Raw_Results.Write_File, Errors.Write_File>
-    export type Make_Directory = Async_Value_Or_Exception<Raw_Results.Make_Directory, Errors.Make_Directory>
+    export type Read_Directory = xy.Async_Value_Or_Exception<Raw_Results.Read_Directory, Errors.Read_Directory>
+    export type Read_File = xy.Async_Value_Or_Exception<Raw_Results.Read_File, Errors.Read_File>
+    export type Copy = xy.Async_Value_Or_Exception<Raw_Results.Copy, Errors.Copy>
+    export type Remove = xy.Async_Value_Or_Exception<Raw_Results.Remove, Errors.Remove>
+    export type Stat = xy.Async_Value_Or_Exception<Raw_Results.Stat, Errors.Stat>
+    export type Access = xy.Async_Value_Or_Exception<Raw_Results.Access, Errors.Access>
+    export type Write_File = xy.Async_Value_Or_Exception<Raw_Results.Write_File, Errors.Write_File>
+    export type Make_Directory = xy.Async_Value_Or_Exception<Raw_Results.Make_Directory, Errors.Make_Directory>
     // export type Spawn = _et.Async_Value<Raw_Results.Spawn>
 }
 
@@ -118,60 +112,64 @@ export const temp_resources = {
             path: string,
             escape_spaces_in_path: boolean,
         ): Results.Read_File => {
-            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
-                fs.readFile(possibly_escape_filename(path, escape_spaces_in_path), { 'encoding': 'utf-8' }, (err, data) => {
-                    if (err) {
-                        $e(_ei.block(() => {
-                            if (err.code === 'ENOENT') {
-                                return ['file does not exist', null]
-                            }
-                            if (err.code === 'EACCES' || err.code === 'EPERM') {
-                                return ['permission denied', null]
-                            }
-                            if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
-                                return ['node is not a file', null]
-                            }
-                            if (err.code === 'EFBIG') {
-                                return ['file too large', null]
-                            }
-                            if (err.code === 'EIO' || err.code === 'ENXIO') {
-                                return ['device not ready', null]
-                            }
-                            return _ei.panic(`unhandled fs.readFile error code: ${err.code}`)
-                        }))
-                    } else {
-                        $v(data)
-                    }
-                })
+            return xx.cast_to_async_value_or_exception_imp({
+                'execute': (on_value, on_error) => {
+                    fs.readFile(possibly_escape_filename(path, escape_spaces_in_path), { 'encoding': 'utf-8' }, (err, data) => {
+                        if (err) {
+                            on_error(_ei.block(() => {
+                                if (err.code === 'ENOENT') {
+                                    return ['file does not exist', null]
+                                }
+                                if (err.code === 'EACCES' || err.code === 'EPERM') {
+                                    return ['permission denied', null]
+                                }
+                                if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
+                                    return ['node is not a file', null]
+                                }
+                                if (err.code === 'EFBIG') {
+                                    return ['file too large', null]
+                                }
+                                if (err.code === 'EIO' || err.code === 'ENXIO') {
+                                    return ['device not ready', null]
+                                }
+                                return _ei.panic(`unhandled fs.readFile error code: ${err.code}`)
+                            }))
+                        } else {
+                            on_value(data)
+                        }
+                    })
+                }
             })
         },
         'read directory': (
             path: string,
             escape_spaces_in_path: boolean,
         ): Results.Read_Directory => {
-            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
-                fs.readdir(possibly_escape_filename(path, escape_spaces_in_path), {
-                    'encoding': 'utf-8',
-                    'withFileTypes': true,
-                }, (err, files) => {
-                    if (err) {
-                        $e(_ei.block(() => {
-                            if (err.code === 'ENOENT') {
-                                return ['directory does not exist', null]
-                            }
-                            if (err.code === 'ENOTDIR' || err.code === 'EISDIR') {
-                                return ['node is not a directory', null]
-                            }
-                            return _ei.panic(`unhandled fs.readdir error code: ${err.code}`)
-                        }))
-                    } else {
-                        const out: { [key: string]: Node_Type } = {}
-                        files.forEach((file) => {
-                            out[file.name] = file.isFile() ? ['file', null] : ['directory', null]
-                        })
-                        $v(_ei.dictionary_literal(out))
-                    }
-                })
+            return xx.cast_to_async_value_or_exception_imp({
+                'execute': (on_value, on_error) => {
+                    fs.readdir(possibly_escape_filename(path, escape_spaces_in_path), {
+                        'encoding': 'utf-8',
+                        'withFileTypes': true,
+                    }, (err, files) => {
+                        if (err) {
+                            on_error(_ei.block(() => {
+                                if (err.code === 'ENOENT') {
+                                    return ['directory does not exist', null]
+                                }
+                                if (err.code === 'ENOTDIR' || err.code === 'EISDIR') {
+                                    return ['node is not a directory', null]
+                                }
+                                return _ei.panic(`unhandled fs.readdir error code: ${err.code}`)
+                            }))
+                        } else {
+                            const out: { [key: string]: Node_Type } = {}
+                            files.forEach((file) => {
+                                out[file.name] = file.isFile() ? ['file', null] : ['directory', null]
+                            })
+                            on_value(_ei.dictionary_literal(out))
+                        }
+                    })
+                }
             })
         },
         'copy': (
@@ -184,31 +182,33 @@ export const temp_resources = {
                 errorOnExist?: boolean,
             }
         ): Results.Copy => {
-            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
-                fs.cp(possibly_escape_filename(source, escape_spaces_in_path), possibly_escape_filename(target, escape_spaces_in_path), options, (err) => {
-                    if (err) {
-                        $e(_ei.block((): Errors.Copy => {
-                            if (err.code === 'ENOENT') {
-                                return ['source does not exist', null]
-                            }
-                            if (err.code === 'EACCES' || err.code === 'EPERM') {
-                                return ['permission denied', null]
-                            }
-                            if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
-                                return ['node is not a file', null]
-                            }
-                            if (err.code === 'EFBIG') {
-                                return ['file too large', null]
-                            }
-                            if (err.code === 'EIO' || err.code === 'ENXIO') {
-                                return ['device not ready', null]
-                            }
-                            return _ei.panic(`unhandled fs.cp error code: ${err.code}`)
-                        }))
-                    } else {
-                        $v(null)
-                    }
-                })
+            return xx.cast_to_async_value_or_exception_imp({
+                'execute': (on_value, on_error) => {
+                    fs.cp(possibly_escape_filename(source, escape_spaces_in_path), possibly_escape_filename(target, escape_spaces_in_path), options, (err) => {
+                        if (err) {
+                            on_error(_ei.block((): Errors.Copy => {
+                                if (err.code === 'ENOENT') {
+                                    return ['source does not exist', null]
+                                }
+                                if (err.code === 'EACCES' || err.code === 'EPERM') {
+                                    return ['permission denied', null]
+                                }
+                                if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
+                                    return ['node is not a file', null]
+                                }
+                                if (err.code === 'EFBIG') {
+                                    return ['file too large', null]
+                                }
+                                if (err.code === 'EIO' || err.code === 'ENXIO') {
+                                    return ['device not ready', null]
+                                }
+                                return _ei.panic(`unhandled fs.cp error code: ${err.code}`)
+                            }))
+                        } else {
+                            on_value(null)
+                        }
+                    })
+                }
             })
         },
         'remove': (
@@ -221,44 +221,48 @@ export const temp_resources = {
                 // errorOnExist?: boolean,
             }
         ): Results.Remove => {
-            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
-                fs.rm(possibly_escape_filename(path, escape_spaces_in_path), options, (err) => {
+            return xx.cast_to_async_value_or_exception_imp({
+                'execute': (on_value, on_error) => {
+                    fs.rm(possibly_escape_filename(path, escape_spaces_in_path), options, (err) => {
 
-                    if (err) {
-                        $e(_ei.block((): Errors.Remove => {
-                            if (err.code === 'ENOENT') {
-                                return ['node does not exist', null]
-                            }
-                            if (err.code === 'EACCES' || err.code === 'EPERM') {
-                                return ['permission denied', null]
-                            }
-                            if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
-                                return ['node is not a directory', null]
-                            }
-                            return _ei.panic(`unhandled fs.rm error code: ${err.code}`)
-                        }))
-                    } else {
-                        $v(null)
-                    }
-                })
+                        if (err) {
+                            on_error(_ei.block((): Errors.Remove => {
+                                if (err.code === 'ENOENT') {
+                                    return ['node does not exist', null]
+                                }
+                                if (err.code === 'EACCES' || err.code === 'EPERM') {
+                                    return ['permission denied', null]
+                                }
+                                if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
+                                    return ['node is not a directory', null]
+                                }
+                                return _ei.panic(`unhandled fs.rm error code: ${err.code}`)
+                            }))
+                        } else {
+                            on_value(null)
+                        }
+                    })
+                }
             })
         },
         'stat': (path: string, escape_spaces_in_path: boolean): Results.Stat => {
-            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
-                fs.stat(possibly_escape_filename(path, escape_spaces_in_path), (err, stats) => {
-                    if (err) {
-                        $e(_ei.block(() => {
-                            if (err.code === 'ENOENT') {
-                                return ['node does not exist', null]
-                            }
-                            return _ei.panic(`unhandled fs.stat error code: ${err.code}`)
-                        }))
-                    }
-                    $v(stats.isFile()
-                        ? ['file', null]
-                        : ['directory', null]
-                    )
-                })
+            return xx.cast_to_async_value_or_exception_imp({
+                'execute': (on_value, on_error) => {
+                    fs.stat(possibly_escape_filename(path, escape_spaces_in_path), (err, stats) => {
+                        if (err) {
+                            on_error(_ei.block(() => {
+                                if (err.code === 'ENOENT') {
+                                    return ['node does not exist', null]
+                                }
+                                return _ei.panic(`unhandled fs.stat error code: ${err.code}`)
+                            }))
+                        }
+                        on_value(stats.isFile()
+                            ? ['file', null]
+                            : ['directory', null]
+                        )
+                    })
+                }
             })
         },
         'write file': (
@@ -266,38 +270,40 @@ export const temp_resources = {
             data: string,
             escape_spaces_in_path: boolean
         ): Results.Write_File => {
-            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
+            return xx.cast_to_async_value_or_exception_imp({
+                'execute': (on_value, on_error) => {
 
-                const fname = possibly_escape_filename(path, escape_spaces_in_path)
-                fs.mkdir(
-                    pathlib.dirname(fname),
-                    {
-                        'recursive': true
-                    },
-                    (err, path) => {
-                        if (err) {
-                            $e(_ei.block(() => {
-                                if (err.code === 'EACCES' || err.code === 'EPERM') {
-                                    return ['permission denied', null]
-                                }
-                                return _ei.panic(`unhandled fs.writeFile error code: ${err.code}`)
-                            }))
-                            return
-                        }
-                        fs.writeFile(fname, data, (err) => {
+                    const fname = possibly_escape_filename(path, escape_spaces_in_path)
+                    fs.mkdir(
+                        pathlib.dirname(fname),
+                        {
+                            'recursive': true
+                        },
+                        (err, path) => {
                             if (err) {
-                                $e(_ei.block(() => {
+                                on_error(_ei.block(() => {
                                     if (err.code === 'EACCES' || err.code === 'EPERM') {
                                         return ['permission denied', null]
                                     }
                                     return _ei.panic(`unhandled fs.writeFile error code: ${err.code}`)
                                 }))
-                            } else {
-                                $v(null)
+                                return
                             }
-                        })
-                    }
-                )
+                            fs.writeFile(fname, data, (err) => {
+                                if (err) {
+                                    on_error(_ei.block(() => {
+                                        if (err.code === 'EACCES' || err.code === 'EPERM') {
+                                            return ['permission denied', null]
+                                        }
+                                        return _ei.panic(`unhandled fs.writeFile error code: ${err.code}`)
+                                    }))
+                                } else {
+                                    on_value(null)
+                                }
+                            })
+                        }
+                    )
+                }
             })
         },
 
@@ -306,24 +312,27 @@ export const temp_resources = {
             escape_spaces_in_path: boolean
         ): Results.Make_Directory => {
 
-            return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
-                fs.mkdir(
-                    possibly_escape_filename(path, escape_spaces_in_path),
-                    {
-                        'recursive': true,
-                    },
-                    (err, path) => {
-                        if (err) {
-                            $e(_ei.block(() => {
-                                if (err.code === 'EEXIST') {
-                                    return ['directory already exists', null]
-                                }
-                                return _ei.panic(`unhandled fs.mkdir error code: ${err.code}`)
-                            }))
-                        } else {
-                            $v(null)
+            return xx.cast_to_async_value_or_exception_imp({
+                'execute': (on_value, on_error) => {
+                    fs.mkdir(
+                        possibly_escape_filename(path, escape_spaces_in_path),
+                        {
+                            'recursive': true,
+                        },
+                        (err, path) => {
+                            if (err) {
+                                on_error(_ei.block(() => {
+                                    if (err.code === 'EEXIST') {
+                                        return ['directory already exists', null]
+                                    }
+                                    return _ei.panic(`unhandled fs.mkdir error code: ${err.code}`)
+                                }))
+                            } else {
+                                on_value(null)
+                            }
                         }
-                    })
+                    )
+                }
             })
         },
 
@@ -347,7 +356,7 @@ export const temp_resources = {
         //     stdin.resume();
         // },
         // 'spawn': (program: string, args: string[], options: { cwd?: string }): _et.Async_Value<Spawn_Result> => {
-        //     return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
+        //     return xx.cast_to_async_value_or_exception_imp((on_value, on_error) => {
 
         //         const x = spawnSync(program, args, {
         //             cwd: options.cwd,
