@@ -7,14 +7,14 @@ export interface Async_Value<T> {
 
     /**
      * maps the current async value into a new async value
-     * @param $v callback that transforms the actual value into a new Async_Value
+     * @param handle_value callback that transforms the actual value into a new Async_Value
      */
-    map<NT>($v: ($: T) => Async_Value<NT>): Async_Value<NT>
+    map<NT>(handle_value: ($: T) => Async_Value<NT>): Async_Value<NT>
     
     /**
      * This method is only to be used by resources
      */
-    __execute(
-        $i: ($: T) => void
+    __start(
+        on_value: ($: T) => void
     ): void
 }

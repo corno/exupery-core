@@ -2,42 +2,45 @@ import * as pt from "exupery-core-types"
 
 import { Async_Value } from "exupery-core-types"
 
-import { Execute } from "../types/Execute"
+
+
+export type Executer<T> = {
+    'execute': (
+        on_value: ($: T) => void
+    ) => void
+}
+
 
 class Async_Value_Class<T> implements pt.Async_Value<T> {
-    private execute: Execute<T>
-    constructor(execute: Execute<T>) {
-        this.execute = execute
+    private executer: Executer<T>
+    constructor(executer: Executer<T>) {
+        this.executer = executer
     }
-    map<NT>($v: ($: T) => Async_Value<NT>): pt.Async_Value<NT> {
-        function rewrite<In, Out>(
-            source: Execute<In>,
-            rewrite: (source: In) => pt.Async_Value<Out>
-        ): pt.Async_Value<Out> {
-            return cast_to_async_value_imp(
-                ((cb) => {
-                    source((v) => {
-                        rewrite(v).__execute(cb)
+    map<NT>(handle_value: ($: T) => Async_Value<NT>): pt.Async_Value<NT> {
+        return cast_to_async_value_imp(
+            {
+                'execute': (on_value) => {
+                    this.executer.execute((value) => {
+                        handle_value(value).__execute(on_value)
                     })
-                })
-            )
-        }
-        return rewrite(this.execute, $v)
+                }
+            }
+        )
     }
 
-    __execute ($i: ($: T) => void) {
-        this.execute($i)
+    __execute(on_value: ($: T) => void) {
+        this.executer.execute(on_value)
     }
 }
 
 /**
  * returns an {@link Async_Value }
- * @param execute the function that produces the eventual value
+ * @param executer the function that produces the eventual value
  * @returns 
  */
 export function cast_to_async_value_imp<T>(
-    execute: Execute<T>,
+    executer: Executer<T>,
 ): pt.Async_Value<T> {
-    return new Async_Value_Class<T>(execute)
+    return new Async_Value_Class<T>(executer)
 
 }

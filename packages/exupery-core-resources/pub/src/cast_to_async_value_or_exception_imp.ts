@@ -1,53 +1,107 @@
-import * as pt from "exupery-core-types"
+import * as _et from "exupery-core-types"
+import * as _ei from "exupery-core-internals"
 
 import { Async_Value } from "exupery-core-types"
 import * as x from "./Async_Value_Or_Exception.js"
 
-type Execute<T, E> = (
-    on_value: ($: T) => void,
-    on_error: ($: E) => void,
-) => void
+
+/**
+ * this function contains the body in which the async value or exception is executed
+ * after the execution, either the on_value or on_error callback will be called
+ * @param on_value the callback to call when a value is produced
+ * @param on_error the callback to call when an error is produced
+ */
+type Executer<T, E> = {
+    'execute': (
+        on_value: ($: T) => void,
+        on_error: ($: E) => void,
+    ) => void
+}
 
 class Async_Value_Or_Exception_Class<T, E> implements x.Async_Value_Or_Exception<T, E> {
-    private execute: Execute<T, E>
-    constructor(execute: Execute<T, E>) {
-        this.execute = execute
+    private executer: Executer<T, E>
+    constructor(executer: Executer<T, E>) {
+        this.executer = executer
     }
-    map<NT>($v: ($: T) => x.Async_Value_Or_Exception<NT, E>): x.Async_Value_Or_Exception<NT, E> {
-        function rewrite<In, Out>(
-            source: Execute<In>,
-            rewrite: (source: In) => pt.Async_Value<Out>
-        ): pt.Async_Value<Out> {
-            return cast_to_async_value_imp(
-                ((cb) => {
-                    source((v) => {
-                        rewrite(v).__execute(cb)
-                    })
-                })
+    map<NT>(
+        handle_value: ($: T) => x.Async_Value_Or_Exception<NT, E>
+    ): x.Async_Value_Or_Exception<NT, E> {
+        return new Async_Value_Or_Exception_Class<NT, E>({
+            'execute': (new_on_value, new_on_error) => {
+                this.executer.execute(
+                    ($) => {
+                        handle_value($).__start(
+                            new_on_value,
+                            new_on_error,
+                        )
+                    },
+                    new_on_error,
+                )
+            }
+        })
+    }
+    map_exception<NE>(
+        handle_error: ($: E) => x.Async_Value_Or_Exception<T, NE>
+    ): x.Async_Value_Or_Exception<T, NE> {
+        return new Async_Value_Or_Exception_Class<T, NE>({
+            'execute': (new_on_value, new_on_error) => {
+                this.executer.execute(
+                    new_on_value,
+                    ($) => {
+                        handle_error($).__start(
+                            new_on_value,
+                            new_on_error,
+                        )
+                    },
+                )
+            }
+        })
+    }
+    catch(
+        handle_error: ($: E) => _et.Async_Value<T>
+    ): _et.Async_Value<T> {
+        return _ei.cast_to_async_value_imp<T>((new_on_value) => {
+            this.executer.execute(
+                new_on_value,
+                ($) => {
+                    handle_error($).__execute(
+                        new_on_value,
+                    )
+                },
             )
-        }
-        return rewrite(this.execute, $v)
+        })
     }
-    map_exception<NE>($e: ($: E) => NE): x.Async_Value_Or_Exception<T, NE> {
-        return new Async_Value_Or_Exception_Class<T, NE>(this.execute)
+    catch_and_map<NT>(
+        handle_value: ($: T) => _et.Async_Value<NT>,
+        handle_error: ($: E) => _et.Async_Value<NT>,
+    ): _et.Async_Value<NT> {
+        return _ei.cast_to_async_value_imp<NT>((new_on_value) => {
+            this.executer.execute(
+                ($) => {
+                    handle_value($).__execute(new_on_value)
+                },
+                ($) => {
+                    handle_error($).__execute(new_on_value,)
+                },
+            )
+        })
     }
-    catch_exception($e: ($: E) => _et.Async_Value<T>): _et.Async_Value<T> {
-        return cast_to_async_value_imp(this.execute)
-    }
-
-    __execute ($i: ($: T) => void) {
-        this.execute($i)
+    __start(
+        on_value: ($: T) => void,
+        on_error: ($: E) => void,
+    ): void {
+        this.executer.execute(on_value, on_error)
     }
 }
 
 /**
  * returns an {@link Async_Value }
- * @param execute the function that produces the eventual value
+ * @param executer the function that produces the eventual value
  * @returns 
  */
 export function cast_to_async_value_or_exception_imp<T, E>(
-    execute: Execute<T, E>,
+    executer: Executer<T, E>,
 ): x.Async_Value_Or_Exception<T, E> {
-    return new Async_Value_Or_Exception_Class<T, E>(execute)
+    return new Async_Value_Or_Exception_Class<T, E>(executer)
 
 }

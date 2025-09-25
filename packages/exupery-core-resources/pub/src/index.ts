@@ -120,30 +120,29 @@ export const temp_resources = {
         ): Results.Read_File => {
             return xx.cast_to_async_value_or_exception_imp(($v, $e) => {
                 fs.readFile(possibly_escape_filename(path, escape_spaces_in_path), { 'encoding': 'utf-8' }, (err, data) => {
-                    $c(_ei.block(() => {
-                        if (err) {
+                    if (err) {
+                        $e(_ei.block(() => {
                             if (err.code === 'ENOENT') {
-                                return ['error', ['file does not exist', null]]
+                                return ['file does not exist', null]
                             }
                             if (err.code === 'EACCES' || err.code === 'EPERM') {
-                                return ['error', ['permission denied', null]]
+                                return ['permission denied', null]
                             }
                             if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
-                                return ['error', ['node is not a file', null]]
+                                return ['node is not a file', null]
                             }
                             if (err.code === 'EFBIG') {
-                                return ['error', ['file too large', null]]
+                                return ['file too large', null]
                             }
                             if (err.code === 'EIO' || err.code === 'ENXIO') {
-                                return ['error', ['device not ready', null]]
+                                return ['device not ready', null]
                             }
                             return _ei.panic(`unhandled fs.readFile error code: ${err.code}`)
-                        }
-                        return ['success', data]
-
-                    }))
+                        }))
+                    } else {
+                        $v(data)
+                    }
                 })
-
             })
         },
         'read directory': (
@@ -155,22 +154,23 @@ export const temp_resources = {
                     'encoding': 'utf-8',
                     'withFileTypes': true,
                 }, (err, files) => {
-                    $c(_ei.block(() => {
-                        if (err) {
+                    if (err) {
+                        $e(_ei.block(() => {
                             if (err.code === 'ENOENT') {
-                                return ['error', ['directory does not exist', null]]
+                                return ['directory does not exist', null]
                             }
                             if (err.code === 'ENOTDIR' || err.code === 'EISDIR') {
-                                return ['error', ['node is not a directory', null]]
+                                return ['node is not a directory', null]
                             }
                             return _ei.panic(`unhandled fs.readdir error code: ${err.code}`)
-                        }
+                        }))
+                    } else {
                         const out: { [key: string]: Node_Type } = {}
                         files.forEach((file) => {
                             out[file.name] = file.isFile() ? ['file', null] : ['directory', null]
                         })
-                        return ['success', _ei.dictionary_literal(out)]
-                    }))
+                        $v(_ei.dictionary_literal(out))
+                    }
                 })
             })
         },
@@ -276,25 +276,25 @@ export const temp_resources = {
                     },
                     (err, path) => {
                         if (err) {
-                            $c(_ei.block(() => {
+                            $e(_ei.block(() => {
                                 if (err.code === 'EACCES' || err.code === 'EPERM') {
-                                    return ['error', ['permission denied', null]]
+                                    return ['permission denied', null]
                                 }
                                 return _ei.panic(`unhandled fs.writeFile error code: ${err.code}`)
                             }))
-                            $c(_ei.panic(`unhandled fs.mkdir error code: ${err.code}`))
                             return
                         }
                         fs.writeFile(fname, data, (err) => {
-                            $c(_ei.block(() => {
-                                if (err) {
+                            if (err) {
+                                $e(_ei.block(() => {
                                     if (err.code === 'EACCES' || err.code === 'EPERM') {
-                                        return ['error', ['permission denied', null]]
+                                        return ['permission denied', null]
                                     }
                                     return _ei.panic(`unhandled fs.writeFile error code: ${err.code}`)
-                                }
-                                return ['success', null]
-                            }))
+                                }))
+                            } else {
+                                $v(null)
+                            }
                         })
                     }
                 )
@@ -313,15 +313,16 @@ export const temp_resources = {
                         'recursive': true,
                     },
                     (err, path) => {
-                        $c(_ei.block(() => {
-                            if (err) {
+                        if (err) {
+                            $e(_ei.block(() => {
                                 if (err.code === 'EEXIST') {
-                                    return ['error', ['directory already exists', null]]
+                                    return ['directory already exists', null]
                                 }
                                 return _ei.panic(`unhandled fs.mkdir error code: ${err.code}`)
-                            }
-                            return ['success', null]
-                        }))
+                            }))
+                        } else {
+                            $v(null)
+                        }
                     })
             })
         },
