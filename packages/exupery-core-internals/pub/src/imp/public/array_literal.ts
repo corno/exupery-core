@@ -21,7 +21,31 @@ class Array_Class<T> implements _et.Array<T> {
             return $v(entry)
         }))
     }
-    async_map<NT>(on_element_value: ($: T) => _et.Async_Value<NT>): _et.Async_Value<_et.Array<NT>> {
+    map_async<NT>(on_element_value: ($: T) => _et.Async_Value<NT>): _et.Async_Value<_et.Array<NT>> {
+        const data = this.data
+        return create_Async_Value(
+            {
+                'execute': (on_array_value) => {
+                    const temp: NT[] = []
+                    create_asynchronous_processes_monitor(
+                        (registry) => {
+                            data.map(on_element_value).forEach((v) => {
+                                registry['report process started']()
+                                v.__start((v) => {
+                                    temp.push(v)
+                                    registry['report process finished']()
+                                })
+                            })
+                        },
+                        () => {
+                            on_array_value(array_literal(temp))
+                        }
+                    )
+                }
+            },
+        )
+    }
+    map_async_unsafe<NT, NE>(on_element_value: ($: T) => _et.Unsafe_Async_Value<NT, NE>): _et.Unsafe_Async_Value<_et.Array<NT>, _et.Array<NE>> {
         const data = this.data
         return create_Async_Value(
             {

@@ -17,6 +17,8 @@ git diff --exit-code && git log origin/main..main --exit-code && \
 
 node $scriptDir/../node_modules/npm-updatedependencies2latest/dist/index.js $rootDir/pub dependencies && \
 
+npm update --prefix "$rootDir/pub" && \
+
 $scriptDir/build.sh && \
 
 #validate that everything is still committed after the update and build
