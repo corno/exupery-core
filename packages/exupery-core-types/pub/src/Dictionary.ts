@@ -1,5 +1,6 @@
 import { Array } from "./Array"
 import { Async_Value } from "./Async_Value"
+import { Unsafe_Async_Value } from "./Unsafe_Async_Value"
 import { Optional_Value } from "./Optional_Value"
 
 export type Key_Value_Pair<T> = {
@@ -26,9 +27,13 @@ export interface Dictionary<T> {
      * 
      * @param handle_value callback that provides an {@link Async_Value}. keys are not available.
      */
-    async_map<NT>(
+    map_async<NT>(
         handle_value: ($: T) => Async_Value<NT>
     ): Async_Value<Dictionary<NT>>
+
+    map_async_unsafe<NT, NE>(
+        handle_value: ($: T) => Unsafe_Async_Value<NT, NE>,
+    ): Unsafe_Async_Value<Dictionary<NT>, Dictionary<NE>>
 
     /**
      * This method is only to be used by resources

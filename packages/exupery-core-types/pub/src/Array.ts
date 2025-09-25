@@ -1,4 +1,5 @@
 import { Async_Value } from "./Async_Value"
+import { Unsafe_Async_Value } from "./Unsafe_Async_Value"
 import { Optional_Value } from "./Optional_Value"
 
 /**
@@ -17,9 +18,12 @@ export interface Array<T> {
      * maps the array to {@link Async_Value} that contains an array
      * @param handle_value callback that provides an async value. keys are not available.
      */
-    async_map<NT>(
+    map_async<NT>(
         handle_value: ($: T) => Async_Value<NT>
     ): Async_Value<Array<NT>>
+    map_async_unsafe<NT, NE>(
+        handle_value: ($: T) => Unsafe_Async_Value<NT, NE>
+    ): Unsafe_Async_Value<Array<NT>, Array<NE>>
 
     /**
      * This method is only to be used by resources
