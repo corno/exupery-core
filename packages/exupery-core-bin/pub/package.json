@@ -20,7 +20,7 @@
     "dist"
   ],
   "devDependencies": {
-    "@types/node": "^18.11.9"
+    "@types/node": "^24.5.2"
   },
   "repository": {
     "type": "git",
