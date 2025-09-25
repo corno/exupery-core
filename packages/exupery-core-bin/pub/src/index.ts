@@ -1,8 +1,16 @@
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
+export type Program_Main = ($: _et.Array<string>) => _et.Async_Value<number>
+
+/**
+ * Runs a program main function, passing command line arguments (excluding
+ * `node` and the script name), and setting the process exit code to the
+ * returned value when the async value completes.
+ */
+
 export const run_program = (
-    main: ($: _et.Array<string>) => _et.Async_Value<number>
+    main: Program_Main
 ): void => {
     main(_ei.array_literal(process.argv.slice(2))).__execute(($) => {
         process.exitCode = $
