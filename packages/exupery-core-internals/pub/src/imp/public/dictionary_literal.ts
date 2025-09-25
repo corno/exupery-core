@@ -1,7 +1,4 @@
 import * as pt from "exupery-core-types"
-import { create_asynchronous_processes_monitor } from "../private/create_asynchronous_processes_monitor"
-import { create_Async_Value } from "./create_Async_Value"
-import { create_Unsafe_Async_Value } from "./create_Unsafe_Async_Value"
 import { set } from "./set"
 import { not_set } from "./not_set"
 import { array_literal } from "./array_literal"
@@ -27,69 +24,6 @@ class Dictionary<T> implements pt.Dictionary<T> {
             }
         }))
     }
-    map_async<NT>(on_entry_value: ($: T) => pt.Async_Value<NT>): pt.Async_Value<pt.Dictionary<NT>> {
-        const source = this.source
-        const temp: { [key: string]: NT } = {}
-        return create_Async_Value(
-            {
-                'execute': (on_dictionary_value) => {
-                    create_asynchronous_processes_monitor(
-                        (counter) => {
-                            source.map(($) => {
-                                counter['report process started']()
-                                on_entry_value($.value).__start((nv) => {
-                                    temp[$.key] = nv
-                                    counter['report process finished']()
-                                })
-                            })
-                        },
-                        () => {
-                            on_dictionary_value(dictionary_literal(temp))
-                        }
-                    )
-                }
-            }
-        )
-    }
-    map_async_unsafe<NT, NE>(on_entry_value: ($: T) => pt.Unsafe_Async_Value<NT, NE>): pt.Unsafe_Async_Value<pt.Dictionary<NT>, pt.Dictionary<NE>> {
-        const source = this.source
-        const temp_values: { [key: string]: NT } = {}
-        const temp_exceptions: { [key: string]: NE } = {}
-        return create_Unsafe_Async_Value(
-            {
-                'execute': (
-                    on_dictionary_value,
-                    on_dictionary_exception,
-                ) => {
-                    create_asynchronous_processes_monitor(
-                        (counter) => {
-                            source.map(($) => {
-                                counter['report process started']()
-                                on_entry_value($.value).__start(
-                                    (value) => {
-                                        temp_values[$.key] = value
-                                        counter['report process finished']()
-                                    },
-                                    (exception) => {
-                                        temp_exceptions[$.key] = exception
-                                        counter['report process finished']()
-                                    },
-                                )
-                            })
-                        },
-                        () => {
-                            if (Object.keys(temp_exceptions).length > 0) {
-                                on_dictionary_exception(dictionary_literal(temp_exceptions))
-                            } else {
-                                on_dictionary_value(dictionary_literal(temp_values))
-                            }
-                        }
-                    )
-                }
-            }
-        )
-    }
-
     __map_with_key<NT>(
         $v: (entry: T, key: string) => NT
     ) {

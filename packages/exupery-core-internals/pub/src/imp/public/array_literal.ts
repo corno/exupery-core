@@ -1,7 +1,4 @@
 import * as _et from "exupery-core-types"
-import { create_asynchronous_processes_monitor } from "../private/create_asynchronous_processes_monitor"
-import { create_Async_Value } from "./create_Async_Value"
-import { create_Unsafe_Async_Value } from "./create_Unsafe_Async_Value"
 import { not_set } from "./not_set"
 import { set } from "./set"
 
@@ -21,70 +18,6 @@ class Array_Class<T> implements _et.Array<T> {
         return array_literal(this.data.map((entry) => {
             return $v(entry)
         }))
-    }
-    map_async<NT>(on_element_value: ($: T) => _et.Async_Value<NT>): _et.Async_Value<_et.Array<NT>> {
-        const data = this.data
-        return create_Async_Value(
-            {
-                'execute': (on_array_value) => {
-                    const temp: NT[] = []
-                    create_asynchronous_processes_monitor(
-                        (registry) => {
-                            data.map(on_element_value).forEach((v) => {
-                                registry['report process started']()
-                                v.__start((v) => {
-                                    temp.push(v)
-                                    registry['report process finished']()
-                                })
-                            })
-                        },
-                        () => {
-                            on_array_value(array_literal(temp))
-                        }
-                    )
-                }
-            },
-        )
-    }
-    map_async_unsafe<NT, NE>(
-        on_element_value: ($: T) => _et.Unsafe_Async_Value<NT, NE>
-    ): _et.Unsafe_Async_Value<_et.Array<NT>, _et.Array<NE>> {
-        const data = this.data
-        return create_Unsafe_Async_Value(
-            {
-                'execute': (
-                    on_array_value,
-                    on_array_exception,
-                ) => {
-                    const temp_values: NT[] = []
-                    const temp_exceptions: NE[] = []
-                    create_asynchronous_processes_monitor(
-                        (registry) => {
-                            data.map(on_element_value).forEach((v) => {
-                                registry['report process started']()
-                                v.__start(
-                                    ($) => {
-                                        temp_values.push($)
-                                        registry['report process finished']()
-                                    },
-                                    ($) => {
-                                        temp_exceptions.push($)
-                                        registry['report process finished']()
-                                    }
-                                )
-                            })
-                        },
-                        () => {
-                            if (temp_exceptions.length > 0) {
-                                on_array_exception(array_literal(temp_exceptions))
-                            } else {
-                                on_array_value(array_literal(temp_values))
-                            }
-                        }
-                    )
-                }
-            },
-        )
     }
 
 
