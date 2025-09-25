@@ -5,10 +5,6 @@ import * as fs from "fs"
 
 import * as pathlib from "path"
 import { spawnSync } from 'child_process'
-
-import * as xx from "./create_Async_Value_Or_Exception.js"
-import * as xy from "./Async_Value_Or_Exception.js"
-
 export namespace Raw_Results {
     export type Read_Directory = _et.Dictionary<Node_Type>
 
@@ -76,14 +72,14 @@ export namespace Errors {
 }
 
 export namespace Results {
-    export type Read_Directory = xy.Async_Value_Or_Exception<Raw_Results.Read_Directory, Errors.Read_Directory>
-    export type Read_File = xy.Async_Value_Or_Exception<Raw_Results.Read_File, Errors.Read_File>
-    export type Copy = xy.Async_Value_Or_Exception<Raw_Results.Copy, Errors.Copy>
-    export type Remove = xy.Async_Value_Or_Exception<Raw_Results.Remove, Errors.Remove>
-    export type Stat = xy.Async_Value_Or_Exception<Raw_Results.Stat, Errors.Stat>
-    export type Access = xy.Async_Value_Or_Exception<Raw_Results.Access, Errors.Access>
-    export type Write_File = xy.Async_Value_Or_Exception<Raw_Results.Write_File, Errors.Write_File>
-    export type Make_Directory = xy.Async_Value_Or_Exception<Raw_Results.Make_Directory, Errors.Make_Directory>
+    export type Read_Directory = _et.Unsafe_Async_Value<Raw_Results.Read_Directory, Errors.Read_Directory>
+    export type Read_File = _et.Unsafe_Async_Value<Raw_Results.Read_File, Errors.Read_File>
+    export type Copy = _et.Unsafe_Async_Value<Raw_Results.Copy, Errors.Copy>
+    export type Remove = _et.Unsafe_Async_Value<Raw_Results.Remove, Errors.Remove>
+    export type Stat = _et.Unsafe_Async_Value<Raw_Results.Stat, Errors.Stat>
+    export type Access = _et.Unsafe_Async_Value<Raw_Results.Access, Errors.Access>
+    export type Write_File = _et.Unsafe_Async_Value<Raw_Results.Write_File, Errors.Write_File>
+    export type Make_Directory = _et.Unsafe_Async_Value<Raw_Results.Make_Directory, Errors.Make_Directory>
     // export type Spawn = _et.Async_Value<Raw_Results.Spawn>
 }
 
@@ -112,7 +108,7 @@ export const temp_resources = {
             path: string,
             escape_spaces_in_path: boolean,
         ): Results.Read_File => {
-            return xx.create_Async_Value_Or_Exception({
+            return _ei.cre({
                 'execute': (on_value, on_exception) => {
                     fs.readFile(possibly_escape_filename(path, escape_spaces_in_path), { 'encoding': 'utf-8' }, (err, data) => {
                         if (err) {
@@ -145,7 +141,7 @@ export const temp_resources = {
             path: string,
             escape_spaces_in_path: boolean,
         ): Results.Read_Directory => {
-            return xx.create_Async_Value_Or_Exception({
+            return _ei.create_Async_Value_Or_Exception({
                 'execute': (on_value, on_exception) => {
                     fs.readdir(possibly_escape_filename(path, escape_spaces_in_path), {
                         'encoding': 'utf-8',
@@ -182,7 +178,7 @@ export const temp_resources = {
                 errorOnExist?: boolean,
             }
         ): Results.Copy => {
-            return xx.create_Async_Value_Or_Exception({
+            return _ei.create_Async_Value_Or_Exception({
                 'execute': (on_value, on_exception) => {
                     fs.cp(possibly_escape_filename(source, escape_spaces_in_path), possibly_escape_filename(target, escape_spaces_in_path), options, (err) => {
                         if (err) {
@@ -221,7 +217,7 @@ export const temp_resources = {
                 // errorOnExist?: boolean,
             }
         ): Results.Remove => {
-            return xx.create_Async_Value_Or_Exception({
+            return _ei.create_Async_Value_Or_Exception({
                 'execute': (on_value, on_exception) => {
                     fs.rm(possibly_escape_filename(path, escape_spaces_in_path), options, (err) => {
 
@@ -246,7 +242,7 @@ export const temp_resources = {
             })
         },
         'stat': (path: string, escape_spaces_in_path: boolean): Results.Stat => {
-            return xx.create_Async_Value_Or_Exception({
+            return _ei.create_Async_Value_Or_Exception({
                 'execute': (on_value, on_exception) => {
                     fs.stat(possibly_escape_filename(path, escape_spaces_in_path), (err, stats) => {
                         if (err) {
@@ -270,7 +266,7 @@ export const temp_resources = {
             data: string,
             escape_spaces_in_path: boolean
         ): Results.Write_File => {
-            return xx.create_Async_Value_Or_Exception({
+            return _ei.create_Async_Value_Or_Exception({
                 'execute': (on_value, on_exception) => {
 
                     const fname = possibly_escape_filename(path, escape_spaces_in_path)
@@ -312,7 +308,7 @@ export const temp_resources = {
             escape_spaces_in_path: boolean
         ): Results.Make_Directory => {
 
-            return xx.create_Async_Value_Or_Exception({
+            return _ei.create_Async_Value_Or_Exception({
                 'execute': (on_value, on_exception) => {
                     fs.mkdir(
                         possibly_escape_filename(path, escape_spaces_in_path),
@@ -356,7 +352,7 @@ export const temp_resources = {
         //     stdin.resume();
         // },
         // 'spawn': (program: string, args: string[], options: { cwd?: string }): _et.Async_Value<Spawn_Result> => {
-        //     return xx.cast_to_async_value_or_exception_imp((on_value, on_exception) => {
+        //     return _ei.cast_to_async_value_or_exception_imp((on_value, on_exception) => {
 
         //         const x = spawnSync(program, args, {
         //             cwd: options.cwd,

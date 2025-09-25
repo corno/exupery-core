@@ -18,7 +18,7 @@
     "dist"
   ],
   "dependencies": {
-    "exupery-core-internals": "^0.1.4"
+    "exupery-core-internals": "^0.1.5"
   },
   "repository": {
     "type": "git",
