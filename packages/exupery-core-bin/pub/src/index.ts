@@ -12,7 +12,9 @@ export type Program_Main = ($: _et.Array<string>) => _et.Async_Value<number>
 export const run_program = (
     main: Program_Main
 ): void => {
-    main(_ei.array_literal(process.argv.slice(2))).__execute(($) => {
-        process.exitCode = $
-    })
+    main(_ei.array_literal(process.argv.slice(2))).__start(
+        ($) => {
+            process.exitCode = $
+        }
+    )
 }
