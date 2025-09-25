@@ -38,22 +38,24 @@ class Dictionary<T> implements pt.Dictionary<T> {
                 }
             })
             return cast_to_async_value_imp(
-                (cb) => {
-                    const temp: { [key: string]: NT } = {}
-                    create_async_registry(
-                        (counter) => {
-                            mapped.map(($) => {
-                                counter.register()
-                                $.value.__execute((nv) => {
-                                    temp[$.key] = nv
-                                    counter.report_finished()
+                {
+                    'execute': (on_value) => {
+                        const temp: { [key: string]: NT } = {}
+                        create_async_registry(
+                            (counter) => {
+                                mapped.map(($) => {
+                                    counter.register()
+                                    $.value.__start((nv) => {
+                                        temp[$.key] = nv
+                                        counter.report_finished()
+                                    })
                                 })
-                            })
-                        },
-                        () => {
-                            cb(dictionary_literal(temp))
-                        }
-                    )
+                            },
+                            () => {
+                                on_value(dictionary_literal(temp))
+                            }
+                        )
+                    }
                 }
             )
         }

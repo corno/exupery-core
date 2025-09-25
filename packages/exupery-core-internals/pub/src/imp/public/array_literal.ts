@@ -34,22 +34,24 @@ class Array_Class<T> implements pt.Array<T> {
             const mapped = array.map($v)
 
             return cast_to_async_value_imp(
-                ($c) => {
-                    const temp: NT[] = []
-                    create_async_registry(
-                        (registry) => {
-                            mapped.forEach((v) => {
-                                registry.register()
-                                v.__execute((v) => {
-                                    temp.push(v)
-                                    registry.report_finished()
+                {
+                    'execute': (on_value) => {
+                        const temp: NT[] = []
+                        create_async_registry(
+                            (registry) => {
+                                mapped.forEach((v) => {
+                                    registry.register()
+                                    v.__start((v) => {
+                                        temp.push(v)
+                                        registry.report_finished()
+                                    })
                                 })
-                            })
-                        },
-                        () => {
-                            $c(array_literal(temp))
-                        }
-                    )
+                            },
+                            () => {
+                                on_value(array_literal(temp))
+                            }
+                        )
+                    }
                 },
             )
         }

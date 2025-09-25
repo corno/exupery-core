@@ -12,8 +12,10 @@ export function make_async<T>(
     $: T
 ): pt.Async_Value<T> {
     return cast_to_async_value_imp(
-        ($c) => {
-            $c($)
+        {
+            'execute': (on_value) => {
+                on_value($)
+            }
         }
     )
 }

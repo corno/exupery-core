@@ -21,14 +21,14 @@ class Async_Value_Class<T> implements pt.Async_Value<T> {
             {
                 'execute': (on_value) => {
                     this.executer.execute((value) => {
-                        handle_value(value).__execute(on_value)
+                        handle_value(value).__start(on_value)
                     })
                 }
             }
         )
     }
 
-    __execute(on_value: ($: T) => void) {
+    __start(on_value: ($: T) => void) {
         this.executer.execute(on_value)
     }
 }
