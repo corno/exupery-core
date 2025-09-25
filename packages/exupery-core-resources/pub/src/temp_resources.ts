@@ -108,7 +108,7 @@ export const temp_resources = {
             path: string,
             escape_spaces_in_path: boolean,
         ): Results.Read_File => {
-            return _ei.cre({
+            return _ei.create_Unsafe_Async_Value({
                 'execute': (on_value, on_exception) => {
                     fs.readFile(possibly_escape_filename(path, escape_spaces_in_path), { 'encoding': 'utf-8' }, (err, data) => {
                         if (err) {
@@ -141,7 +141,7 @@ export const temp_resources = {
             path: string,
             escape_spaces_in_path: boolean,
         ): Results.Read_Directory => {
-            return _ei.create_Async_Value_Or_Exception({
+            return _ei.create_Unsafe_Async_Value({
                 'execute': (on_value, on_exception) => {
                     fs.readdir(possibly_escape_filename(path, escape_spaces_in_path), {
                         'encoding': 'utf-8',
@@ -178,7 +178,7 @@ export const temp_resources = {
                 errorOnExist?: boolean,
             }
         ): Results.Copy => {
-            return _ei.create_Async_Value_Or_Exception({
+            return _ei.create_Unsafe_Async_Value({
                 'execute': (on_value, on_exception) => {
                     fs.cp(possibly_escape_filename(source, escape_spaces_in_path), possibly_escape_filename(target, escape_spaces_in_path), options, (err) => {
                         if (err) {
@@ -217,7 +217,7 @@ export const temp_resources = {
                 // errorOnExist?: boolean,
             }
         ): Results.Remove => {
-            return _ei.create_Async_Value_Or_Exception({
+            return _ei.create_Unsafe_Async_Value({
                 'execute': (on_value, on_exception) => {
                     fs.rm(possibly_escape_filename(path, escape_spaces_in_path), options, (err) => {
 
@@ -242,7 +242,7 @@ export const temp_resources = {
             })
         },
         'stat': (path: string, escape_spaces_in_path: boolean): Results.Stat => {
-            return _ei.create_Async_Value_Or_Exception({
+            return _ei.create_Unsafe_Async_Value({
                 'execute': (on_value, on_exception) => {
                     fs.stat(possibly_escape_filename(path, escape_spaces_in_path), (err, stats) => {
                         if (err) {
@@ -266,7 +266,7 @@ export const temp_resources = {
             data: string,
             escape_spaces_in_path: boolean
         ): Results.Write_File => {
-            return _ei.create_Async_Value_Or_Exception({
+            return _ei.create_Unsafe_Async_Value({
                 'execute': (on_value, on_exception) => {
 
                     const fname = possibly_escape_filename(path, escape_spaces_in_path)
@@ -308,7 +308,7 @@ export const temp_resources = {
             escape_spaces_in_path: boolean
         ): Results.Make_Directory => {
 
-            return _ei.create_Async_Value_Or_Exception({
+            return _ei.create_Unsafe_Async_Value({
                 'execute': (on_value, on_exception) => {
                     fs.mkdir(
                         possibly_escape_filename(path, escape_spaces_in_path),
