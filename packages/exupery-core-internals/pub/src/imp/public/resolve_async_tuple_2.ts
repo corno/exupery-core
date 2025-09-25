@@ -1,6 +1,6 @@
 
 import * as pt from 'exupery-core-types'
-import { cast_to_async_value_imp } from './cast_to_async_value_imp';
+import { create_Async_Value } from './create_Async_Value';
 
 export type Sync_Tuple_2<T1, T2> = {
     readonly 'first': T1
@@ -11,7 +11,7 @@ export function resolve_async_tuple_2<T1, T2>(
     first: pt.Async_Value<T1>,
     second: pt.Async_Value<T2>,
 ): pt.Async_Value<Sync_Tuple_2<T1, T2>> {
-    return cast_to_async_value_imp(
+    return create_Async_Value(
         {
             'execute': (on_value) => {
                 let element_1_is_set = false

@@ -1,19 +1,20 @@
-export type I_Async_Registry = {
-    readonly 'register': () => void
-    readonly 'report_finished': () => void
+export type I_Async_Monitor = {
+    readonly 'report process started': () => void
+    readonly 'report process finished': () => void
 }
 
 /**
- * this function provides a callback with a counter as parameter
- * when the counter reaches 0, the onEnd callback is called
+ * this function helps in keeping track of ongoing async operations
+ * async operations are registered and when finished reported as such.
+ * when all ongoing operations are finished the onEnd callback is called
  * 
  * this function is specifically useful for async map functions
  * 
  * @param callback this callback creates a scope within which the counter is provided
- * @param onEnd this callback will be called when the counter reaches 0
+ * @param onEnd this callback will be called when all ongoing operations are finished
  */
-export function create_async_registry(
-    registration_phase: ($: I_Async_Registry) => void,
+export function create_asynchronous_processes_monitor(
+    monitoring_phase: ($: I_Async_Monitor) => void,
     on_all_finished: () => void
 ): void {
 
@@ -40,15 +41,15 @@ export function create_async_registry(
             }
         }
     }
-    registration_phase({
-        register: () => {
+    monitoring_phase({
+        'report process started': () => {
             if (on_all_finished_has_been_called) {
                 throw new Error("CORE: async call done after context is ready")
             }
             counter += 1
 
         },
-        report_finished: () => {
+        'report process finished': () => {
             if (counter === 0) {
                 throw new Error("CORE: decrement while counter is 0")
             }

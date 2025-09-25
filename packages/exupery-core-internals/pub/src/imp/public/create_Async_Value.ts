@@ -17,7 +17,7 @@ class Async_Value_Class<T> implements pt.Async_Value<T> {
         this.executer = executer
     }
     map<NT>(handle_value: ($: T) => Async_Value<NT>): pt.Async_Value<NT> {
-        return cast_to_async_value_imp(
+        return create_Async_Value(
             {
                 'execute': (on_value) => {
                     this.executer.execute((value) => {
@@ -38,7 +38,7 @@ class Async_Value_Class<T> implements pt.Async_Value<T> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function cast_to_async_value_imp<T>(
+export function create_Async_Value<T>(
     executer: Executer<T>,
 ): pt.Async_Value<T> {
     return new Async_Value_Class<T>(executer)

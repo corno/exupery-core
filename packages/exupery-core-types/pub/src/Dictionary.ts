@@ -16,18 +16,18 @@ export type Compare_Function<T> = (a: Key_Value_Pair<T>, b: Key_Value_Pair<T>) =
 export interface Dictionary<T> {
     /**
      * 
-     * @param $v callback to transform an individual entry. keys are not available.
+     * @param handle_value callback to transform an individual entry. keys are not available.
      */
     map<NT>(
-        $v: ($: T, key: string) => NT
+        handle_value: ($: T, key: string) => NT
     ): Dictionary<NT>
 
     /**
      * 
-     * @param $v callback that provides an {@link Async_Value}. keys are not available.
+     * @param handle_value callback that provides an {@link Async_Value}. keys are not available.
      */
     async_map<NT>(
-        $v: ($: T) => Async_Value<NT>
+        handle_value: ($: T) => Async_Value<NT>
     ): Async_Value<Dictionary<NT>>
 
     /**

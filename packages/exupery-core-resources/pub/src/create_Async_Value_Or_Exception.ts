@@ -103,7 +103,7 @@ class Async_Value_Or_Exception_Class<T, E> implements x.Async_Value_Or_Exception
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function cast_to_async_value_or_exception_imp<T, E>(
+export function create_Async_Value_Or_Exception<T, E>(
     executer: Executer<T, E>,
 ): x.Async_Value_Or_Exception<T, E> {
     return new Async_Value_Or_Exception_Class<T, E>(executer)

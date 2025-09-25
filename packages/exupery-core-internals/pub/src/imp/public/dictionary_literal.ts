@@ -1,6 +1,6 @@
 import * as pt from "exupery-core-types"
-import { create_async_registry } from "../private/create_async_registry"
-import { cast_to_async_value_imp } from "./cast_to_async_value_imp"
+import { create_asynchronous_processes_monitor } from "../private/create_asynchronous_processes_monitor"
+import { create_Async_Value } from "./create_Async_Value"
 import { set } from "./set"
 import { not_set } from "./not_set"
 import { array_literal } from "./array_literal"
@@ -26,44 +26,29 @@ class Dictionary<T> implements pt.Dictionary<T> {
             }
         }))
     }
-    async_map<NT>($v: ($: T) => pt.Async_Value<NT>) {
-        function imp<T, NT>(
-            dictionary_as_array: Dictionary_As_Array<T>,
-            $v: ($: T) => pt.Async_Value<NT>
-        ): pt.Async_Value<pt.Dictionary<NT>> {
-            const mapped = dictionary_as_array.map(($) => {
-                return {
-                    key: $.key,
-                    value: $v($.value),
-                }
-            })
-            return cast_to_async_value_imp(
-                {
-                    'execute': (on_value) => {
-                        const temp: { [key: string]: NT } = {}
-                        create_async_registry(
-                            (counter) => {
-                                mapped.map(($) => {
-                                    counter.register()
-                                    $.value.__start((nv) => {
-                                        temp[$.key] = nv
-                                        counter.report_finished()
-                                    })
+    async_map<NT>(on_entry_value: ($: T) => pt.Async_Value<NT>): pt.Async_Value<pt.Dictionary<NT>> {
+        const source = this.source
+        const temp: { [key: string]: NT } = {}
+        return create_Async_Value(
+            {
+                'execute': (on_dictionary_value) => {
+                    create_asynchronous_processes_monitor(
+                        (counter) => {
+                            source.map(($) => {
+                                counter['report process started']()
+                                on_entry_value($.value).__start((nv) => {
+                                    temp[$.key] = nv
+                                    counter['report process finished']()
                                 })
-                            },
-                            () => {
-                                on_value(dictionary_literal(temp))
-                            }
-                        )
-                    }
+                            })
+                        },
+                        () => {
+                            on_dictionary_value(dictionary_literal(temp))
+                        }
+                    )
                 }
-            )
-        }
-        return imp<T, NT>(
-            this.source,
-            $v,
+            }
         )
-
     }
 
     __map_with_key<NT>(

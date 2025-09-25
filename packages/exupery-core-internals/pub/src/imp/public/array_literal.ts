@@ -1,6 +1,6 @@
-import * as pt from "exupery-core-types"
-import { create_async_registry } from "../private/create_async_registry"
-import { cast_to_async_value_imp } from "./cast_to_async_value_imp"
+import * as _et from "exupery-core-types"
+import { create_asynchronous_processes_monitor } from "../private/create_asynchronous_processes_monitor"
+import { create_Async_Value } from "./create_Async_Value"
 import { not_set } from "./not_set"
 import { set } from "./set"
 
@@ -9,7 +9,7 @@ import { set } from "./set"
  * If you feel the need to rename this class, don't rename it to 'Array',
  * it will break the 'instanceOf Array' test
  */
-class Array_Class<T> implements pt.Array<T> {
+class Array_Class<T> implements _et.Array<T> {
     private data: readonly T[]
     constructor(data: readonly T[]) {
         this.data = data
@@ -21,44 +21,33 @@ class Array_Class<T> implements pt.Array<T> {
             return $v(entry)
         }))
     }
-    async_map<NT>($v: ($: T) => pt.Async_Value<NT>) {
-        // const elements = source.map($v)
-        // let _isGuaranteedToReturnAResult = true
-        // source.forEach(($) => {
-        //     if ($)
-        // })
-        function array<T, NT>(
-            array: readonly T[],
-            $v: ($: T) => pt.Async_Value<NT>
-        ): pt.Async_Value<pt.Array<NT>> {
-            const mapped = array.map($v)
-
-            return cast_to_async_value_imp(
-                {
-                    'execute': (on_value) => {
-                        const temp: NT[] = []
-                        create_async_registry(
-                            (registry) => {
-                                mapped.forEach((v) => {
-                                    registry.register()
-                                    v.__start((v) => {
-                                        temp.push(v)
-                                        registry.report_finished()
-                                    })
+    async_map<NT>(on_element_value: ($: T) => _et.Async_Value<NT>): _et.Async_Value<_et.Array<NT>> {
+        const data = this.data
+        return create_Async_Value(
+            {
+                'execute': (on_array_value) => {
+                    const temp: NT[] = []
+                    create_asynchronous_processes_monitor(
+                        (registry) => {
+                            data.map(on_element_value).forEach((v) => {
+                                registry['report process started']()
+                                v.__start((v) => {
+                                    temp.push(v)
+                                    registry['report process finished']()
                                 })
-                            },
-                            () => {
-                                on_value(array_literal(temp))
-                            }
-                        )
-                    }
-                },
-            )
-        }
-        return array(this.data, $v)
+                            })
+                        },
+                        () => {
+                            on_array_value(array_literal(temp))
+                        }
+                    )
+                }
+            },
+        )
     }
 
-    /////////
+
+    //internal methods
     __for_each($i: ($: T) => void) {
         this.data.forEach(($) => {
             $i($)
@@ -73,7 +62,6 @@ class Array_Class<T> implements pt.Array<T> {
         }
         return set(this.data[index])
     }
-
     __get_raw_copy(): T[] {
         return this.data.slice()
     }
@@ -88,7 +76,7 @@ class Array_Class<T> implements pt.Array<T> {
  * @param source An array literal
  * @returns 
  */
-export function array_literal<T>(source: readonly T[]): pt.Array<T> {
+export function array_literal<T>(source: readonly T[]): _et.Array<T> {
     const data = source.slice() //create a copy
     if (!(data instanceof Array)) {
         throw new Error("invalid input in 'array_literal'")
