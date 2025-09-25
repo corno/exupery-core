@@ -1,6 +1,6 @@
 {
   "name": "exupery-core-resources",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "license": "ISC",
   "description": "the exupery core package for using resources (filesystem, console, network, etc.)",
   "author": "Corno",
