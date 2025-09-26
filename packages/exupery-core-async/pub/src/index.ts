@@ -1,4 +1,5 @@
 import * as _et from "exupery-core-types"
+import * as _ei from "exupery-core-internals"
 
 export * from "./Safe_Command_Result"
 export * from "./Unsafe_Command_Result"
@@ -22,6 +23,8 @@ import { __execute_safe_command } from "./execute_safe_command"
 import { __execute_unsafe_command } from "./execute_unsafe_command"
 import { __run_safe_query } from "./run_safe_query"
 import { __run_unsafe_query } from "./run_unsafe_query"
+import { Dictionary } from "exupery-core-types"
+import { create_asynchronous_processes_monitor } from "./create_asynchronous_processes_monitor"
 
 
 export const query = {
@@ -72,6 +75,43 @@ export const command = {
             return __execute_unsafe_command(
                 {
                     'execute': (on_success) => {
+                        on_success()
+                    }
+                }
+            )
+        },
+        'dictionary': <T, E>(
+            $: _et.Dictionary<T>,
+            handle_entry: ($: T) => Unsafe_Command_Result<E>,
+        ): Unsafe_Command_Result<Dictionary<E>> => {
+            return __execute_unsafe_command(
+                {
+                    'execute': (on_success, on_exception) => {
+                        let exceptions: { [key: string]: E } = {}
+                        create_asynchronous_processes_monitor(
+                            (monitor) => {
+                                $.map(($, key) => {
+                                    monitor['report process started']()
+
+                                    handle_entry($).__start(
+                                        () => {
+                                            monitor['report process finished']()
+                                        },
+                                        (e) => {
+                                            exceptions[key] = e
+                                            monitor['report process finished']()
+                                        }
+                                    )
+                                })
+                            },
+                            () => {
+                                if (Object.keys(exceptions).length === 0) {
+                                    on_success()
+                                } else {
+                                    on_exception(_ei.dictionary_literal(exceptions))
+                                }
+                            }
+                        )
                         on_success()
                     }
                 }
