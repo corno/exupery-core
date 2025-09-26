@@ -12,6 +12,7 @@
   "bugs": {
     "url": "https://github.com/corno/exupery-core/issues"
   },
+  "main": "./dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
