@@ -25,6 +25,24 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
     constructor(executer: Executer<E>) {
         this.executer = executer
     }
+
+    then(
+        handle: () => Unsafe_Command_Result<E>
+    ): Unsafe_Command_Result<E> {
+        return new Unsafe_Command_Result_Class<E>({
+            'execute': (new_on_success, new_on_exception) => {
+                this.executer.execute(
+                    () => {
+                        handle().__start(
+                            new_on_success,
+                            new_on_exception,
+                        )
+                    },
+                    new_on_exception,
+                )
+            }
+        })
+    }
     if_exception_then<NE>(
         handle_exception: ($: E) => Unsafe_Command_Result<NE>
     ): Unsafe_Command_Result<NE> {

@@ -7,6 +7,9 @@ export interface Unsafe_Command_Result<E> {
     if_exception_then<NE>(
         handle_exception: ($: E) => Unsafe_Command_Result<NE>
     ): Unsafe_Command_Result<NE>
+    then(
+        handle: () => Unsafe_Command_Result<E> 
+    ): Unsafe_Command_Result<E>
 
     // catch(
     //     handle_exception: ($: E) => T
