@@ -2,7 +2,7 @@ import * as _et from "exupery-core-types"
 
 import { Safe_Command_Result } from "./Safe_Command_Result"
 
-export type Executer = {
+type Executer = {
     'execute': (
         on_finished: () => void
     ) => void
@@ -17,7 +17,7 @@ class Safe_Command_Result_Class implements Safe_Command_Result {
     then(
         handle: () => Safe_Command_Result
     ): Safe_Command_Result {
-        return execute_safe_command(
+        return __execute_safe_command(
             {
                 'execute': (on_finished) => {
                     this.executer.execute(
@@ -42,7 +42,7 @@ class Safe_Command_Result_Class implements Safe_Command_Result {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function execute_safe_command(
+export function __execute_safe_command(
     executer: Executer,
 ): Safe_Command_Result {
     return new Safe_Command_Result_Class(executer)

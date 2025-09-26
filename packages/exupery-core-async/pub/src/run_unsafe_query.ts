@@ -1,6 +1,6 @@
 import * as _et from "exupery-core-types"
 
-import { run_safe_query } from "./run_safe_query"
+import { __run_safe_query } from "./run_safe_query"
 import { Unsafe_Query_Result } from "./Unsafe_Query_Result"
 import { Safe_Query_Result } from "./Safe_Query_Result"
 
@@ -88,7 +88,7 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
     catch(
         handle_exception: ($: E) => T
     ): Safe_Query_Result<T> {
-        return run_safe_query<T>({
+        return __run_safe_query<T>({
             'execute': (on_value) => {
                 this.executer.execute(
                     on_value,
@@ -103,7 +103,7 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
         handle_value: ($: T) => NT,
         handle_exception: ($: E) => NT,
     ): Safe_Query_Result<NT> {
-        return run_safe_query<NT>({
+        return __run_safe_query<NT>({
             'execute': (on_value) => {
                 this.executer.execute(
                     ($) => {
@@ -129,7 +129,7 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function run_unsafe_query<T, E>(
+export function __run_unsafe_query<T, E>(
     executer: Executer<T, E>,
 ): Unsafe_Query_Result<T, E> {
     return new Unsafe_Query_Result_Class<T, E>(executer)

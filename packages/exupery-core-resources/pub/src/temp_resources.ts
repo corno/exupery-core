@@ -1,5 +1,6 @@
 import * as _et from 'exupery-core-types'
 import * as _ei from 'exupery-core-internals'
+import * as _easync from 'exupery-core-async'
 
 import * as fs from "fs"
 
@@ -10,16 +11,8 @@ export namespace Raw_Results {
 
     export type Read_File = string
 
-    export type Copy = null
-    export type Remove = null
 
     export type Stat = Node_Type
-
-    export type Access = null
-
-    export type Write_File = null
-
-    export type Make_Directory = null
 
     // export type Spawn = {
     //     pid: number;
@@ -72,14 +65,15 @@ export namespace Errors {
 }
 
 export namespace Results {
-    export type Read_Directory = _et.Unsafe_Async_Value<Raw_Results.Read_Directory, Errors.Read_Directory>
-    export type Read_File = _et.Unsafe_Async_Value<Raw_Results.Read_File, Errors.Read_File>
-    export type Copy = _et.Unsafe_Async_Value<Raw_Results.Copy, Errors.Copy>
-    export type Remove = _et.Unsafe_Async_Value<Raw_Results.Remove, Errors.Remove>
-    export type Stat = _et.Unsafe_Async_Value<Raw_Results.Stat, Errors.Stat>
-    export type Access = _et.Unsafe_Async_Value<Raw_Results.Access, Errors.Access>
-    export type Write_File = _et.Unsafe_Async_Value<Raw_Results.Write_File, Errors.Write_File>
-    export type Make_Directory = _et.Unsafe_Async_Value<Raw_Results.Make_Directory, Errors.Make_Directory>
+    export type Read_Directory = _easync.Unsafe_Query_Result<Raw_Results.Read_Directory, Errors.Read_Directory>
+    export type Read_File = _easync.Unsafe_Query_Result<Raw_Results.Read_File, Errors.Read_File>
+    export type Stat = _easync.Unsafe_Query_Result<Raw_Results.Stat, Errors.Stat>
+
+    export type Copy = _easync.Unsafe_Command_Result<Errors.Copy>
+    export type Remove = _easync.Unsafe_Command_Result<Errors.Remove>
+    export type Access = _easync.Unsafe_Command_Result<Errors.Access>
+    export type Write_File = _easync.Unsafe_Command_Result<Errors.Write_File>
+    export type Make_Directory = _easync.Unsafe_Command_Result<Errors.Make_Directory>
     // export type Spawn = _et.Async_Value<Raw_Results.Spawn>
 }
 
@@ -108,7 +102,7 @@ export const temp_resources = {
             path: string,
             escape_spaces_in_path: boolean,
         ): Results.Read_File => {
-            return _ei.create_Unsafe_Async_Value({
+            return _easync.query.unsafe['create result']({
                 'execute': (on_value, on_exception) => {
                     fs.readFile(possibly_escape_filename(path, escape_spaces_in_path), { 'encoding': 'utf-8' }, (err, data) => {
                         if (err) {
@@ -269,7 +263,7 @@ export const temp_resources = {
             data: string,
             escape_spaces_in_path: boolean
         ): Results.Write_File => {
-            return _ei.create_Unsafe_Async_Value({
+            return _easync.ex({
                 'execute': (on_value, on_exception) => {
 
                     const fname = possibly_escape_filename(path, escape_spaces_in_path)

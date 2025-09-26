@@ -6,8 +6,11 @@ export * from "./Safe_Query_Result"
 export * from "./Unsafe_Query_Result"
 
 export * from "./merge_2_safe_query_results"
+
 export * from "./run_safe_query"
 export * from "./run_unsafe_query"
+export * from "./execute_safe_command"
+export * from "./execute_unsafe_command"
 
 
 import { Safe_Command_Result } from "./Safe_Command_Result"
@@ -15,10 +18,10 @@ import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
 import { Safe_Query_Result } from "./Safe_Query_Result"
 import { Unsafe_Query_Result } from "./Unsafe_Query_Result"
 
-import { execute_safe_command } from "./execue_safe_command"
-import { execute_unsafe_command } from "./execute_unsafe_command"
-import { run_safe_query } from "./run_safe_query"
-import { run_unsafe_query } from "./run_unsafe_query"
+import { __execute_safe_command } from "./execute_safe_command"
+import { __execute_unsafe_command } from "./execute_unsafe_command"
+import { __run_safe_query } from "./run_safe_query"
+import { __run_unsafe_query } from "./run_unsafe_query"
 
 
 export const query = {
@@ -26,7 +29,7 @@ export const query = {
         'create result': <T>(
             $: T
         ): Safe_Query_Result<T> => {
-            return run_safe_query(
+            return __run_safe_query(
                 {
                     'execute': (on_value) => {
                         on_value($)
@@ -39,7 +42,7 @@ export const query = {
         'create result': <T, E>(
             $: T
         ): Unsafe_Query_Result<T, E> => {
-            return run_unsafe_query(
+            return __run_unsafe_query(
                 {
                     'execute': (on_value) => {
                         on_value($)
@@ -54,7 +57,7 @@ export const command = {
     'safe': {
         'create result': (
         ): Safe_Command_Result => {
-            return execute_safe_command(
+            return __execute_safe_command(
                 {
                     'execute': (on_success) => {
                         on_success()
@@ -66,7 +69,7 @@ export const command = {
     'unsafe': {
         'create result': <E>(
         ): Unsafe_Command_Result<E> => {
-            return execute_unsafe_command(
+            return __execute_unsafe_command(
                 {
                     'execute': (on_success) => {
                         on_success()

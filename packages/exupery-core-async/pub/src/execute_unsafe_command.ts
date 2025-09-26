@@ -1,9 +1,10 @@
 import * as _et from "exupery-core-types"
 
-import { run_safe_query } from "./run_safe_query"
 import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
 import { Safe_Command_Result } from "./Safe_Command_Result"
-import { execute_safe_command } from "./execue_safe_command"
+
+import { __execute_safe_command } from "./execute_safe_command"
+import { __run_safe_query } from "./run_safe_query"
 
 
 /**
@@ -58,7 +59,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
     catch(
         handle_exception: ($: E) => void
     ): Safe_Command_Result {
-        return execute_safe_command({
+        return __execute_safe_command({
             'execute': (on_success) => {
                 this.executer.execute(
                     on_success,
@@ -83,7 +84,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function execute_unsafe_command<E>(
+export function __execute_unsafe_command<E>(
     executer: Executer<E>,
 ): Unsafe_Command_Result<E> {
     return new Unsafe_Command_Result_Class<E>(executer)

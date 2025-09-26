@@ -1,9 +1,8 @@
 import * as _et from "exupery-core-types"
 
 import { Safe_Query_Result } from "./Safe_Query_Result"
-import { Unsafe_Query_Result } from "./Unsafe_Query_Result"
 
-export type Executer<T> = {
+type Executer<T> = {
     'execute': (
         on_value: ($: T) => void
     ) => void
@@ -18,7 +17,7 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
     map<NT>(
         handle_value: ($: T) => NT
     ): Safe_Query_Result<NT> {
-        return run_safe_query(
+        return __run_safe_query(
             {
                 'execute': (on_value) => {
                     this.executer.execute(
@@ -33,7 +32,7 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
     then<NT>(
         handle_value: ($: T) => Safe_Query_Result<NT>
     ): Safe_Query_Result<NT> {
-        return run_safe_query(
+        return __run_safe_query(
             {
                 'execute': (on_value) => {
                     this.executer.execute(
@@ -58,7 +57,7 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function run_safe_query<T>(
+export function __run_safe_query<T>(
     executer: Executer<T>,
 ): Safe_Query_Result<T> {
     return new Safe_Query_Result_Class<T>(executer)
