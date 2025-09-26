@@ -102,7 +102,7 @@ export const temp_resources = {
             path: string,
             escape_spaces_in_path: boolean,
         ): Results.Read_File => {
-            return _easync.query.unsafe['create result']({
+            return _easync.__run_unsafe_query({
                 'execute': (on_value, on_exception) => {
                     fs.readFile(possibly_escape_filename(path, escape_spaces_in_path), { 'encoding': 'utf-8' }, (err, data) => {
                         if (err) {
@@ -135,7 +135,7 @@ export const temp_resources = {
             path: string,
             escape_spaces_in_path: boolean,
         ): Results.Read_Directory => {
-            return _ei.create_Unsafe_Async_Value({
+            return _easync.__run_unsafe_query({
                 'execute': (on_value, on_exception) => {
                     fs.readdir(possibly_escape_filename(path, escape_spaces_in_path), {
                         'encoding': 'utf-8',
@@ -172,8 +172,8 @@ export const temp_resources = {
                 errorOnExist?: boolean,
             }
         ): Results.Copy => {
-            return _ei.create_Unsafe_Async_Value({
-                'execute': (on_value, on_exception) => {
+            return _easync.__execute_unsafe_command({
+                'execute': (on_success, on_exception) => {
                     fs.cp(possibly_escape_filename(source, escape_spaces_in_path), possibly_escape_filename(target, escape_spaces_in_path), options, (err) => {
                         if (err) {
                             on_exception(_ei.block((): Errors.Copy => {
@@ -195,7 +195,7 @@ export const temp_resources = {
                                 return _ei.panic(`unhandled fs.cp error code: ${err.code}`)
                             }))
                         } else {
-                            on_value(null)
+                            on_success()
                         }
                     })
                 }
@@ -211,8 +211,8 @@ export const temp_resources = {
                 // errorOnExist?: boolean,
             }
         ): Results.Remove => {
-            return _ei.create_Unsafe_Async_Value({
-                'execute': (on_value, on_exception) => {
+            return _easync.__execute_unsafe_command({
+                'execute': (on_success, on_exception) => {
                     fs.rm(possibly_escape_filename(path, escape_spaces_in_path), options, (err) => {
 
                         if (err) {
@@ -229,7 +229,7 @@ export const temp_resources = {
                                 return _ei.panic(`unhandled fs.rm error code: ${err.code}`)
                             }))
                         } else {
-                            on_value(null)
+                            on_success()
                         }
                     })
                 }
@@ -239,7 +239,7 @@ export const temp_resources = {
             path: string,
             escape_spaces_in_path: boolean
         ): Results.Stat => {
-            return _ei.create_Unsafe_Async_Value({
+            return _easync.__run_unsafe_query({
                 'execute': (on_value, on_exception) => {
                     fs.stat(possibly_escape_filename(path, escape_spaces_in_path), (err, stats) => {
                         if (err) {
@@ -263,8 +263,8 @@ export const temp_resources = {
             data: string,
             escape_spaces_in_path: boolean
         ): Results.Write_File => {
-            return _easync.ex({
-                'execute': (on_value, on_exception) => {
+            return _easync.__execute_unsafe_command({
+                'execute': (on_success, on_exception) => {
 
                     const fname = possibly_escape_filename(path, escape_spaces_in_path)
                     fs.mkdir(
@@ -291,7 +291,7 @@ export const temp_resources = {
                                         return _ei.panic(`unhandled fs.writeFile error code: ${err.code}`)
                                     }))
                                 } else {
-                                    on_value(null)
+                                    on_success()
                                 }
                             })
                         }
@@ -305,8 +305,8 @@ export const temp_resources = {
             escape_spaces_in_path: boolean,
         ): Results.Make_Directory => {
 
-            return _ei.create_Unsafe_Async_Value({
-                'execute': (on_value, on_exception) => {
+            return _easync.__execute_unsafe_command({
+                'execute': (on_success, on_exception) => {
                     fs.mkdir(
                         possibly_escape_filename(path, escape_spaces_in_path),
                         {
@@ -321,7 +321,7 @@ export const temp_resources = {
                                     return _ei.panic(`unhandled fs.mkdir error code: ${err.code}`)
                                 }))
                             } else {
-                                on_value(null)
+                                on_success()
                             }
                         }
                     )
