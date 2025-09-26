@@ -7,37 +7,7 @@ import * as fs from "fs"
 import * as pathlib from "path"
 import { spawnSync } from 'child_process'
 import { Node_Type } from './types'
-export namespace Raw_Results {
 
-    export type Stat = Node_Type
-
-    // export type Spawn = {
-    //     pid: number;
-    //     output: _et.Array<string>;
-    //     stdout: string;
-    //     stderr: string;
-    //     status: _et.Optional_Value<number>;
-    //     // signal: NodeJS.Signals | null;
-    //     error?: { message: string } | undefined;
-    // }
-}
-
-export namespace Errors {
-
-
-    export type Access =
-        | ['node does not exist', null]
-        | ['permission denied', null]
-
-}
-
-export namespace Results {
-
-    export type Access = _easync.Unsafe_Command_Result<Errors.Access>
-    // export type Spawn = _et.Async_Value<Raw_Results.Spawn>
-}
-
-import { $$ as __possibly_escape_filename } from "./__internal/possibly_escape_file_name"
 
 // export const temp_resources = {
 //     'console': {

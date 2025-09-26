@@ -8,16 +8,10 @@ import * as D from "../types"
 
 import { $$ as __possibly_escape_filename } from "../__internal/possibly_escape_file_name"
 
-export type Error =
-    | ['directory does not exist', null]
-    | ['node is not a directory', null]
-
-export type Result = _easync.Unsafe_Query_Result<_et.Dictionary<D.Node_Type>, Error>
-
 export const $$ = (
     path: string,
     escape_spaces_in_path: boolean,
-): Result => {
+): _easync.Unsafe_Query_Result<_et.Dictionary<D.Node_Type>, D.Read_Directory_Error> => {
     return _easync.__run_unsafe_query({
         'execute': (on_value, on_exception) => {
             fs.readdir(__possibly_escape_filename(path, escape_spaces_in_path), {

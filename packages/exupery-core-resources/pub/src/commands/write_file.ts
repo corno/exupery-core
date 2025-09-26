@@ -10,16 +10,11 @@ import * as D from "../types"
 
 import { $$ as __possibly_escape_filename } from "../__internal/possibly_escape_file_name"
 
-export type Error =
-        | ['permission denied', null]
-
-export type Result = _easync.Unsafe_Command_Result<Error>
-
 export const $$ = (
     path: string,
     data: string,
     escape_spaces_in_path: boolean
-): Result => {
+): _easync.Unsafe_Command_Result<D.Write_File_Error> => {
     return _easync.__execute_unsafe_command({
         'execute': (on_success, on_exception) => {
 

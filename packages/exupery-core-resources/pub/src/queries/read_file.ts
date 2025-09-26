@@ -4,21 +4,12 @@ import * as _ei from 'exupery-core-internals'
 import * as fs from "fs"
 
 import { $$ as __possibly_escape_filename } from "../__internal/possibly_escape_file_name"
-
-export type Error =
-    | ['file does not exist', null]
-    | ['node is not a file', null]
-    | ['permission denied', null]
-    | ['file too large', null]
-    | ['device not ready', null]
-
-export type Result = _easync.Unsafe_Query_Result<string, Error>
-
+import * as D from "../types"
 
 export const $$ = (
     path: string,
     escape_spaces_in_path: boolean,
-): Result => {
+): _easync.Unsafe_Query_Result<string, D.Read_File_Error> => {
     return _easync.__run_unsafe_query({
         'execute': (on_value, on_exception) => {
             fs.readFile(__possibly_escape_filename(path, escape_spaces_in_path), { 'encoding': 'utf-8' }, (err, data) => {

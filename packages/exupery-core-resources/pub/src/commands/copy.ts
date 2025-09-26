@@ -10,15 +10,6 @@ import * as D from "../types"
 
 import { $$ as __possibly_escape_filename } from "../__internal/possibly_escape_file_name"
 
-export type Error =
-    | ['source does not exist', null]
-    | ['node is not a file', null]
-    | ['permission denied', null]
-    | ['file too large', null]
-    | ['device not ready', null]
-
-export type Result = _easync.Unsafe_Command_Result<Error>
-
 export const $$ = (
     source: string,
     target: string,
@@ -28,12 +19,12 @@ export const $$ = (
         force?: boolean,
         errorOnExist?: boolean,
     }
-): Result => {
+): _easync.Unsafe_Command_Result<D.Copy_Error> => {
     return _easync.__execute_unsafe_command({
         'execute': (on_success, on_exception) => {
             fs.cp(__possibly_escape_filename(source, escape_spaces_in_path), __possibly_escape_filename(target, escape_spaces_in_path), options, (err) => {
                 if (err) {
-                    on_exception(_ei.block((): Error => {
+                    on_exception(_ei.block((): D.Copy_Error => {
                         if (err.code === 'ENOENT') {
                             return ['source does not exist', null]
                         }
