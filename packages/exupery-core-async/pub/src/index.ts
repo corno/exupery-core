@@ -9,34 +9,71 @@ export * from "./run_safe_query"
 export * from "./run_unsafe_query"
 
 
+import { Safe_Query_Result } from "./Safe_Query_Result"
+import { run_safe_query } from "./run_safe_query"
+import { Unsafe_Query_Result } from "./Unsafe_Query_Result"
+import { run_unsafe_query } from "./run_unsafe_query"
+import { Safe_Command_Result } from "./Safe_Command_Result"
+import { execute_safe_command } from "./execue_safe_command"
+import { execute_unsafe_command } from "./execute_unsafe_command"
+import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
 
-export * from "./make_async"
 
+export const query = {
+    'safe': {
+        'create result': <T>(
+            $: T
+        ): Safe_Query_Result<T> => {
+            return run_safe_query(
+                {
+                    'execute': (on_value) => {
+                        on_value($)
+                    }
+                }
+            )
+        }
+    },
+    'unsafe': {
+        'create result': <T, E>(
+            $: T
+        ): Unsafe_Query_Result<T, E> => {
+            return run_unsafe_query(
+                {
+                    'execute': (on_value) => {
+                        on_value($)
+                    }
+                }
+            )
+        }
+    },
+}
 
-// export const query = {
-//     'safe': {
-
-//     },
-//     'unsafe': {
-//     },
-//     'entries': {
-//         'safe': <T>(source: _et.Dictionary<T>) => new Dictionary_Query_Safe_Result<T>(source),
-//         'unsafe': <T, E>(source: _et.Dictionary<T>) => new Dictionary_Query_Unsafe_Result<T, E>(source),
-//     },
-//     'elements': {
-//         'safe': <T>(source: _et.Array<T>) => new Array_Query_Safe_Result<T>(source),
-//         'unsafe': <T, E>(source: _et.Array<T>) => new Array_Query_Unsafe_Result<T, E>(source),
-//     }
-// }
-
-// export const command = {
-//     'safe': {
-
-//     },
-//     'unsafe': {
-
-//     }
-// }
+export const command = {
+    'safe': {
+        'create result': (
+        ): Safe_Command_Result => {
+            return execute_safe_command(
+                {
+                    'execute': (on_success) => {
+                        on_success()
+                    }
+                }
+            )
+        }
+    },
+    'unsafe': {
+        'create result': <E>(
+        ): Unsafe_Command_Result<E> => {
+            return execute_unsafe_command(
+                {
+                    'execute': (on_success) => {
+                        on_success()
+                    }
+                }
+            )
+        }
+    },
+}
 
 
 // //array
