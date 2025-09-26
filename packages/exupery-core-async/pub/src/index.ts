@@ -82,7 +82,7 @@ export const command = {
         },
         'dictionary': <T, E>(
             $: _et.Dictionary<T>,
-            handle_entry: ($: T) => Unsafe_Command_Result<E>,
+            handle_entry: ($: T, key: string) => Unsafe_Command_Result<E>,
         ): Unsafe_Command_Result<Dictionary<E>> => {
             return __execute_unsafe_command(
                 {
@@ -93,7 +93,7 @@ export const command = {
                                 $.map(($, key) => {
                                     monitor['report process started']()
 
-                                    handle_entry($).__start(
+                                    handle_entry($, key).__start(
                                         () => {
                                             monitor['report process finished']()
                                         },
