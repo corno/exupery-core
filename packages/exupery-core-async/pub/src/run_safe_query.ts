@@ -1,6 +1,10 @@
 import * as _et from "exupery-core-types"
 
 import { Safe_Query_Result } from "./Safe_Query_Result"
+import { Safe_Command_Result } from "./Safe_Command_Result"
+import { __execute_safe_command } from "./execute_safe_command"
+import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
+import { __execute_unsafe_command } from "./execute_unsafe_command"
 
 type Executer<T> = {
     'execute': (
@@ -38,6 +42,39 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
                     this.executer.execute(
                         (value) => {
                             handle_value(value).__start(on_value)
+                        }
+                    )
+                }
+            }
+        )
+    }
+    execute_safe_command(
+        handle_value: ($: T) => Safe_Command_Result
+    ): Safe_Command_Result {
+        return __execute_safe_command(
+            {
+                'execute': (on_success) => {
+                    this.executer.execute(
+                        (value) => {
+                            handle_value(value).__start(on_success)
+                        }
+                    )
+                }
+            }
+        )
+    }
+    execute_unsafe_command<E>(
+        handle_value: ($: T) => Unsafe_Command_Result<E>
+    ): Unsafe_Command_Result<E> {
+        return __execute_unsafe_command(
+            {
+                'execute': (on_success, on_exception) => {
+                    this.executer.execute(
+                        (value) => {
+                            handle_value(value).__start(
+                                on_success,
+                                on_exception,
+                            )
                         }
                     )
                 }

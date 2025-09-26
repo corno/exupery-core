@@ -1,3 +1,5 @@
+import * as _et from 'exupery-core-types'
+
 export interface Unsafe_Command_Result<E> {
 
     map_exception<NE>(
@@ -14,6 +16,11 @@ export interface Unsafe_Command_Result<E> {
     // catch(
     //     handle_exception: ($: E) => T
     // ): Async_Value<T>
+
+    do_dictionary<E2>(
+        $: _et.Dictionary<Unsafe_Command_Result<E2>>,
+        aggregate_exceptions: ($: _et.Dictionary<E2>) => E,
+    ): Unsafe_Command_Result<E>
 
     __start(
         on_success: () => void,

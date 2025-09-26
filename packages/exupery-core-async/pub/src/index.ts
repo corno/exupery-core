@@ -112,7 +112,6 @@ export const command = {
                                 }
                             }
                         )
-                        on_success()
                     }
                 }
             )

@@ -1,3 +1,5 @@
+import { Safe_Command_Result } from "./Safe_Command_Result"
+import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
 
 /**
  * A value that will asynchronously become available.
@@ -16,6 +18,13 @@ export interface Safe_Query_Result<T> {
     then<NT>(
         handle_value: ($: T) => Safe_Query_Result<NT>
     ): Safe_Query_Result<NT>
+
+    execute_safe_command(
+        handle_value: ($: T) => Safe_Command_Result
+    ): Safe_Command_Result 
+    execute_unsafe_command<E>(
+        handle_value: ($: T) => Unsafe_Command_Result<E>
+    ): Unsafe_Command_Result<E>
 
     /**
      * This method is only to be used by resources

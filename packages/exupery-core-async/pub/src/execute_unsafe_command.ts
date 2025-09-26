@@ -1,10 +1,12 @@
 import * as _et from "exupery-core-types"
+import * as _ei from "exupery-core-internals"
 
 import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
 import { Safe_Command_Result } from "./Safe_Command_Result"
 
 import { __execute_safe_command } from "./execute_safe_command"
 import { __run_safe_query } from "./run_safe_query"
+import { create_asynchronous_processes_monitor } from "./create_asynchronous_processes_monitor"
 
 
 /**
@@ -74,6 +76,42 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
             }
         })
     }
+
+    do_dictionary<E2>(
+        $: _et.Dictionary<Unsafe_Command_Result<E2>>,
+        aggregate_exceptions: ($: _et.Dictionary<E2>) => E,
+    ): Unsafe_Command_Result<E> {
+        let exceptions: { [key: string]: E2 } = {}
+        return __execute_unsafe_command({
+            'execute': (on_success, on_exception) => {
+                create_asynchronous_processes_monitor(
+                    (monitor) => {
+                        $.map(($, key) => {
+                            monitor['report process started']()
+
+                            $.__start(
+                                () => {
+                                    monitor['report process finished']()
+                                },
+                                (e) => {
+                                    exceptions[key] = e
+                                    monitor['report process finished']()
+                                }
+                            )
+                        })
+                    },
+                    () => {
+                        if (Object.keys(exceptions).length === 0) {
+                            on_success()
+                        } else {
+                            on_exception(aggregate_exceptions(_ei.dictionary_literal(exceptions)))
+                        }
+                    }
+                )
+            }
+        })
+    }
+
     catch(
         handle_exception: ($: E) => void
     ): Safe_Command_Result {
