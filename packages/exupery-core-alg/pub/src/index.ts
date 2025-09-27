@@ -52,3 +52,20 @@ export const build_text = (
     })
     return out
 }
+
+export const build_dictionary = <T>(
+    $: (
+        $c: { 'add entry': (key: string, value: T) => void }
+    ) => void
+): _et.Dictionary<T> => {
+    const temp: { [key: string]: T } = {}
+    $({
+        'add entry': (key, $) => {
+            if (key in temp) {
+                _ei.panic(`duplicate key in dictionary literal: ${key}`)
+            }
+            temp[key] = $
+        }
+    })
+    return _ei.dictionary_literal(temp)
+}
