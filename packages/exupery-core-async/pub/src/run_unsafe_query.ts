@@ -3,6 +3,10 @@ import * as _et from "exupery-core-types"
 import { __run_safe_query } from "./run_safe_query"
 import { Unsafe_Query_Result } from "./Unsafe_Query_Result"
 import { Safe_Query_Result } from "./Safe_Query_Result"
+import { Safe_Command_Result } from "./Safe_Command_Result"
+import { __execute_safe_command } from "./execute_safe_command"
+import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
+import { __execute_unsafe_command } from "./execute_unsafe_command"
 
 
 /**
@@ -115,6 +119,25 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
                 )
             }
         })
+    }
+    execute_unsafe_command(
+        handle_value: ($: T) => Unsafe_Command_Result<E>
+    ): Unsafe_Command_Result<E> {
+        return __execute_unsafe_command(
+            {
+                'execute': (on_success, on_exception) => {
+                    this.executer.execute(
+                        (value) => {
+                            handle_value(value).__start(
+                                on_success,
+                                on_exception,
+                            )
+                        },
+                        on_exception
+                    )
+                }
+            }
+        )
     }
     __start(
         on_value: ($: T) => void,

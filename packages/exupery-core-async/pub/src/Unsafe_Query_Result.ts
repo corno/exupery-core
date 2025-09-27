@@ -1,4 +1,6 @@
+import { Safe_Command_Result } from "./Safe_Command_Result"
 import { Safe_Query_Result } from "./Safe_Query_Result"
+import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
 
 export interface Unsafe_Query_Result<T, E> {
     map<NT>(
@@ -25,6 +27,10 @@ export interface Unsafe_Query_Result<T, E> {
         handle_value: ($: T) => NT,
         handle_exception: ($: E) => NT,
     ): Safe_Query_Result<NT>
+
+    execute_unsafe_command(
+        handle_value: ($: T) => Unsafe_Command_Result<E>
+    ): Unsafe_Command_Result<E>
 
     __start(
         on_value: ($: T) => void,

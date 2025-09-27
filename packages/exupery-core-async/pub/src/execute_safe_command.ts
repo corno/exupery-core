@@ -1,6 +1,8 @@
 import * as _et from "exupery-core-types"
 
 import { Safe_Command_Result } from "./Safe_Command_Result"
+import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
+import { __execute_unsafe_command } from "./execute_unsafe_command"
 
 type Executer = {
     'execute': (
@@ -23,6 +25,37 @@ class Safe_Command_Result_Class implements Safe_Command_Result {
                     this.executer.execute(
                         () => {
                             handle().__start(on_finished)
+                        }
+                    )
+                }
+            }
+        )
+    }
+
+    cast_to_unsafe<E>(
+    ): Unsafe_Command_Result<E> {
+        return __execute_unsafe_command(
+            {
+                'execute': (on_finished) => {
+                    this.executer.execute(
+                        () => {
+                            on_finished()
+                        }
+                    )
+                }
+            }
+        )
+    }
+
+    throw_exception<E>(
+        $: E
+    ): Unsafe_Command_Result<E> {
+        return __execute_unsafe_command(
+            {
+                'execute': (on_finished, on_exception) => {
+                    this.executer.execute(
+                        () => {
+                            on_exception($)
                         }
                     )
                 }
