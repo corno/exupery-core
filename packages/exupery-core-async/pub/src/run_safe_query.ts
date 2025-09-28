@@ -18,6 +18,7 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
     constructor(executer: Executer<T>) {
         this.executer = executer
     }
+
     map<NT>(
         handle_value: ($: T) => NT
     ): Safe_Query_Result<NT> {
@@ -48,8 +49,8 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
             }
         )
     }
-    execute_safe_command(
-        handle_value: ($: T) => Safe_Command_Result
+    process_safe(
+        handle_value: ($: T) => Safe_Command_Result,
     ): Safe_Command_Result {
         return __execute_safe_command(
             {
@@ -63,7 +64,7 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
             }
         )
     }
-    execute_unsafe_command<E>(
+    process_unsafe<E>(
         handle_value: ($: T) => Unsafe_Command_Result<E>
     ): Unsafe_Command_Result<E> {
         return __execute_unsafe_command(

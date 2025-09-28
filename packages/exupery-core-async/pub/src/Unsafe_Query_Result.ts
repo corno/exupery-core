@@ -19,8 +19,15 @@ export interface Unsafe_Query_Result<T, E> {
         handle_exception: ($: E) => T
     ): Safe_Query_Result<T>
 
-    execute_unsafe_command(
-        handle_value: ($: T) => Unsafe_Command_Result<E>
+    /**
+     * processes the queried data by executing a command,
+     * if the result on which this method is called is in an exception state, the command will not be executed,
+     * but a handler for the exception will be called instead.
+     * That handler is not allowed to return an unsafe result, as the command has already failed.
+     */
+    process(
+        handle_value: ($: T) => Unsafe_Command_Result<E>,
+        handle_exception: ($: E) => Safe_Command_Result,
     ): Unsafe_Command_Result<E>
 
     __start(
