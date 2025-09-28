@@ -86,10 +86,11 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
             }
         })
     }
-    process(
-        handle_value: ($: T) => Unsafe_Command_Result<E>,
+    process<NE>(
+        handle_value: ($: T) => Unsafe_Command_Result<NE>,
         handle_exception: ($: E) => Safe_Command_Result,
-    ): Unsafe_Command_Result<E> {
+        map_exception: ($: E) => NE,
+    ): Unsafe_Command_Result<NE> {
         return __execute_unsafe_command(
             {
                 'execute': (on_success, on_exception) => {
@@ -102,7 +103,7 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
                         },
                         (exception) => {
                             handle_exception(exception).__start(
-                                () => on_exception(exception),
+                                () => on_exception(map_exception(exception)),
                             )
                         }
                     )
