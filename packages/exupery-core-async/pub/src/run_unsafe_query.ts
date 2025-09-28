@@ -87,9 +87,9 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
         })
     }
     process<NE>(
-        handle_value: ($: T) => Unsafe_Command_Result<NE>,
         handle_exception: ($: E) => Safe_Command_Result,
         map_exception: ($: E) => NE,
+        handle_value: ($: T) => Unsafe_Command_Result<NE>,
     ): Unsafe_Command_Result<NE> {
         return __execute_unsafe_command(
             {
