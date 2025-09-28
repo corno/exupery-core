@@ -8,7 +8,23 @@ export interface Unsafe_Command_Result<E> {
         handle_exception: ($: E) => NE
     ): Unsafe_Command_Result<NE>
 
-    catch<NE>(
+    /**
+     * 
+     * executes a command when an exception has occurred,
+     * but stays in the unsafe context
+     * 
+     * this is useful when you want to do some cleanup
+     * or logging in case of an exception,
+     * but still want to propagate the exception further
+     * 
+     * note that this is different from `catch`,
+     * which would switch to the safe context
+     */
+    if_exception_then(
+        handle_exception: ($: E) => Safe_Command_Result
+    ): Unsafe_Command_Result<E>
+
+    catch(
         handle_exception: ($: E) => Safe_Command_Result
     ): Safe_Command_Result
 

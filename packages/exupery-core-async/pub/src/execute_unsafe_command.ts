@@ -28,6 +28,22 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
         this.executer = executer
     }
 
+    if_exception_then(
+        handle_exception: ($: E) => Safe_Command_Result
+    ): Unsafe_Command_Result<E> {
+        return new Unsafe_Command_Result_Class<E>({
+            'execute': (new_on_success, new_on_exception) => {
+                this.executer.execute(
+                    new_on_success,
+                    ($) => {
+                        handle_exception($).__start(
+                            () => new_on_exception($),
+                        )
+                    },
+                )
+            }
+        })
+    }
     catch(
         handle_exception: ($: E) => Safe_Command_Result
     ): Safe_Command_Result {
