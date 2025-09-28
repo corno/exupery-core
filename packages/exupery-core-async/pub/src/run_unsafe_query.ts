@@ -58,23 +58,6 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
             }
         })
     }
-    if_exception_then<NE>(
-        handle_exception: ($: E) => Unsafe_Query_Result<T, NE>
-    ): Unsafe_Query_Result<T, NE> {
-        return new Unsafe_Query_Result_Class<T, NE>({
-            'execute': (new_on_value, new_on_exception) => {
-                this.executer.execute(
-                    new_on_value,
-                    ($) => {
-                        handle_exception($).__start(
-                            new_on_value,
-                            new_on_exception,
-                        )
-                    },
-                )
-            }
-        })
-    }
     map_exception<NE>(
         handle_exception: ($: E) => NE
     ): Unsafe_Query_Result<T, NE> {
@@ -96,23 +79,6 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
             'execute': (on_value) => {
                 this.executer.execute(
                     on_value,
-                    ($) => {
-                        on_value(handle_exception($))
-                    },
-                )
-            }
-        })
-    }
-    catch_and_map<NT>(
-        handle_value: ($: T) => NT,
-        handle_exception: ($: E) => NT,
-    ): Safe_Query_Result<NT> {
-        return __run_safe_query<NT>({
-            'execute': (on_value) => {
-                this.executer.execute(
-                    ($) => {
-                        on_value(handle_value($))
-                    },
                     ($) => {
                         on_value(handle_exception($))
                     },

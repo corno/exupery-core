@@ -15,18 +15,9 @@ export interface Unsafe_Query_Result<T, E> {
         handle_value: ($: T) => Unsafe_Query_Result<NT, E>
     ): Unsafe_Query_Result<NT, E>
 
-    if_exception_then<NE>(
-        handle_exception: ($: E) => Unsafe_Query_Result<T, NE>
-    ): Unsafe_Query_Result<T, NE>
-
     catch(
         handle_exception: ($: E) => T
     ): Safe_Query_Result<T>
-
-    catch_and_map<NT>(
-        handle_value: ($: T) => NT,
-        handle_exception: ($: E) => NT,
-    ): Safe_Query_Result<NT>
 
     execute_unsafe_command(
         handle_value: ($: T) => Unsafe_Command_Result<E>

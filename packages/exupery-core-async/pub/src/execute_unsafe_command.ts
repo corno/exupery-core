@@ -28,34 +28,16 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
         this.executer = executer
     }
 
-    then(
-        handle: () => Unsafe_Command_Result<E>
-    ): Unsafe_Command_Result<E> {
-        return new Unsafe_Command_Result_Class<E>({
-            'execute': (new_on_success, new_on_exception) => {
-                this.executer.execute(
-                    () => {
-                        handle().__start(
-                            new_on_success,
-                            new_on_exception,
-                        )
-                    },
-                    new_on_exception,
-                )
-            }
-        })
-    }
-    if_exception_then<NE>(
-        handle_exception: ($: E) => Unsafe_Command_Result<NE>
-    ): Unsafe_Command_Result<NE> {
-        return new Unsafe_Command_Result_Class<NE>({
-            'execute': (new_on_success, new_on_exception) => {
+    catch(
+        handle_exception: ($: E) => Safe_Command_Result
+    ): Safe_Command_Result {
+        return __execute_safe_command({
+            'execute': (new_on_success) => {
                 this.executer.execute(
                     new_on_success,
                     ($) => {
                         handle_exception($).__start(
                             new_on_success,
-                            new_on_exception,
                         )
                     },
                 )
@@ -77,7 +59,24 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
         })
     }
 
-    do_dictionary<E2>(
+    then(
+        handle: () => Unsafe_Command_Result<E>
+    ): Unsafe_Command_Result<E> {
+        return new Unsafe_Command_Result_Class<E>({
+            'execute': (new_on_success, new_on_exception) => {
+                this.executer.execute(
+                    () => {
+                        handle().__start(
+                            new_on_success,
+                            new_on_exception,
+                        )
+                    },
+                    new_on_exception,
+                )
+            }
+        })
+    }
+    then_dictionary<E2>(
         $: _et.Dictionary<Unsafe_Command_Result<E2>>,
         aggregate_exceptions: ($: _et.Dictionary<E2>) => E,
     ): Unsafe_Command_Result<E> {
@@ -112,21 +111,6 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
         })
     }
 
-    catch(
-        handle_exception: ($: E) => void
-    ): Safe_Command_Result {
-        return __execute_safe_command({
-            'execute': (on_success) => {
-                this.executer.execute(
-                    on_success,
-                    ($) => {
-                        handle_exception($)
-                        on_success()
-                    },
-                )
-            }
-        })
-    }
     __start(
         on_success: () => void,
         on_exception: ($: E) => void,
