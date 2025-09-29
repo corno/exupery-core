@@ -28,16 +28,18 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
         this.executer = executer
     }
 
-    if_exception_then(
-        handle_exception: ($: E) => Safe_Command_Result
-    ): Unsafe_Command_Result<E> {
-        return new Unsafe_Command_Result_Class<E>({
+    process_exception<NE>(
+        handle: ($: E) => Safe_Command_Result,
+        map: ($: E) => NE,
+
+    ): Unsafe_Command_Result<NE> {
+        return new Unsafe_Command_Result_Class<NE>({
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
                     new_on_success,
                     ($) => {
-                        handle_exception($).__start(
-                            () => new_on_exception($),
+                        handle($).__start(
+                            () => new_on_exception(map($)),
                         )
                     },
                 )
@@ -120,6 +122,39 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
                             on_success()
                         } else {
                             on_exception(aggregate_exceptions(_ei.dictionary_literal(exceptions)))
+                        }
+                    }
+                )
+            }
+        })
+    }
+    then_multiple<E2>(
+        $: _et.Array<Unsafe_Command_Result<E2>>,
+        aggregate_exceptions: ($: _et.Array<E2>) => E,
+    ): Unsafe_Command_Result<E> {
+        let exceptions: E2[] = []
+        return __execute_unsafe_command({
+            'execute': (on_success, on_exception) => {
+                create_asynchronous_processes_monitor(
+                    (monitor) => {
+                        $.map(($) => {
+                            monitor['report process started']()
+                            $.__start(
+                                () => {
+                                    monitor['report process finished']()
+                                },
+                                (e) => {
+                                    exceptions.push(e)
+                                    monitor['report process finished']()
+                                }
+                            )
+                        })
+                    },
+                    () => {
+                        if (exceptions.length === 0) {
+                            on_success()
+                        } else {
+                            on_exception(aggregate_exceptions(_ei.array_literal(exceptions)))
                         }
                     }
                 )
