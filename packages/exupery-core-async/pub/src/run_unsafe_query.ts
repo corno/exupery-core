@@ -73,14 +73,14 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
         })
     }
     catch(
-        handle_exception: ($: E) => T
+        handle_exception: ($: E) => Safe_Query_Result<T>
     ): Safe_Query_Result<T> {
         return __run_safe_query<T>({
             'execute': (on_value) => {
                 this.executer.execute(
                     on_value,
                     ($) => {
-                        on_value(handle_exception($))
+                        handle_exception($).__start(on_value)
                     },
                 )
             }

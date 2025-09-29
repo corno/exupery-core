@@ -1,3 +1,5 @@
+import * as _et from "exupery-core-types"
+
 import { Safe_Command_Result } from "./Safe_Command_Result"
 import { Safe_Query_Result } from "./Safe_Query_Result"
 import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
@@ -15,8 +17,14 @@ export interface Unsafe_Query_Result<T, E> {
         handle_value: ($: T) => Unsafe_Query_Result<NT, E>
     ): Unsafe_Query_Result<NT, E>
 
+    // then_dictionary<Entry_Data, Result_Data, Entry_Exception, Result_Exception>(
+    //     get_dictionary: ($: T) => _et.Dictionary<Unsafe_Query_Result<Entry_Data, Entry_Exception>>,
+    //     aggregate_exceptions: ($: _et.Dictionary<Entry_Exception>) => Result_Exception,
+    //     aggregate_values: ($: _et.Dictionary<Entry_Data>, original_data: T) => Result_Data,
+    // ): Unsafe_Query_Result<Result_Data, Result_Exception>
+
     catch(
-        handle_exception: ($: E) => T
+        handle_exception: ($: E) => Safe_Query_Result<T>
     ): Safe_Query_Result<T>
 
     /**

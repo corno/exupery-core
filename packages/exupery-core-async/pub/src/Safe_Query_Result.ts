@@ -21,7 +21,8 @@ export interface Safe_Query_Result<T> {
 
     process_safe(
         handle_value: ($: T) => Safe_Command_Result
-    ): Safe_Command_Result 
+    ): Safe_Command_Result
+    
     process_unsafe<E>(
         handle_value: ($: T) => Unsafe_Command_Result<E>
     ): Unsafe_Command_Result<E>
