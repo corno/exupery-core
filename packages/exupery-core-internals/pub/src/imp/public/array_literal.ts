@@ -45,15 +45,14 @@ class Array_Class<T> implements _et.Array<T> {
 
 /**
  * returns a Exupery array
- * why is this not the constructor? to call a constructor, you have to use the keyword 'new'. Exupery doesn't use the concept of a class so that keyword should be avoided
 
  * @param source An array literal
  * @returns 
  */
 export function array_literal<T>(source: readonly T[]): _et.Array<T> {
-    const data = source.slice() //create a copy
-    if (!(data instanceof Array)) {
+    if (!(source instanceof Array)) {
         throw new Error("invalid input in 'array_literal'")
     }
-    return new Array_Class(source)
+    const data = source.slice() //create a copy
+    return new Array_Class(data)
 }
