@@ -62,20 +62,6 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
             }
         })
     }
-    map_exception<NE>(
-        handle_exception: ($: E) => NE
-    ): Unsafe_Command_Result<NE> {
-        return new Unsafe_Command_Result_Class<NE>({
-            'execute': (on_success, on_exception) => {
-                this.executer.execute(
-                    on_success,
-                    ($) => {
-                        on_exception(handle_exception($))
-                    },
-                )
-            }
-        })
-    }
 
     then(
         handle: () => Unsafe_Command_Result<E>

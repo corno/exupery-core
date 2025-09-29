@@ -51,7 +51,7 @@ export const query = {
                 }
             )
         },
-        'create exception': <T, E>(
+        'raise exception': <T, E>(
             $: E
         ): Unsafe_Query_Result<T, E> => {
             return __run_unsafe_query(
@@ -67,7 +67,7 @@ export const query = {
 
 export const command = {
     'safe': {
-        'create result': (
+        'do nothing': (
         ): Safe_Command_Result => {
             return __execute_safe_command(
                 {
@@ -79,7 +79,7 @@ export const command = {
         }
     },
     'unsafe': {
-        'create result': <E>(
+        'do nothing': <E>(
         ): Unsafe_Command_Result<E> => {
             return __execute_unsafe_command(
                 {
@@ -89,7 +89,7 @@ export const command = {
                 }
             )
         },
-        'create exception': <E>(
+        'raise exception': <E>(
             $: E
         ): Unsafe_Command_Result<E> => {
             return __execute_unsafe_command(
