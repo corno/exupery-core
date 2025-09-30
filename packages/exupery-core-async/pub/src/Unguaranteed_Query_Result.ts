@@ -1,31 +1,25 @@
 import * as _et from "exupery-core-types"
 
-import { Safe_Procedure_Context } from "./Safe_Procedure_Context"
-import { Safe_Query_Result } from "./Safe_Query_Result"
-import { Unsafe_Procedure_Context } from "./Unsafe_Procedure_Context"
+import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
+import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
+import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
 
-export interface Unsafe_Query_Result<T, E> {
+export interface Unguaranteed_Query_Result<T, E> {
     map<NT>(
         handle_value: ($: T) => NT
-    ): Unsafe_Query_Result<NT, E>
+    ): Unguaranteed_Query_Result<NT, E>
 
     map_exception<NE>(
         handle_exception: ($: E) => NE
-    ): Unsafe_Query_Result<T, NE>
+    ): Unguaranteed_Query_Result<T, NE>
 
     then<NT>(
-        handle_value: ($: T) => Unsafe_Query_Result<NT, E>
-    ): Unsafe_Query_Result<NT, E>
-
-    // then_dictionary<Entry_Data, Result_Data, Entry_Exception, Result_Exception>(
-    //     get_dictionary: ($: T) => _et.Dictionary<Unsafe_Query_Result<Entry_Data, Entry_Exception>>,
-    //     aggregate_exceptions: ($: _et.Dictionary<Entry_Exception>) => Result_Exception,
-    //     aggregate_values: ($: _et.Dictionary<Entry_Data>, original_data: T) => Result_Data,
-    // ): Unsafe_Query_Result<Result_Data, Result_Exception>
+        handle_value: ($: T) => Unguaranteed_Query_Result<NT, E>
+    ): Unguaranteed_Query_Result<NT, E>
 
     catch(
-        handle_exception: ($: E) => Safe_Query_Result<T>
-    ): Safe_Query_Result<T>
+        handle_exception: ($: E) => Guaranteed_Query_Result<T>
+    ): Guaranteed_Query_Result<T>
 
     /**
      * processes the queried data by executing a command.
@@ -41,10 +35,10 @@ export interface Unsafe_Query_Result<T, E> {
      * 
      */
     process<NE>(
-        handle_exception: ($i: Safe_Procedure_Context, $: E) => Safe_Procedure_Context,
+        handle_exception: ($i: Guaranteed_Procedure_Context, $: E) => Guaranteed_Procedure_Context,
         map_exception: ($: E) => NE,
-        handle_value: ($i: Unsafe_Procedure_Context<NE>, $: T) => Unsafe_Procedure_Context<NE>,
-    ): Unsafe_Procedure_Context<NE>
+        handle_value: ($i: Ungaranteed_Procedure_Context<NE>, $: T) => Ungaranteed_Procedure_Context<NE>,
+    ): Ungaranteed_Procedure_Context<NE>
 
     __start(
         on_value: ($: T) => void,

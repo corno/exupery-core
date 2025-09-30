@@ -1,11 +1,11 @@
 import * as _et from "exupery-core-types"
 import * as _ei from "exupery-core-internals"
 
-import { Unsafe_Procedure_Context } from "./Unsafe_Procedure_Context"
-import { Safe_Procedure_Context } from "./Safe_Procedure_Context"
+import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
+import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
 
-import { __execute_safe_action, initialize_safe_procedure_context } from "./initialize_safe_procedure_context"
-import { __run_safe_query } from "./run_safe_query"
+import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./initialize_guaranteed_procedure_context"
+import { __run_guaranteed_query } from "./run_guaranteed_query"
 import { create_asynchronous_processes_monitor } from "./create_asynchronous_processes_monitor"
 
 
@@ -22,23 +22,23 @@ type Executer<E> = {
     ) => void
 }
 
-class Unsafe_Command_Result_Class<E> implements Unsafe_Procedure_Context<E> {
+class Unguaranteed_Command_Result_Class<E> implements Ungaranteed_Procedure_Context<E> {
     private executer: Executer<E>
     constructor(executer: Executer<E>) {
         this.executer = executer
     }
 
-    process_exception<NE>(
-        handle: ($i: Safe_Procedure_Context, $: E) => Safe_Procedure_Context,
+    process_exception_deprecated<NE>(
+        handle: ($i: Guaranteed_Procedure_Context, $: E) => Guaranteed_Procedure_Context,
         map: ($: E) => NE,
 
-    ): Unsafe_Procedure_Context<NE> {
-        return new Unsafe_Command_Result_Class<NE>({
+    ): Ungaranteed_Procedure_Context<NE> {
+        return new Unguaranteed_Command_Result_Class<NE>({
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
                     new_on_success,
                     ($) => {
-                        handle(initialize_safe_procedure_context(), $).__start(
+                        handle(initialize_guaranteed_procedure_context(), $).__start(
                             () => new_on_exception(map($)),
                         )
                     },
@@ -47,14 +47,14 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Procedure_Context<E> {
         })
     }
     catch(
-        handle_exception: ($i: Safe_Procedure_Context, $: E) => Safe_Procedure_Context
-    ): Safe_Procedure_Context {
-        return __execute_safe_action({
+        handle_exception: ($i: Guaranteed_Procedure_Context, $: E) => Guaranteed_Procedure_Context
+    ): Guaranteed_Procedure_Context {
+        return __execute_guaranteed_action({
             'execute': (new_on_success) => {
                 this.executer.execute(
                     new_on_success,
                     ($) => {
-                        handle_exception(initialize_safe_procedure_context(), $).__start(
+                        handle_exception(initialize_guaranteed_procedure_context(), $).__start(
                             new_on_success,
                         )
                     },
@@ -65,8 +65,8 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Procedure_Context<E> {
 
     throw_exception<E>(
         $: E
-    ): Unsafe_Procedure_Context<E> {
-        return __execute_unsafe_action(
+    ): Ungaranteed_Procedure_Context<E> {
+        return __execute_unguaranteed_action(
             {
                 'execute': (on_finished, on_exception) => {
                     this.executer.execute(
@@ -80,14 +80,14 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Procedure_Context<E> {
         )
     }
 
-    execute_unsafe(
-        handle: ($i: Unsafe_Procedure_Context<E>) => Unsafe_Procedure_Context<E>
-    ): Unsafe_Procedure_Context<E> {
-        return new Unsafe_Command_Result_Class<E>({
+    execute_unguaranteed(
+        handle: ($i: Ungaranteed_Procedure_Context<E>) => Ungaranteed_Procedure_Context<E>
+    ): Ungaranteed_Procedure_Context<E> {
+        return new Unguaranteed_Command_Result_Class<E>({
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
                     () => {
-                        handle(initialize_unsafe_procedure_context()).__start(
+                        handle(initialize_unguaranteed_procedure_context()).__start(
                             new_on_success,
                             new_on_exception,
                         )
@@ -99,13 +99,13 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Procedure_Context<E> {
     }
 
     execute(
-        handle: ($i: Safe_Procedure_Context) => Safe_Procedure_Context
-    ): Unsafe_Procedure_Context<E> {
-        return new Unsafe_Command_Result_Class<E>({
+        handle: ($i: Guaranteed_Procedure_Context) => Guaranteed_Procedure_Context
+    ): Ungaranteed_Procedure_Context<E> {
+        return new Unguaranteed_Command_Result_Class<E>({
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
                     () => {
-                        handle(initialize_safe_procedure_context()).__start(
+                        handle(initialize_guaranteed_procedure_context()).__start(
                             new_on_success,
                         )
                     },
@@ -114,12 +114,12 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Procedure_Context<E> {
             }
         })
     }
-    execute_dictionary_unsafe<E2>(
-        $: _et.Dictionary<Unsafe_Procedure_Context<E2>>,
+    execute_dictionary_unguaranteed<E2>(
+        $: _et.Dictionary<Ungaranteed_Procedure_Context<E2>>,
         aggregate_exceptions: ($: _et.Dictionary<E2>) => E,
-    ): Unsafe_Procedure_Context<E> {
+    ): Ungaranteed_Procedure_Context<E> {
         let exceptions: { [key: string]: E2 } = {}
-        return __execute_unsafe_action({
+        return __execute_unguaranteed_action({
             'execute': (on_success, on_exception) => {
                 create_asynchronous_processes_monitor(
                     (monitor) => {
@@ -148,12 +148,12 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Procedure_Context<E> {
             }
         })
     }
-    execute_multiple_unsafe<E2>(
-        $: _et.Array<Unsafe_Procedure_Context<E2>>,
+    execute_multiple_unguaranteed<E2>(
+        $: _et.Array<Ungaranteed_Procedure_Context<E2>>,
         aggregate_exceptions: ($: _et.Array<E2>) => E,
-    ): Unsafe_Procedure_Context<E> {
+    ): Ungaranteed_Procedure_Context<E> {
         let exceptions: E2[] = []
-        return __execute_unsafe_action({
+        return __execute_unguaranteed_action({
             'execute': (on_success, on_exception) => {
                 create_asynchronous_processes_monitor(
                     (monitor) => {
@@ -195,16 +195,16 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Procedure_Context<E> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function __execute_unsafe_action<E>(
+export function __execute_unguaranteed_action<E>(
     executer: Executer<E>,
-): Unsafe_Procedure_Context<E> {
-    return new Unsafe_Command_Result_Class<E>(executer)
+): Ungaranteed_Procedure_Context<E> {
+    return new Unguaranteed_Command_Result_Class<E>(executer)
 
 }
 
-export const initialize_unsafe_procedure_context = <E>(
-): Unsafe_Procedure_Context<E> => {
-    return new Unsafe_Command_Result_Class<E>({
+export const initialize_unguaranteed_procedure_context = <E>(
+): Ungaranteed_Procedure_Context<E> => {
+    return new Unguaranteed_Command_Result_Class<E>({
         'execute': (on_success, on_exception) => {
             on_success() //nothing to do, call on_finished immediately
         }

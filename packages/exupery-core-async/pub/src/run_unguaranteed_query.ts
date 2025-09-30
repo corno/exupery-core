@@ -1,12 +1,12 @@
 import * as _et from "exupery-core-types"
 
-import { __run_safe_query } from "./run_safe_query"
-import { Unsafe_Query_Result } from "./Unsafe_Query_Result"
-import { Safe_Query_Result } from "./Safe_Query_Result"
-import { Safe_Procedure_Context } from "./Safe_Procedure_Context"
-import { __execute_safe_action, initialize_safe_procedure_context } from "./initialize_safe_procedure_context"
-import { Unsafe_Procedure_Context } from "./Unsafe_Procedure_Context"
-import { __execute_unsafe_action, initialize_unsafe_procedure_context } from "./initialize_unsafe_procedure_context"
+import { __run_guaranteed_query } from "./run_guaranteed_query"
+import { Unguaranteed_Query_Result } from "./Unguaranteed_Query_Result"
+import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
+import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
+import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./initialize_guaranteed_procedure_context"
+import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
+import { __execute_unguaranteed_action, initialize_unguaranteed_procedure_context } from "./initialize_unguaranteed_procedure_context"
 
 
 /**
@@ -22,15 +22,15 @@ type Executer<T, E> = {
     ) => void
 }
 
-class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
+class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result<T, E> {
     private executer: Executer<T, E>
     constructor(executer: Executer<T, E>) {
         this.executer = executer
     }
     map<NT>(
         handle_value: ($: T) => NT
-    ): Unsafe_Query_Result<NT, E> {
-        return new Unsafe_Query_Result_Class<NT, E>({
+    ): Unguaranteed_Query_Result<NT, E> {
+        return new Unguaranteed_Query_Result_Class<NT, E>({
             'execute': (on_value, on_exception) => {
                 this.executer.execute(
                     ($) => {
@@ -42,9 +42,9 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
         })
     }
     then<NT>(
-        handle_value: ($: T) => Unsafe_Query_Result<NT, E>
-    ): Unsafe_Query_Result<NT, E> {
-        return new Unsafe_Query_Result_Class<NT, E>({
+        handle_value: ($: T) => Unguaranteed_Query_Result<NT, E>
+    ): Unguaranteed_Query_Result<NT, E> {
+        return new Unguaranteed_Query_Result_Class<NT, E>({
             'execute': (new_on_value, new_on_exception) => {
                 this.executer.execute(
                     ($) => {
@@ -60,8 +60,8 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
     }
     map_exception<NE>(
         handle_exception: ($: E) => NE
-    ): Unsafe_Query_Result<T, NE> {
-        return new Unsafe_Query_Result_Class<T, NE>({
+    ): Unguaranteed_Query_Result<T, NE> {
+        return new Unguaranteed_Query_Result_Class<T, NE>({
             'execute': (on_value, on_exception) => {
                 this.executer.execute(
                     on_value,
@@ -73,9 +73,9 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
         })
     }
     catch(
-        handle_exception: ($: E) => Safe_Query_Result<T>
-    ): Safe_Query_Result<T> {
-        return __run_safe_query<T>({
+        handle_exception: ($: E) => Guaranteed_Query_Result<T>
+    ): Guaranteed_Query_Result<T> {
+        return __run_guaranteed_query<T>({
             'execute': (on_value) => {
                 this.executer.execute(
                     on_value,
@@ -87,22 +87,22 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
         })
     }
     process<NE>(
-        handle_exception: ($i: Safe_Procedure_Context, $: E) => Safe_Procedure_Context,
+        handle_exception: ($i: Guaranteed_Procedure_Context, $: E) => Guaranteed_Procedure_Context,
         map_exception: ($: E) => NE,
-        handle_value: ($i: Unsafe_Procedure_Context<NE>, $: T) => Unsafe_Procedure_Context<NE>,
-    ): Unsafe_Procedure_Context<NE> {
-        return __execute_unsafe_action(
+        handle_value: ($i: Ungaranteed_Procedure_Context<NE>, $: T) => Ungaranteed_Procedure_Context<NE>,
+    ): Ungaranteed_Procedure_Context<NE> {
+        return __execute_unguaranteed_action(
             {
                 'execute': (on_success, on_exception) => {
                     this.executer.execute(
                         (value) => {
-                            handle_value(initialize_unsafe_procedure_context(), value).__start(
+                            handle_value(initialize_unguaranteed_procedure_context(), value).__start(
                                 on_success,
                                 on_exception,
                             )
                         },
                         (exception) => {
-                            handle_exception(initialize_safe_procedure_context(), exception).__start(
+                            handle_exception(initialize_guaranteed_procedure_context(), exception).__start(
                                 () => on_exception(map_exception(exception)),
                             )
                         }
@@ -124,9 +124,9 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function __run_unsafe_query<T, E>(
+export function __run_unguaranteed_query<T, E>(
     executer: Executer<T, E>,
-): Unsafe_Query_Result<T, E> {
-    return new Unsafe_Query_Result_Class<T, E>(executer)
+): Unguaranteed_Query_Result<T, E> {
+    return new Unguaranteed_Query_Result_Class<T, E>(executer)
 
 }

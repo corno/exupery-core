@@ -1,10 +1,10 @@
 import * as _et from "exupery-core-types"
 
-import { Safe_Query_Result } from "./Safe_Query_Result"
-import { Safe_Procedure_Context } from "./Safe_Procedure_Context"
-import { __execute_safe_action, initialize_safe_procedure_context } from "./initialize_safe_procedure_context"
-import { Unsafe_Procedure_Context } from "./Unsafe_Procedure_Context"
-import { __execute_unsafe_action, initialize_unsafe_procedure_context } from "./initialize_unsafe_procedure_context"
+import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
+import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
+import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./initialize_guaranteed_procedure_context"
+import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
+import { __execute_unguaranteed_action, initialize_unguaranteed_procedure_context } from "./initialize_unguaranteed_procedure_context"
 
 type Executer<T> = {
     'execute': (
@@ -13,7 +13,7 @@ type Executer<T> = {
 }
 
 
-class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
+class Guaranteed_Query_Result_Class<T> implements Guaranteed_Query_Result<T> {
     private executer: Executer<T>
     constructor(executer: Executer<T>) {
         this.executer = executer
@@ -21,8 +21,8 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
 
     map<NT>(
         handle_value: ($: T) => NT
-    ): Safe_Query_Result<NT> {
-        return __run_safe_query(
+    ): Guaranteed_Query_Result<NT> {
+        return __run_guaranteed_query(
             {
                 'execute': (on_value) => {
                     this.executer.execute(
@@ -35,9 +35,9 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
         )
     }
     then<NT>(
-        handle_value: ($: T) => Safe_Query_Result<NT>
-    ): Safe_Query_Result<NT> {
-        return __run_safe_query(
+        handle_value: ($: T) => Guaranteed_Query_Result<NT>
+    ): Guaranteed_Query_Result<NT> {
+        return __run_guaranteed_query(
             {
                 'execute': (on_value) => {
                     this.executer.execute(
@@ -49,30 +49,30 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
             }
         )
     }
-    process_safe(
-        handle_value: ($i: Safe_Procedure_Context, $: T) => Safe_Procedure_Context,
-    ): Safe_Procedure_Context {
-        return __execute_safe_action(
+    process_guaranteed(
+        handle_value: ($i: Guaranteed_Procedure_Context, $: T) => Guaranteed_Procedure_Context,
+    ): Guaranteed_Procedure_Context {
+        return __execute_guaranteed_action(
             {
                 'execute': (on_success) => {
                     this.executer.execute(
                         (value) => {
-                            handle_value(initialize_safe_procedure_context(), value).__start(on_success)
+                            handle_value(initialize_guaranteed_procedure_context(), value).__start(on_success)
                         }
                     )
                 }
             }
         )
     }
-    process_unsafe<E>(
-        handle_value: ($i: Unsafe_Procedure_Context<E>, $: T) => Unsafe_Procedure_Context<E>
-    ): Unsafe_Procedure_Context<E> {
-        return __execute_unsafe_action(
+    process_unguaranteed<E>(
+        handle_value: ($i: Ungaranteed_Procedure_Context<E>, $: T) => Ungaranteed_Procedure_Context<E>
+    ): Ungaranteed_Procedure_Context<E> {
+        return __execute_unguaranteed_action(
             {
                 'execute': (on_success, on_exception) => {
                     this.executer.execute(
                         (value) => {
-                            handle_value(initialize_unsafe_procedure_context(), value).__start(
+                            handle_value(initialize_unguaranteed_procedure_context(), value).__start(
                                 on_success,
                                 on_exception,
                             )
@@ -95,9 +95,9 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function __run_safe_query<T>(
+export function __run_guaranteed_query<T>(
     executer: Executer<T>,
-): Safe_Query_Result<T> {
-    return new Safe_Query_Result_Class<T>(executer)
+): Guaranteed_Query_Result<T> {
+    return new Guaranteed_Query_Result_Class<T>(executer)
 
 }

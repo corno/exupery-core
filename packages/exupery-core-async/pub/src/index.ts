@@ -1,36 +1,36 @@
 import * as _et from "exupery-core-types"
 import * as _ei from "exupery-core-internals"
 
-export * from "./Safe_Procedure_Context"
-export * from "./Unsafe_Procedure_Context"
-export * from "./Safe_Query_Result"
-export * from "./Unsafe_Query_Result"
+export * from "./Guaranteed_Procedure_Context"
+export * from "./Unguaranteed_Procedure_Context"
+export * from "./Guaranteed_Query_Result"
+export * from "./Unguaranteed_Query_Result"
 
-export * from "./merge_2_safe_query_results"
+export * from "./merge_2_guaranteed_query_results"
 
-export * from "./run_safe_query"
-export * from "./run_unsafe_query"
-export * from "./initialize_safe_procedure_context"
-export * from "./initialize_unsafe_procedure_context"
+export * from "./run_guaranteed_query"
+export * from "./run_unguaranteed_query"
+export * from "./initialize_guaranteed_procedure_context"
+export * from "./initialize_unguaranteed_procedure_context"
 
 
-import { Safe_Procedure_Context } from "./Safe_Procedure_Context"
-import { Unsafe_Procedure_Context } from "./Unsafe_Procedure_Context"
-import { Safe_Query_Result } from "./Safe_Query_Result"
-import { Unsafe_Query_Result } from "./Unsafe_Query_Result"
+import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
+import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
+import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
+import { Unguaranteed_Query_Result } from "./Unguaranteed_Query_Result"
 
-import { __execute_safe_action, initialize_safe_procedure_context } from "./initialize_safe_procedure_context"
-import { __execute_unsafe_action, initialize_unsafe_procedure_context } from "./initialize_unsafe_procedure_context"
-import { __run_safe_query } from "./run_safe_query"
-import { __run_unsafe_query } from "./run_unsafe_query"
+import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./initialize_guaranteed_procedure_context"
+import { __execute_unguaranteed_action, initialize_unguaranteed_procedure_context } from "./initialize_unguaranteed_procedure_context"
+import { __run_guaranteed_query } from "./run_guaranteed_query"
+import { __run_unguaranteed_query } from "./run_unguaranteed_query"
 
 
 export const query = {
-    'safe': {
+    'guaranteed': {
         'create result': <T>(
             $: T
-        ): Safe_Query_Result<T> => {
-            return __run_safe_query(
+        ): Guaranteed_Query_Result<T> => {
+            return __run_guaranteed_query(
                 {
                     'execute': (on_value) => {
                         on_value($)
@@ -39,11 +39,11 @@ export const query = {
             )
         }
     },
-    'unsafe': {
+    'unguaranteed': {
         'create result': <T, E>(
             $: T
-        ): Unsafe_Query_Result<T, E> => {
-            return __run_unsafe_query(
+        ): Unguaranteed_Query_Result<T, E> => {
+            return __run_unguaranteed_query(
                 {
                     'execute': (on_value) => {
                         on_value($)
@@ -53,8 +53,8 @@ export const query = {
         },
         'raise exception': <T, E>(
             $: E
-        ): Unsafe_Query_Result<T, E> => {
-            return __run_unsafe_query(
+        ): Unguaranteed_Query_Result<T, E> => {
+            return __run_unguaranteed_query(
                 {
                     'execute': (on_value, on_exception) => {
                         on_exception($)
@@ -66,15 +66,15 @@ export const query = {
 }
 
 export const command = {
-    'safe': {
-        'initialize': initialize_safe_procedure_context
+    'guaranteed': {
+        'initialize': initialize_guaranteed_procedure_context
     },
-    'unsafe': {
-        'initialize': initialize_unsafe_procedure_context,
+    'unguaranteed': {
+        'initialize': initialize_unguaranteed_procedure_context,
         'raise exception': <E>(
             $: E
-        ): Unsafe_Procedure_Context<E> => {
-            return __execute_unsafe_action(
+        ): Ungaranteed_Procedure_Context<E> => {
+            return __execute_unguaranteed_action(
                 {
                     'execute': (on_success, on_exception) => {
                         on_exception($)

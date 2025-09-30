@@ -4,10 +4,10 @@ import * as _easync from 'exupery-core-async'
 
 
 export type Run_Safe_Program_Main = (
+    $i: _easync.Safe_Procedure_Context,
     $: {
         'arguments': _et.Array<string>,
     },
-    init: _easync.Safe_Procedure_Context
 ) => _easync.Safe_Procedure_Context
 
 /**
@@ -18,10 +18,10 @@ export const run_program = (
     main: Run_Safe_Program_Main
 ): void => {
     main(
+        _easync.initialize_safe_procedure_context(),
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },
-        _easync.initialize_safe_procedure_context()
     ).__start(
         () => {
         }
