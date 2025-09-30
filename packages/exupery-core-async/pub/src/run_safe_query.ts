@@ -50,14 +50,14 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
         )
     }
     process_safe(
-        handle_value: ($: T, init: Safe_Command_Result) => Safe_Command_Result,
+        handle_value: ($i: Safe_Command_Result, $: T) => Safe_Command_Result,
     ): Safe_Command_Result {
         return __execute_safe_command(
             {
                 'execute': (on_success) => {
                     this.executer.execute(
                         (value) => {
-                            handle_value(value, initialize_safe_command()).__start(on_success)
+                            handle_value(initialize_safe_command(), value).__start(on_success)
                         }
                     )
                 }
@@ -65,14 +65,14 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
         )
     }
     process_unsafe<E>(
-        handle_value: ($: T, init: Unsafe_Command_Result<E>) => Unsafe_Command_Result<E>
+        handle_value: ($i: Unsafe_Command_Result<E>, $: T) => Unsafe_Command_Result<E>
     ): Unsafe_Command_Result<E> {
         return __execute_unsafe_command(
             {
                 'execute': (on_success, on_exception) => {
                     this.executer.execute(
                         (value) => {
-                            handle_value(value, initialize_unsafe_command()).__start(
+                            handle_value(initialize_unsafe_command(), value).__start(
                                 on_success,
                                 on_exception,
                             )

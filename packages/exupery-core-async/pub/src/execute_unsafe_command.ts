@@ -29,7 +29,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
     }
 
     process_exception<NE>(
-        handle: ($: E, init: Safe_Command_Result) => Safe_Command_Result,
+        handle: ($i: Safe_Command_Result, $: E) => Safe_Command_Result,
         map: ($: E) => NE,
 
     ): Unsafe_Command_Result<NE> {
@@ -38,7 +38,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
                 this.executer.execute(
                     new_on_success,
                     ($) => {
-                        handle($, initialize_safe_command()).__start(
+                        handle(initialize_safe_command(), $).__start(
                             () => new_on_exception(map($)),
                         )
                     },
@@ -47,14 +47,14 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
         })
     }
     catch(
-        handle_exception: ($: E, init: Safe_Command_Result) => Safe_Command_Result
+        handle_exception: ($i: Safe_Command_Result, $: E) => Safe_Command_Result
     ): Safe_Command_Result {
         return __execute_safe_command({
             'execute': (new_on_success) => {
                 this.executer.execute(
                     new_on_success,
                     ($) => {
-                        handle_exception($, initialize_safe_command()).__start(
+                        handle_exception(initialize_safe_command(), $).__start(
                             new_on_success,
                         )
                     },
@@ -81,7 +81,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
     }
 
     then(
-        handle: (init: Unsafe_Command_Result<E>) => Unsafe_Command_Result<E>
+        handle: ($i: Unsafe_Command_Result<E>) => Unsafe_Command_Result<E>
     ): Unsafe_Command_Result<E> {
         return new Unsafe_Command_Result_Class<E>({
             'execute': (new_on_success, new_on_exception) => {
@@ -99,7 +99,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
     }
 
     then_safe(
-        handle: (init: Safe_Command_Result) => Safe_Command_Result
+        handle: ($i: Safe_Command_Result) => Safe_Command_Result
     ): Unsafe_Command_Result<E> {
         return new Unsafe_Command_Result_Class<E>({
             'execute': (new_on_success, new_on_exception) => {

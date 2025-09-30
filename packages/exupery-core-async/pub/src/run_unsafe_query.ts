@@ -87,22 +87,22 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
         })
     }
     process<NE>(
-        handle_exception: ($: E, init: Safe_Command_Result) => Safe_Command_Result,
+        handle_exception: ($i: Safe_Command_Result, $: E) => Safe_Command_Result,
         map_exception: ($: E) => NE,
-        handle_value: ($: T, init: Unsafe_Command_Result<NE>) => Unsafe_Command_Result<NE>,
+        handle_value: ($i: Unsafe_Command_Result<NE>, $: T) => Unsafe_Command_Result<NE>,
     ): Unsafe_Command_Result<NE> {
         return __execute_unsafe_command(
             {
                 'execute': (on_success, on_exception) => {
                     this.executer.execute(
                         (value) => {
-                            handle_value(value, initialize_unsafe_command()).__start(
+                            handle_value(initialize_unsafe_command(), value).__start(
                                 on_success,
                                 on_exception,
                             )
                         },
                         (exception) => {
-                            handle_exception(exception, initialize_safe_command()).__start(
+                            handle_exception(initialize_safe_command(), exception).__start(
                                 () => on_exception(map_exception(exception)),
                             )
                         }

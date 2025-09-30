@@ -18,7 +18,7 @@ export interface Unsafe_Command_Result<E> {
      * which would switch to the safe context
      */
     process_exception<NE>(
-        handle: ($: E, init: Safe_Command_Result) => Safe_Command_Result,
+        handle: ($i: Safe_Command_Result, $: E) => Safe_Command_Result,
         map: ($: E) => NE
 
     ): Unsafe_Command_Result<NE>
@@ -27,15 +27,15 @@ export interface Unsafe_Command_Result<E> {
     throw_exception<E>($: E): Unsafe_Command_Result<E>
 
     catch(
-        handle_exception: ($: E, init: Safe_Command_Result) => Safe_Command_Result
+        handle_exception: ($i: Safe_Command_Result, $: E) => Safe_Command_Result
     ): Safe_Command_Result
 
     then(
-        handle: (init: Unsafe_Command_Result<E>) => Unsafe_Command_Result<E>
+        handle: ($i: Unsafe_Command_Result<E>) => Unsafe_Command_Result<E>
     ): Unsafe_Command_Result<E>
 
     then_safe(
-        handle: (init: Safe_Command_Result) => Safe_Command_Result
+        handle: ($i: Safe_Command_Result) => Safe_Command_Result
     ): Unsafe_Command_Result<E>
 
     then_dictionary<E2>(

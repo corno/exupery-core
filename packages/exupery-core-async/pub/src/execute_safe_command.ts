@@ -17,7 +17,7 @@ class Safe_Command_Result_Class implements Safe_Command_Result {
         this.executer = executer
     }
     then(
-        handle: (init: Safe_Command_Result) => Safe_Command_Result
+        handle: ($i: Safe_Command_Result) => Safe_Command_Result
     ): Safe_Command_Result {
         return __execute_safe_command(
             {

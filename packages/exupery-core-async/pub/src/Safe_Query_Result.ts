@@ -20,11 +20,11 @@ export interface Safe_Query_Result<T> {
     ): Safe_Query_Result<NT>
 
     process_safe(
-        handle_value: ($: T, init: Safe_Command_Result) => Safe_Command_Result
+        handle_value: ($i: Safe_Command_Result, $: T) => Safe_Command_Result
     ): Safe_Command_Result
     
     process_unsafe<E>(
-        handle_value: ($: T, init: Unsafe_Command_Result<E>) => Unsafe_Command_Result<E>
+        handle_value: ($i: Unsafe_Command_Result<E>, $: T) => Unsafe_Command_Result<E>
     ): Unsafe_Command_Result<E>
 
     /**
