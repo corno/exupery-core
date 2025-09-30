@@ -80,7 +80,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
         )
     }
 
-    then(
+    execute_unsafe(
         handle: ($i: Unsafe_Command_Result<E>) => Unsafe_Command_Result<E>
     ): Unsafe_Command_Result<E> {
         return new Unsafe_Command_Result_Class<E>({
@@ -98,7 +98,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
         })
     }
 
-    then_safe(
+    execute(
         handle: ($i: Safe_Command_Result) => Safe_Command_Result
     ): Unsafe_Command_Result<E> {
         return new Unsafe_Command_Result_Class<E>({
@@ -114,7 +114,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
             }
         })
     }
-    then_dictionary<E2>(
+    execute_dictionary_unsafe<E2>(
         $: _et.Dictionary<Unsafe_Command_Result<E2>>,
         aggregate_exceptions: ($: _et.Dictionary<E2>) => E,
     ): Unsafe_Command_Result<E> {
@@ -148,7 +148,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
             }
         })
     }
-    then_multiple<E2>(
+    execute_multiple_unsafe<E2>(
         $: _et.Array<Unsafe_Command_Result<E2>>,
         aggregate_exceptions: ($: _et.Array<E2>) => E,
     ): Unsafe_Command_Result<E> {
