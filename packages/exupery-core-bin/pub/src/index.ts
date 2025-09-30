@@ -20,6 +20,9 @@ export const run_program = (
     )
 }
 
+export type Error = {
+    'exit code': number
+}
 
 /**
  * Runs a program main function, passing command line arguments (excluding
@@ -29,9 +32,7 @@ export const run_program = (
 export const run_unsafe_program = (
     main: ($: {
         'arguments': _et.Array<string>
-    }) => _easync.Unsafe_Command_Result<{
-        'exit_code': number
-    }>
+    }) => _easync.Unsafe_Command_Result<Error>
 ): void => {
     main({
         'arguments': _ei.array_literal(process.argv.slice(2))
@@ -39,7 +40,7 @@ export const run_unsafe_program = (
         () => {
         },
         ($) => {
-            process.exitCode = $.exit_code
+            process.exitCode = $['exit code']
         }
     )
 }
