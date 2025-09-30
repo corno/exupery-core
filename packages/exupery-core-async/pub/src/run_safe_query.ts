@@ -1,10 +1,10 @@
 import * as _et from "exupery-core-types"
 
 import { Safe_Query_Result } from "./Safe_Query_Result"
-import { Safe_Command_Result } from "./Safe_Command_Result"
-import { __execute_safe_command, initialize_safe_command } from "./execute_safe_command"
-import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
-import { __execute_unsafe_command, initialize_unsafe_command } from "./execute_unsafe_command"
+import { Safe_Procedure_Context } from "./Safe_Procedure_Context"
+import { __execute_safe_action, initialize_safe_procedure_context } from "./initialize_safe_procedure_context"
+import { Unsafe_Procedure_Context } from "./Unsafe_Procedure_Context"
+import { __execute_unsafe_action, initialize_unsafe_procedure_context } from "./initialize_unsafe_procedure_context"
 
 type Executer<T> = {
     'execute': (
@@ -50,14 +50,14 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
         )
     }
     process_safe(
-        handle_value: ($i: Safe_Command_Result, $: T) => Safe_Command_Result,
-    ): Safe_Command_Result {
-        return __execute_safe_command(
+        handle_value: ($i: Safe_Procedure_Context, $: T) => Safe_Procedure_Context,
+    ): Safe_Procedure_Context {
+        return __execute_safe_action(
             {
                 'execute': (on_success) => {
                     this.executer.execute(
                         (value) => {
-                            handle_value(initialize_safe_command(), value).__start(on_success)
+                            handle_value(initialize_safe_procedure_context(), value).__start(on_success)
                         }
                     )
                 }
@@ -65,14 +65,14 @@ class Safe_Query_Result_Class<T> implements Safe_Query_Result<T> {
         )
     }
     process_unsafe<E>(
-        handle_value: ($i: Unsafe_Command_Result<E>, $: T) => Unsafe_Command_Result<E>
-    ): Unsafe_Command_Result<E> {
-        return __execute_unsafe_command(
+        handle_value: ($i: Unsafe_Procedure_Context<E>, $: T) => Unsafe_Procedure_Context<E>
+    ): Unsafe_Procedure_Context<E> {
+        return __execute_unsafe_action(
             {
                 'execute': (on_success, on_exception) => {
                     this.executer.execute(
                         (value) => {
-                            handle_value(initialize_unsafe_command(), value).__start(
+                            handle_value(initialize_unsafe_procedure_context(), value).__start(
                                 on_success,
                                 on_exception,
                             )

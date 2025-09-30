@@ -1,8 +1,8 @@
 import * as _et from 'exupery-core-types'
 
-import { Safe_Command_Result } from "./Safe_Command_Result"
+import { Safe_Procedure_Context } from "./Safe_Procedure_Context"
 
-export interface Unsafe_Command_Result<E> {
+export interface Unsafe_Procedure_Context<E> {
 
 
     /**
@@ -18,34 +18,34 @@ export interface Unsafe_Command_Result<E> {
      * which would switch to the safe context
      */
     process_exception<NE>(
-        handle: ($i: Safe_Command_Result, $: E) => Safe_Command_Result,
+        handle: ($i: Safe_Procedure_Context, $: E) => Safe_Procedure_Context,
         map: ($: E) => NE
 
-    ): Unsafe_Command_Result<NE>
+    ): Unsafe_Procedure_Context<NE>
 
 
-    throw_exception<E>($: E): Unsafe_Command_Result<E>
+    throw_exception<E>($: E): Unsafe_Procedure_Context<E>
 
     catch(
-        handle_exception: ($i: Safe_Command_Result, $: E) => Safe_Command_Result
-    ): Safe_Command_Result
+        handle_exception: ($i: Safe_Procedure_Context, $: E) => Safe_Procedure_Context
+    ): Safe_Procedure_Context
 
     execute_unsafe(
-        handle: ($i: Unsafe_Command_Result<E>) => Unsafe_Command_Result<E>
-    ): Unsafe_Command_Result<E>
+        handle: ($i: Unsafe_Procedure_Context<E>) => Unsafe_Procedure_Context<E>
+    ): Unsafe_Procedure_Context<E>
 
     execute(
-        handle: ($i: Safe_Command_Result) => Safe_Command_Result
-    ): Unsafe_Command_Result<E>
+        handle: ($i: Safe_Procedure_Context) => Safe_Procedure_Context
+    ): Unsafe_Procedure_Context<E>
 
     execute_dictionary_unsafe<E2>(
-        $: _et.Dictionary<Unsafe_Command_Result<E2>>,
+        $: _et.Dictionary<Unsafe_Procedure_Context<E2>>,
         aggregate_exceptions: ($: _et.Dictionary<E2>) => E,
-    ): Unsafe_Command_Result<E>
+    ): Unsafe_Procedure_Context<E>
     execute_multiple_unsafe<E2>(
-        $: _et.Array<Unsafe_Command_Result<E2>>,
+        $: _et.Array<Unsafe_Procedure_Context<E2>>,
         aggregate_exceptions: ($: _et.Array<E2>) => E,
-    ): Unsafe_Command_Result<E>
+    ): Unsafe_Procedure_Context<E>
 
     __start(
         on_success: () => void,

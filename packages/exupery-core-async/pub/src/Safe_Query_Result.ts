@@ -1,5 +1,5 @@
-import { Safe_Command_Result } from "./Safe_Command_Result"
-import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
+import { Safe_Procedure_Context } from "./Safe_Procedure_Context"
+import { Unsafe_Procedure_Context } from "./Unsafe_Procedure_Context"
 
 /**
  * A value that will asynchronously become available.
@@ -20,12 +20,12 @@ export interface Safe_Query_Result<T> {
     ): Safe_Query_Result<NT>
 
     process_safe(
-        handle_value: ($i: Safe_Command_Result, $: T) => Safe_Command_Result
-    ): Safe_Command_Result
+        handle_value: ($i: Safe_Procedure_Context, $: T) => Safe_Procedure_Context
+    ): Safe_Procedure_Context
     
     process_unsafe<E>(
-        handle_value: ($i: Unsafe_Command_Result<E>, $: T) => Unsafe_Command_Result<E>
-    ): Unsafe_Command_Result<E>
+        handle_value: ($i: Unsafe_Procedure_Context<E>, $: T) => Unsafe_Procedure_Context<E>
+    ): Unsafe_Procedure_Context<E>
 
     /**
      * This method is only to be used by resources
