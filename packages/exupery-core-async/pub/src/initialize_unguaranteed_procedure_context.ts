@@ -118,7 +118,7 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
                             },
                         )
                     },
-                    new_on_exception, // if there was an exception before, propagate it, don't handle and map it
+                    new_on_exception, // if there was an exception before, there is nothing to do
                 )
             }
         })
