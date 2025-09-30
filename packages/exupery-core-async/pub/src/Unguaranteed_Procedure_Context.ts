@@ -32,11 +32,17 @@ export interface Unguaranteed_Procedure_Context<E> {
     ): Guaranteed_Procedure_Context
 
     execute_unguaranteed(
-        handle: ($i: Unguaranteed_Procedure_Context<E>) => Unguaranteed_Procedure_Context<E>
+        executer: ($i: Unguaranteed_Procedure_Context<E>) => Unguaranteed_Procedure_Context<E>,
+    ): Unguaranteed_Procedure_Context<E>
+
+    execute_foreign<NE>(
+        executer: ($i: Unguaranteed_Procedure_Context<NE>) => Unguaranteed_Procedure_Context<NE>,
+        handle_exception: ($i: Guaranteed_Procedure_Context, $: NE) => Guaranteed_Procedure_Context,
+        map: ($: NE) => E
     ): Unguaranteed_Procedure_Context<E>
 
     execute(
-        handle: ($i: Guaranteed_Procedure_Context) => Guaranteed_Procedure_Context
+        executer: ($i: Guaranteed_Procedure_Context) => Guaranteed_Procedure_Context
     ): Unguaranteed_Procedure_Context<E>
 
     execute_dictionary_unguaranteed<E2>(

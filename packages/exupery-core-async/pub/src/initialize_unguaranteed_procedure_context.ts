@@ -98,6 +98,32 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
         })
     }
 
+    execute_foreign<NE>(
+        executer: ($i: Unguaranteed_Procedure_Context<NE>) => Unguaranteed_Procedure_Context<NE>,
+        handle_exception: ($i: Guaranteed_Procedure_Context, $: NE) => Guaranteed_Procedure_Context,
+        map_exception: ($: NE) => E
+    ): Unguaranteed_Procedure_Context<E> {
+        return new Unguaranteed_Command_Result_Class<E>({
+            'execute': (new_on_success, new_on_exception) => {
+                this.executer.execute(
+                    () => {
+                        executer(initialize_unguaranteed_procedure_context()).__start(
+                            new_on_success,
+                            ($) => {
+                                handle_exception(initialize_guaranteed_procedure_context(), $).__start(
+                                    () => {
+                                        new_on_exception(map_exception($))
+                                    },
+                                )
+                            },
+                        )
+                    },
+                    new_on_exception, // if there was an exception before, propagate it, don't handle and map it
+                )
+            }
+        })
+    }
+
     execute(
         handle: ($i: Guaranteed_Procedure_Context) => Guaranteed_Procedure_Context
     ): Unguaranteed_Procedure_Context<E> {
