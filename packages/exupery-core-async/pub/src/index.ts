@@ -67,7 +67,7 @@ export const query = {
 
 export const command = {
     'safe': {
-        'do nothing': (
+        'initialize': (
         ): Safe_Command_Result => {
             return __execute_safe_command(
                 {
@@ -79,7 +79,7 @@ export const command = {
         }
     },
     'unsafe': {
-        'do nothing': <E>(
+        'initialize': <E>(
         ): Unsafe_Command_Result<E> => {
             return __execute_unsafe_command(
                 {
