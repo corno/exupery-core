@@ -7,8 +7,8 @@ export type Run_Safe_Program_Main = (
     $: {
         'arguments': _et.Array<string>,
     },
-    init: _easync.Safe_Command_Result
-) => _easync.Safe_Command_Result
+    init: _easync.Safe_Procedure_Context
+) => _easync.Safe_Procedure_Context
 
 /**
  * Runs a program main function, passing command line arguments (excluding
@@ -21,7 +21,7 @@ export const run_program = (
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },
-        _easync.initialize_safe_command()
+        _easync.initialize_safe_procedure_context()
     ).__start(
         () => {
         }
@@ -33,11 +33,11 @@ export type Error = {
 }
 
 export type Run_Unsafe_Program_Main = (
-    $i: _easync.Unsafe_Command_Result<Error>,
+    $i: _easync.Unsafe_Procedure_Context<Error>,
     $: {
         'arguments': _et.Array<string>
     },
-) => _easync.Unsafe_Command_Result<Error>
+) => _easync.Unsafe_Procedure_Context<Error>
 
 /**
  * Runs a program main function, passing command line arguments (excluding
@@ -48,7 +48,7 @@ export const run_unsafe_program = (
     main: Run_Unsafe_Program_Main
 ): void => {
     main(
-        _easync.initialize_unsafe_command(),
+        _easync.initialize_unsafe_procedure_context(),
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },
