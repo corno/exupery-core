@@ -33,11 +33,11 @@ export type Error = {
 }
 
 export type Run_Unguaranteed_Program_Main = (
-    $i: _easync.Ungaranteed_Procedure_Context<Error>,
+    $i: _easync.Unguaranteed_Procedure_Context<Error>,
     $: {
         'arguments': _et.Array<string>
     },
-) => _easync.Ungaranteed_Procedure_Context<Error>
+) => _easync.Unguaranteed_Procedure_Context<Error>
 
 /**
  * Runs a program main function, passing command line arguments (excluding
