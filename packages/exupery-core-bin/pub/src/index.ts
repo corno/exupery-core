@@ -3,7 +3,7 @@ import * as _et from 'exupery-core-types'
 import * as _easync from 'exupery-core-async'
 
 
-export type Runs_Safe_Program_Main = ($: {
+export type Run_Safe_Program_Main = ($: {
     'arguments': _et.Array<string>
 }) => _easync.Safe_Command_Result
 
@@ -12,7 +12,7 @@ export type Runs_Safe_Program_Main = ($: {
  * `node` and the script name)
  */
 export const run_program = (
-    main: Runs_Safe_Program_Main
+    main: Run_Safe_Program_Main
 ): void => {
     main({
         'arguments': _ei.array_literal(process.argv.slice(2))
