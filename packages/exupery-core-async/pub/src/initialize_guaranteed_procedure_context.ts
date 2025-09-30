@@ -1,7 +1,7 @@
 import * as _et from "exupery-core-types"
 
 import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
-import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
+import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
 import { __execute_unguaranteed_action } from "./initialize_unguaranteed_procedure_context"
 
 type Executer = {

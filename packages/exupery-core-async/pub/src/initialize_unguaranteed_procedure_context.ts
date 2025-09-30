@@ -1,7 +1,7 @@
 import * as _et from "exupery-core-types"
 import * as _ei from "exupery-core-internals"
 
-import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
+import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
 import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
 
 import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./initialize_guaranteed_procedure_context"
@@ -22,7 +22,7 @@ type Executer<E> = {
     ) => void
 }
 
-class Unguaranteed_Command_Result_Class<E> implements Ungaranteed_Procedure_Context<E> {
+class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Context<E> {
     private executer: Executer<E>
     constructor(executer: Executer<E>) {
         this.executer = executer
@@ -32,7 +32,7 @@ class Unguaranteed_Command_Result_Class<E> implements Ungaranteed_Procedure_Cont
         handle: ($i: Guaranteed_Procedure_Context, $: E) => Guaranteed_Procedure_Context,
         map: ($: E) => NE,
 
-    ): Ungaranteed_Procedure_Context<NE> {
+    ): Unguaranteed_Procedure_Context<NE> {
         return new Unguaranteed_Command_Result_Class<NE>({
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
@@ -65,7 +65,7 @@ class Unguaranteed_Command_Result_Class<E> implements Ungaranteed_Procedure_Cont
 
     throw_exception<E>(
         $: E
-    ): Ungaranteed_Procedure_Context<E> {
+    ): Unguaranteed_Procedure_Context<E> {
         return __execute_unguaranteed_action(
             {
                 'execute': (on_finished, on_exception) => {
@@ -81,8 +81,8 @@ class Unguaranteed_Command_Result_Class<E> implements Ungaranteed_Procedure_Cont
     }
 
     execute_unguaranteed(
-        handle: ($i: Ungaranteed_Procedure_Context<E>) => Ungaranteed_Procedure_Context<E>
-    ): Ungaranteed_Procedure_Context<E> {
+        handle: ($i: Unguaranteed_Procedure_Context<E>) => Unguaranteed_Procedure_Context<E>
+    ): Unguaranteed_Procedure_Context<E> {
         return new Unguaranteed_Command_Result_Class<E>({
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
@@ -100,7 +100,7 @@ class Unguaranteed_Command_Result_Class<E> implements Ungaranteed_Procedure_Cont
 
     execute(
         handle: ($i: Guaranteed_Procedure_Context) => Guaranteed_Procedure_Context
-    ): Ungaranteed_Procedure_Context<E> {
+    ): Unguaranteed_Procedure_Context<E> {
         return new Unguaranteed_Command_Result_Class<E>({
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
@@ -115,9 +115,9 @@ class Unguaranteed_Command_Result_Class<E> implements Ungaranteed_Procedure_Cont
         })
     }
     execute_dictionary_unguaranteed<E2>(
-        $: _et.Dictionary<Ungaranteed_Procedure_Context<E2>>,
+        $: _et.Dictionary<Unguaranteed_Procedure_Context<E2>>,
         aggregate_exceptions: ($: _et.Dictionary<E2>) => E,
-    ): Ungaranteed_Procedure_Context<E> {
+    ): Unguaranteed_Procedure_Context<E> {
         let exceptions: { [key: string]: E2 } = {}
         return __execute_unguaranteed_action({
             'execute': (on_success, on_exception) => {
@@ -149,9 +149,9 @@ class Unguaranteed_Command_Result_Class<E> implements Ungaranteed_Procedure_Cont
         })
     }
     execute_multiple_unguaranteed<E2>(
-        $: _et.Array<Ungaranteed_Procedure_Context<E2>>,
+        $: _et.Array<Unguaranteed_Procedure_Context<E2>>,
         aggregate_exceptions: ($: _et.Array<E2>) => E,
-    ): Ungaranteed_Procedure_Context<E> {
+    ): Unguaranteed_Procedure_Context<E> {
         let exceptions: E2[] = []
         return __execute_unguaranteed_action({
             'execute': (on_success, on_exception) => {
@@ -197,13 +197,13 @@ class Unguaranteed_Command_Result_Class<E> implements Ungaranteed_Procedure_Cont
  */
 export function __execute_unguaranteed_action<E>(
     executer: Executer<E>,
-): Ungaranteed_Procedure_Context<E> {
+): Unguaranteed_Procedure_Context<E> {
     return new Unguaranteed_Command_Result_Class<E>(executer)
 
 }
 
 export const initialize_unguaranteed_procedure_context = <E>(
-): Ungaranteed_Procedure_Context<E> => {
+): Unguaranteed_Procedure_Context<E> => {
     return new Unguaranteed_Command_Result_Class<E>({
         'execute': (on_success, on_exception) => {
             on_success() //nothing to do, call on_finished immediately

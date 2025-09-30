@@ -2,7 +2,7 @@ import * as _et from 'exupery-core-types'
 
 import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
 
-export interface Ungaranteed_Procedure_Context<E> {
+export interface Unguaranteed_Procedure_Context<E> {
 
 
     /**
@@ -21,33 +21,33 @@ export interface Ungaranteed_Procedure_Context<E> {
         handle: ($i: Guaranteed_Procedure_Context, $: E) => Guaranteed_Procedure_Context,
         map: ($: E) => NE
 
-    ): Ungaranteed_Procedure_Context<NE>
+    ): Unguaranteed_Procedure_Context<NE>
 
     throw_exception<E>(
         $: E
-    ): Ungaranteed_Procedure_Context<E>
+    ): Unguaranteed_Procedure_Context<E>
 
     catch(
         handle_exception: ($i: Guaranteed_Procedure_Context, $: E) => Guaranteed_Procedure_Context
     ): Guaranteed_Procedure_Context
 
     execute_unguaranteed(
-        handle: ($i: Ungaranteed_Procedure_Context<E>) => Ungaranteed_Procedure_Context<E>
-    ): Ungaranteed_Procedure_Context<E>
+        handle: ($i: Unguaranteed_Procedure_Context<E>) => Unguaranteed_Procedure_Context<E>
+    ): Unguaranteed_Procedure_Context<E>
 
     execute(
         handle: ($i: Guaranteed_Procedure_Context) => Guaranteed_Procedure_Context
-    ): Ungaranteed_Procedure_Context<E>
+    ): Unguaranteed_Procedure_Context<E>
 
     execute_dictionary_unguaranteed<E2>(
-        $: _et.Dictionary<Ungaranteed_Procedure_Context<E2>>,
+        $: _et.Dictionary<Unguaranteed_Procedure_Context<E2>>,
         aggregate_exceptions: ($: _et.Dictionary<E2>) => E,
-    ): Ungaranteed_Procedure_Context<E>
+    ): Unguaranteed_Procedure_Context<E>
 
     execute_multiple_unguaranteed<E2>(
-        $: _et.Array<Ungaranteed_Procedure_Context<E2>>,
+        $: _et.Array<Unguaranteed_Procedure_Context<E2>>,
         aggregate_exceptions: ($: _et.Array<E2>) => E,
-    ): Ungaranteed_Procedure_Context<E>
+    ): Unguaranteed_Procedure_Context<E>
 
     __start(
         on_success: () => void,

@@ -15,7 +15,7 @@ export * from "./initialize_unguaranteed_procedure_context"
 
 
 import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
-import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
+import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
 import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
 import { Unguaranteed_Query_Result } from "./Unguaranteed_Query_Result"
 
@@ -73,7 +73,7 @@ export const command = {
         'initialize': initialize_unguaranteed_procedure_context,
         'raise exception': <E>(
             $: E
-        ): Ungaranteed_Procedure_Context<E> => {
+        ): Unguaranteed_Procedure_Context<E> => {
             return __execute_unguaranteed_action(
                 {
                     'execute': (on_success, on_exception) => {

@@ -1,4 +1,4 @@
-import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
+import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
 
 
 export interface Guaranteed_Procedure_Context {

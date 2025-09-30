@@ -5,7 +5,7 @@ import { Unguaranteed_Query_Result } from "./Unguaranteed_Query_Result"
 import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
 import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
 import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./initialize_guaranteed_procedure_context"
-import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
+import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
 import { __execute_unguaranteed_action, initialize_unguaranteed_procedure_context } from "./initialize_unguaranteed_procedure_context"
 
 
@@ -89,8 +89,8 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
     process<NE>(
         handle_exception: ($i: Guaranteed_Procedure_Context, $: E) => Guaranteed_Procedure_Context,
         map_exception: ($: E) => NE,
-        handle_value: ($i: Ungaranteed_Procedure_Context<NE>, $: T) => Ungaranteed_Procedure_Context<NE>,
-    ): Ungaranteed_Procedure_Context<NE> {
+        handle_value: ($i: Unguaranteed_Procedure_Context<NE>, $: T) => Unguaranteed_Procedure_Context<NE>,
+    ): Unguaranteed_Procedure_Context<NE> {
         return __execute_unguaranteed_action(
             {
                 'execute': (on_success, on_exception) => {

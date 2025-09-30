@@ -4,11 +4,11 @@ import * as _easync from 'exupery-core-async'
 
 
 export type Run_Safe_Program_Main = (
-    $i: _easync.Safe_Procedure_Context,
+    $i: _easync.Guaranteed_Procedure_Context,
     $: {
         'arguments': _et.Array<string>,
     },
-) => _easync.Safe_Procedure_Context
+) => _easync.Guaranteed_Procedure_Context
 
 /**
  * Runs a program main function, passing command line arguments (excluding
@@ -18,7 +18,7 @@ export const run_program = (
     main: Run_Safe_Program_Main
 ): void => {
     main(
-        _easync.initialize_safe_procedure_context(),
+        _easync.initialize_guaranteed_procedure_context(),
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },
@@ -32,12 +32,12 @@ export type Error = {
     'exit code': number
 }
 
-export type Run_Unsafe_Program_Main = (
-    $i: _easync.Unsafe_Procedure_Context<Error>,
+export type Run_Unguaranteed_Program_Main = (
+    $i: _easync.Ungaranteed_Procedure_Context<Error>,
     $: {
         'arguments': _et.Array<string>
     },
-) => _easync.Unsafe_Procedure_Context<Error>
+) => _easync.Ungaranteed_Procedure_Context<Error>
 
 /**
  * Runs a program main function, passing command line arguments (excluding
@@ -45,10 +45,10 @@ export type Run_Unsafe_Program_Main = (
  * returned value when the async value completes.
  */
 export const run_unsafe_program = (
-    main: Run_Unsafe_Program_Main
+    main: Run_Unguaranteed_Program_Main
 ): void => {
     main(
-        _easync.initialize_unsafe_procedure_context(),
+        _easync.initialize_unguaranteed_procedure_context(),
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },

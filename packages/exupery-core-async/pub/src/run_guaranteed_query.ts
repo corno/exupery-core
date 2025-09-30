@@ -3,7 +3,7 @@ import * as _et from "exupery-core-types"
 import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
 import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
 import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./initialize_guaranteed_procedure_context"
-import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
+import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
 import { __execute_unguaranteed_action, initialize_unguaranteed_procedure_context } from "./initialize_unguaranteed_procedure_context"
 
 type Executer<T> = {
@@ -65,8 +65,8 @@ class Guaranteed_Query_Result_Class<T> implements Guaranteed_Query_Result<T> {
         )
     }
     process_unguaranteed<E>(
-        handle_value: ($i: Ungaranteed_Procedure_Context<E>, $: T) => Ungaranteed_Procedure_Context<E>
-    ): Ungaranteed_Procedure_Context<E> {
+        handle_value: ($i: Unguaranteed_Procedure_Context<E>, $: T) => Unguaranteed_Procedure_Context<E>
+    ): Unguaranteed_Procedure_Context<E> {
         return __execute_unguaranteed_action(
             {
                 'execute': (on_success, on_exception) => {

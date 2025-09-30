@@ -1,5 +1,5 @@
 import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
-import { Ungaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
+import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
 
 /**
  * A value that will asynchronously become available.
@@ -24,8 +24,8 @@ export interface Guaranteed_Query_Result<T> {
     ): Guaranteed_Procedure_Context
     
     process_unguaranteed<E>(
-        handle_value: ($i: Ungaranteed_Procedure_Context<E>, $: T) => Ungaranteed_Procedure_Context<E>
-    ): Ungaranteed_Procedure_Context<E>
+        handle_value: ($i: Unguaranteed_Procedure_Context<E>, $: T) => Unguaranteed_Procedure_Context<E>
+    ): Unguaranteed_Procedure_Context<E>
 
     /**
      * This method is only to be used by resources
