@@ -63,6 +63,23 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
         })
     }
 
+    throw_exception<E>(
+        $: E
+    ): Unsafe_Command_Result<E> {
+        return __execute_unsafe_command(
+            {
+                'execute': (on_finished, on_exception) => {
+                    this.executer.execute(
+                        () => {
+                            on_exception($)
+                        },
+                        () => on_exception($)
+                    )
+                }
+            }
+        )
+    }
+
     then(
         handle: () => Unsafe_Command_Result<E>
     ): Unsafe_Command_Result<E> {
@@ -73,6 +90,23 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
                         handle().__start(
                             new_on_success,
                             new_on_exception,
+                        )
+                    },
+                    new_on_exception,
+                )
+            }
+        })
+    }
+
+    then_safe(
+        handle: () => Safe_Command_Result
+    ): Unsafe_Command_Result<E> {
+        return new Unsafe_Command_Result_Class<E>({
+            'execute': (new_on_success, new_on_exception) => {
+                this.executer.execute(
+                    () => {
+                        handle().__start(
+                            new_on_success,
                         )
                     },
                     new_on_exception,

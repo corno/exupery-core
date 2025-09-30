@@ -32,37 +32,6 @@ class Safe_Command_Result_Class implements Safe_Command_Result {
         )
     }
 
-    cast_to_unsafe<E>(
-    ): Unsafe_Command_Result<E> {
-        return __execute_unsafe_command(
-            {
-                'execute': (on_finished) => {
-                    this.executer.execute(
-                        () => {
-                            on_finished()
-                        }
-                    )
-                }
-            }
-        )
-    }
-
-    throw_exception<E>(
-        $: E
-    ): Unsafe_Command_Result<E> {
-        return __execute_unsafe_command(
-            {
-                'execute': (on_finished, on_exception) => {
-                    this.executer.execute(
-                        () => {
-                            on_exception($)
-                        }
-                    )
-                }
-            }
-        )
-    }
-
     __start(
         on_finished: () => void
     ) {
