@@ -33,10 +33,10 @@ export type Error = {
 }
 
 export type Run_Unsafe_Program_Main = (
+    $i: _easync.Unsafe_Command_Result<Error>,
     $: {
         'arguments': _et.Array<string>
     },
-    init: _easync.Unsafe_Command_Result<Error>
 ) => _easync.Unsafe_Command_Result<Error>
 
 /**
@@ -48,10 +48,10 @@ export const run_unsafe_program = (
     main: Run_Unsafe_Program_Main
 ): void => {
     main(
+        _easync.initialize_unsafe_command(),
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },
-        _easync.initialize_unsafe_command()
     ).__start(
         () => {
         },
