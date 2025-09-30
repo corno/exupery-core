@@ -17,14 +17,14 @@ class Safe_Command_Result_Class implements Safe_Command_Result {
         this.executer = executer
     }
     then(
-        handle: () => Safe_Command_Result
+        handle: (init: Safe_Command_Result) => Safe_Command_Result
     ): Safe_Command_Result {
         return __execute_safe_command(
             {
                 'execute': (on_finished) => {
                     this.executer.execute(
                         () => {
-                            handle().__start(on_finished)
+                            handle(initialize_safe_command()).__start(on_finished)
                         }
                     )
                 }
@@ -49,4 +49,15 @@ export function __execute_safe_command(
 ): Safe_Command_Result {
     return new Safe_Command_Result_Class(executer)
 
+}
+
+export const initialize_safe_command = (
+): Safe_Command_Result => {
+    return __execute_safe_command(
+        {
+            'execute': (on_success) => {
+                on_success()
+            }
+        }
+    )
 }

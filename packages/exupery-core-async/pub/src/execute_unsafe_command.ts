@@ -4,7 +4,7 @@ import * as _ei from "exupery-core-internals"
 import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
 import { Safe_Command_Result } from "./Safe_Command_Result"
 
-import { __execute_safe_command } from "./execute_safe_command"
+import { __execute_safe_command, initialize_safe_command } from "./execute_safe_command"
 import { __run_safe_query } from "./run_safe_query"
 import { create_asynchronous_processes_monitor } from "./create_asynchronous_processes_monitor"
 
@@ -29,7 +29,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
     }
 
     process_exception<NE>(
-        handle: ($: E) => Safe_Command_Result,
+        handle: ($: E, init: Safe_Command_Result) => Safe_Command_Result,
         map: ($: E) => NE,
 
     ): Unsafe_Command_Result<NE> {
@@ -38,7 +38,7 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
                 this.executer.execute(
                     new_on_success,
                     ($) => {
-                        handle($).__start(
+                        handle($, initialize_safe_command()).__start(
                             () => new_on_exception(map($)),
                         )
                     },
@@ -47,14 +47,14 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
         })
     }
     catch(
-        handle_exception: ($: E) => Safe_Command_Result
+        handle_exception: ($: E, init: Safe_Command_Result) => Safe_Command_Result
     ): Safe_Command_Result {
         return __execute_safe_command({
             'execute': (new_on_success) => {
                 this.executer.execute(
                     new_on_success,
                     ($) => {
-                        handle_exception($).__start(
+                        handle_exception($, initialize_safe_command()).__start(
                             new_on_success,
                         )
                     },
@@ -81,13 +81,13 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
     }
 
     then(
-        handle: () => Unsafe_Command_Result<E>
+        handle: (init: Unsafe_Command_Result<E>) => Unsafe_Command_Result<E>
     ): Unsafe_Command_Result<E> {
         return new Unsafe_Command_Result_Class<E>({
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
                     () => {
-                        handle().__start(
+                        handle(initialize_unsafe_command()).__start(
                             new_on_success,
                             new_on_exception,
                         )
@@ -99,13 +99,13 @@ class Unsafe_Command_Result_Class<E> implements Unsafe_Command_Result<E> {
     }
 
     then_safe(
-        handle: () => Safe_Command_Result
+        handle: (init: Safe_Command_Result) => Safe_Command_Result
     ): Unsafe_Command_Result<E> {
         return new Unsafe_Command_Result_Class<E>({
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
                     () => {
-                        handle().__start(
+                        handle(initialize_safe_command()).__start(
                             new_on_success,
                         )
                     },
@@ -200,4 +200,15 @@ export function __execute_unsafe_command<E>(
 ): Unsafe_Command_Result<E> {
     return new Unsafe_Command_Result_Class<E>(executer)
 
+}
+
+export const initialize_unsafe_command = <E>(
+): Unsafe_Command_Result<E> => {
+    return __execute_unsafe_command(
+        {
+            'execute': (on_success) => {
+                on_success()
+            }
+        }
+    )
 }

@@ -4,9 +4,9 @@ import { __run_safe_query } from "./run_safe_query"
 import { Unsafe_Query_Result } from "./Unsafe_Query_Result"
 import { Safe_Query_Result } from "./Safe_Query_Result"
 import { Safe_Command_Result } from "./Safe_Command_Result"
-import { __execute_safe_command } from "./execute_safe_command"
+import { __execute_safe_command, initialize_safe_command } from "./execute_safe_command"
 import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
-import { __execute_unsafe_command } from "./execute_unsafe_command"
+import { __execute_unsafe_command, initialize_unsafe_command } from "./execute_unsafe_command"
 
 
 /**
@@ -87,22 +87,22 @@ class Unsafe_Query_Result_Class<T, E> implements Unsafe_Query_Result<T, E> {
         })
     }
     process<NE>(
-        handle_exception: ($: E) => Safe_Command_Result,
+        handle_exception: ($: E, init: Safe_Command_Result) => Safe_Command_Result,
         map_exception: ($: E) => NE,
-        handle_value: ($: T) => Unsafe_Command_Result<NE>,
+        handle_value: ($: T, init: Unsafe_Command_Result<NE>) => Unsafe_Command_Result<NE>,
     ): Unsafe_Command_Result<NE> {
         return __execute_unsafe_command(
             {
                 'execute': (on_success, on_exception) => {
                     this.executer.execute(
                         (value) => {
-                            handle_value(value).__start(
+                            handle_value(value, initialize_unsafe_command()).__start(
                                 on_success,
                                 on_exception,
                             )
                         },
                         (exception) => {
-                            handle_exception(exception).__start(
+                            handle_exception(exception, initialize_safe_command()).__start(
                                 () => on_exception(map_exception(exception)),
                             )
                         }

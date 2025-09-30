@@ -41,9 +41,9 @@ export interface Unsafe_Query_Result<T, E> {
      * 
      */
     process<NE>(
-        handle_exception: ($: E) => Safe_Command_Result,
+        handle_exception: ($: E, init: Safe_Command_Result) => Safe_Command_Result,
         map_exception: ($: E) => NE,
-        handle_value: ($: T) => Unsafe_Command_Result<NE>,
+        handle_value: ($: T, init: Unsafe_Command_Result<NE>) => Unsafe_Command_Result<NE>,
     ): Unsafe_Command_Result<NE>
 
     __start(

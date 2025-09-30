@@ -19,8 +19,8 @@ import { Unsafe_Command_Result } from "./Unsafe_Command_Result"
 import { Safe_Query_Result } from "./Safe_Query_Result"
 import { Unsafe_Query_Result } from "./Unsafe_Query_Result"
 
-import { __execute_safe_command } from "./execute_safe_command"
-import { __execute_unsafe_command } from "./execute_unsafe_command"
+import { __execute_safe_command, initialize_safe_command } from "./execute_safe_command"
+import { __execute_unsafe_command, initialize_unsafe_command } from "./execute_unsafe_command"
 import { __run_safe_query } from "./run_safe_query"
 import { __run_unsafe_query } from "./run_unsafe_query"
 
@@ -67,28 +67,10 @@ export const query = {
 
 export const command = {
     'safe': {
-        'initialize': (
-        ): Safe_Command_Result => {
-            return __execute_safe_command(
-                {
-                    'execute': (on_success) => {
-                        on_success()
-                    }
-                }
-            )
-        }
+        'initialize': initialize_safe_command
     },
     'unsafe': {
-        'initialize': <E>(
-        ): Unsafe_Command_Result<E> => {
-            return __execute_unsafe_command(
-                {
-                    'execute': (on_success) => {
-                        on_success()
-                    }
-                }
-            )
-        },
+        'initialize': initialize_unsafe_command,
         'raise exception': <E>(
             $: E
         ): Unsafe_Command_Result<E> => {
