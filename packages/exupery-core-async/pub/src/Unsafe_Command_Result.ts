@@ -24,7 +24,7 @@ export interface Unsafe_Command_Result<E> {
     ): Unsafe_Command_Result<NE>
 
 
-    throw_exception<E>($: E, init: Unsafe_Command_Result<E>): Unsafe_Command_Result<E>
+    throw_exception<E>($: E): Unsafe_Command_Result<E>
 
     catch(
         handle_exception: ($: E, init: Safe_Command_Result) => Safe_Command_Result
