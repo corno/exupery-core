@@ -41,7 +41,23 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
             }
         })
     }
-    then<NT>(
+    then_<NT>(
+        handle_value: ($: T) => Guaranteed_Query_Result<NT>
+    ): Unguaranteed_Query_Result<NT, E> {
+        return new Unguaranteed_Query_Result_Class<NT, E>({
+            'execute': (new_on_value, new_on_exception) => {
+                this.executer.execute(
+                    ($) => {
+                        handle_value($).__start(
+                            new_on_value,
+                        )
+                    },
+                    new_on_exception,
+                )
+            }
+        })
+    }
+    then_unguaranteed<NT>(
         handle_value: ($: T) => Unguaranteed_Query_Result<NT, E>
     ): Unguaranteed_Query_Result<NT, E> {
         return new Unguaranteed_Query_Result_Class<NT, E>({

@@ -13,7 +13,11 @@ export interface Unguaranteed_Query_Result<T, E> {
         handle_exception: ($: E) => NE
     ): Unguaranteed_Query_Result<T, NE>
 
-    then<NT>(
+    then_<NT>(
+        handle_value: ($: T) => Guaranteed_Query_Result<NT>
+    ): Unguaranteed_Query_Result<NT, E>
+    
+    then_unguaranteed<NT>(
         handle_value: ($: T) => Unguaranteed_Query_Result<NT, E>
     ): Unguaranteed_Query_Result<NT, E>
 
