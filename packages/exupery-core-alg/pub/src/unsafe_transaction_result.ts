@@ -5,7 +5,7 @@ export interface Unsafe_Transformation_Result<T, E> {
      * @param set what to do when the value was set, returns the new type
      * @param not_set  what to do when the value was not set, returns the new type
      */
-    transform<NT>(
+    'transform result'<NT>(
         success: ($: T) => NT,
         exception: ($: E) => NT,
     ): NT
@@ -21,7 +21,7 @@ export const failed = <T, E>(
     exception: E
 ): Unsafe_Transformation_Result<T, E> => {
     return {
-        'transform': (success, exception_handler) => {
+        'transform result': (success, exception_handler) => {
             return exception_handler(exception)
         },
         'map': <NT>(
@@ -36,7 +36,7 @@ export const successful = <T, E>(
     value: T
 ): Unsafe_Transformation_Result<T, E> => {
     return {
-        'transform': (success, exception_handler) => {
+        'transform result': (success, exception_handler) => {
             return success(value)
         },
         'map': <NT>(

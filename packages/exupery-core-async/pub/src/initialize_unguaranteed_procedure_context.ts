@@ -7,6 +7,7 @@ import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
 import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./initialize_guaranteed_procedure_context"
 import { __run_guaranteed_query } from "./run_guaranteed_query"
 import { create_asynchronous_processes_monitor } from "./create_asynchronous_processes_monitor"
+import { Unguaranteed_Query_Result } from "./Unguaranteed_Query_Result"
 
 
 /**
@@ -26,6 +27,20 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
     private executer: Executer<E>
     constructor(executer: Executer<E>) {
         this.executer = executer
+    }
+
+
+    process_unguaranteed_data<T, NE>(
+        get_data: () => Unguaranteed_Query_Result<T, NE>,
+        handle_exception: ($i: Guaranteed_Procedure_Context, $: NE) => Guaranteed_Procedure_Context,
+        map_exception: ($: NE) => E,
+        handle_data: ($i: Unguaranteed_Procedure_Context<E>, $: T) => Unguaranteed_Procedure_Context<E>,
+    ): Unguaranteed_Procedure_Context<E> {
+        return get_data().process(
+            handle_exception,
+            map_exception,
+            handle_data
+        )
     }
 
     process_exception_deprecated<NE>(
