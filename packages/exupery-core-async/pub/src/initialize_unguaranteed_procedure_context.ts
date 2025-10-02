@@ -43,12 +43,14 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
                         () => {
                             get_data().__start(
                                 (value) => {
+                                    //the data was successfully retrieved
                                     handle_data(initialize_unguaranteed_procedure_context(), value).__start(
                                         on_success,
                                         on_exception,
                                     )
                                 },
                                 (exception) => {
+                                    //data retrieval failed
                                     handle_exception(initialize_guaranteed_procedure_context(), exception).__start(
                                         () => on_exception(map_exception(exception)),
                                     )

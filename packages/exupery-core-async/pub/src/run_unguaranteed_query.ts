@@ -27,7 +27,7 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
     constructor(executer: Executer<T, E>) {
         this.executer = executer
     }
-    map<NT>(
+    map_<NT>(
         handle_value: ($: T) => NT
     ): Unguaranteed_Query_Result<NT, E> {
         return new Unguaranteed_Query_Result_Class<NT, E>({
@@ -41,7 +41,7 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
             }
         })
     }
-    then_<NT>(
+    then<NT>(
         handle_value: ($: T) => Guaranteed_Query_Result<NT>
     ): Unguaranteed_Query_Result<NT, E> {
         return new Unguaranteed_Query_Result_Class<NT, E>({
@@ -74,7 +74,7 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
             }
         })
     }
-    map_exception<NE>(
+    map_exception_<NE>(
         handle_exception: ($: E) => NE
     ): Unguaranteed_Query_Result<T, NE> {
         return new Unguaranteed_Query_Result_Class<T, NE>({
@@ -88,7 +88,8 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
             }
         })
     }
-    catch(
+
+    catch_(
         handle_exception: ($: E) => Guaranteed_Query_Result<T>
     ): Guaranteed_Query_Result<T> {
         return __run_guaranteed_query<T>({
@@ -102,31 +103,7 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
             }
         })
     }
-    process<NE>(
-        handle_exception: ($i: Guaranteed_Procedure_Context, $: E) => Guaranteed_Procedure_Context,
-        map_exception: ($: E) => NE,
-        handle_value: ($i: Unguaranteed_Procedure_Context<NE>, $: T) => Unguaranteed_Procedure_Context<NE>,
-    ): Unguaranteed_Procedure_Context<NE> {
-        return __execute_unguaranteed_action(
-            {
-                'execute': (on_success, on_exception) => {
-                    this.executer.execute(
-                        (value) => {
-                            handle_value(initialize_unguaranteed_procedure_context(), value).__start(
-                                on_success,
-                                on_exception,
-                            )
-                        },
-                        (exception) => {
-                            handle_exception(initialize_guaranteed_procedure_context(), exception).__start(
-                                () => on_exception(map_exception(exception)),
-                            )
-                        }
-                    )
-                }
-            }
-        )
-    }
+
     __start(
         on_value: ($: T) => void,
         on_exception: ($: E) => void,

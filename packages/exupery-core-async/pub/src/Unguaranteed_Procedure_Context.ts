@@ -24,12 +24,18 @@ export interface Unguaranteed_Procedure_Context<E> {
 
     ): Unguaranteed_Procedure_Context<NE>
 
-
+    /**
+     * 
+     * if data was not succesfully queried, the action will not be executed.
+     * instead, the 2 other handlers will be called.
+     * first, the exception handler will be called, to report the exception.
+     * secondly, the exception will be mapped into a new exception value that has the same type as the command's exception type.
+     */
     process_unguaranteed_data<T, NE>(
         get_data: () => Unguaranteed_Query_Result<T, NE>,
         handle_exception: ($i: Guaranteed_Procedure_Context, $: NE) => Guaranteed_Procedure_Context,
         map_exception: ($: NE) => E,
-        handle_data: ($i: Unguaranteed_Procedure_Context<E>, $: T) => Unguaranteed_Procedure_Context<E>,
+        execute_action: ($i: Unguaranteed_Procedure_Context<E>, $: T) => Unguaranteed_Procedure_Context<E>,
     ): Unguaranteed_Procedure_Context<E>
 
     throw_exception<E>(
