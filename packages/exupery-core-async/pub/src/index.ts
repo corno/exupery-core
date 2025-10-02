@@ -1,28 +1,28 @@
 import * as _et from "exupery-core-types"
 import * as _ei from "exupery-core-internals"
 
-export * from "./Guaranteed_Procedure_Context"
-export * from "./Unguaranteed_Procedure_Context"
-export * from "./Guaranteed_Query_Result"
-export * from "./Unguaranteed_Query_Result"
+export * from "./procedure/Guaranteed_Procedure_Context"
+export * from "./procedure/Unguaranteed_Procedure_Context"
+export * from "./query/Guaranteed_Query_Result"
+export * from "./query/Unguaranteed_Query_Result"
 
-export * from "./merge_2_guaranteed_query_results"
+export * from "./query/merge_2_guaranteed_query_results"
 
-export * from "./run_guaranteed_query"
-export * from "./run_unguaranteed_query"
-export * from "./initialize_guaranteed_procedure_context"
-export * from "./initialize_unguaranteed_procedure_context"
+export * from "./query/run_guaranteed_query"
+export * from "./query/run_unguaranteed_query"
+export * from "./procedure/initialize_guaranteed_procedure_context"
+export * from "./procedure/initialize_unguaranteed_procedure_context"
 
 
-import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
-import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
-import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
-import { Unguaranteed_Query_Result } from "./Unguaranteed_Query_Result"
+import { Guaranteed_Procedure_Context } from "./procedure/Guaranteed_Procedure_Context"
+import { Unguaranteed_Procedure_Context } from "./procedure/Unguaranteed_Procedure_Context"
+import { Guaranteed_Query_Result } from "./query/Guaranteed_Query_Result"
+import { Unguaranteed_Query_Result } from "./query/Unguaranteed_Query_Result"
 
-import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./initialize_guaranteed_procedure_context"
-import { __execute_unguaranteed_action, initialize_unguaranteed_procedure_context } from "./initialize_unguaranteed_procedure_context"
-import { __run_guaranteed_query } from "./run_guaranteed_query"
-import { __run_unguaranteed_query } from "./run_unguaranteed_query"
+import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./procedure/initialize_guaranteed_procedure_context"
+import { __execute_unguaranteed_action, initialize_unguaranteed_procedure_context } from "./procedure/initialize_unguaranteed_procedure_context"
+import { __run_guaranteed_query } from "./query/run_guaranteed_query"
+import { __run_unguaranteed_query } from "./query/run_unguaranteed_query"
 
 
 export const query = {

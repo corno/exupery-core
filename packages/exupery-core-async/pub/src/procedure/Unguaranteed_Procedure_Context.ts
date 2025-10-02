@@ -1,8 +1,13 @@
 import * as _et from 'exupery-core-types'
 
+import { Unguaranteed_Query_Result } from "../query/Unguaranteed_Query_Result"
+import { Guaranteed_Query_Result } from "../query/Guaranteed_Query_Result"
+
 import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
-import { Unguaranteed_Query_Result } from './Unguaranteed_Query_Result'
-import { Guaranteed_Query_Result } from './Guaranteed_Query_Result'
+
+
+
+export type Unguaranteed_Action<Params, Error> = ($: Params) => Unguaranteed_Procedure_Context<Error>
 
 export interface Unguaranteed_Procedure_Context<E> {
 

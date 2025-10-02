@@ -1,6 +1,6 @@
 import * as _et from "exupery-core-types"
 
-import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
+import { Guaranteed_Action, Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
 import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
 import { __execute_unguaranteed_action } from "./initialize_unguaranteed_procedure_context"
 
@@ -16,15 +16,18 @@ class Guaranteed_Procedure_Context_Class implements Guaranteed_Procedure_Context
     constructor(executer: Executer) {
         this.executer = executer
     }
-    execute(
-        handle: ($i: Guaranteed_Procedure_Context) => Guaranteed_Procedure_Context
+    execute<Params>(
+        get_action: () => Guaranteed_Action<Params>,
+        get_parameters: () => Params
     ): Guaranteed_Procedure_Context {
         return __execute_guaranteed_action(
             {
                 'execute': (on_finished) => {
                     this.executer.execute(
                         () => {
-                            handle(initialize_guaranteed_procedure_context()).__start(on_finished)
+                            const action = get_action()
+                            const params = get_parameters()
+                            action(params).__start(on_finished)
                         }
                     )
                 }

@@ -3,10 +3,6 @@ import * as _et from "exupery-core-types"
 import { __run_guaranteed_query } from "./run_guaranteed_query"
 import { Unguaranteed_Query_Result } from "./Unguaranteed_Query_Result"
 import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
-import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
-import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./initialize_guaranteed_procedure_context"
-import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
-import { __execute_unguaranteed_action, initialize_unguaranteed_procedure_context } from "./initialize_unguaranteed_procedure_context"
 
 
 /**
