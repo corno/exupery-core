@@ -8,6 +8,7 @@ import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } 
 import { __run_guaranteed_query } from "./run_guaranteed_query"
 import { create_asynchronous_processes_monitor } from "./create_asynchronous_processes_monitor"
 import { Unguaranteed_Query_Result } from "./Unguaranteed_Query_Result"
+import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
 
 
 /**
@@ -29,6 +30,30 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
         this.executer = executer
     }
 
+    process_guaranteed_data<T>(
+        get_data: () => Guaranteed_Query_Result<T>,
+        handle_data: ($i: Unguaranteed_Procedure_Context<E>, $: T) => Unguaranteed_Procedure_Context<E>,
+    ): Unguaranteed_Procedure_Context<E> {
+        return __execute_unguaranteed_action(
+            {
+                'execute': (on_success, on_exception) => {
+                    this.executer.execute(
+                        () => {
+                            get_data().__start(
+                                (value) => {
+                                    handle_data(initialize_unguaranteed_procedure_context(), value).__start(
+                                        on_success,
+                                        on_exception,
+                                    )
+                                },
+                            )
+                        },
+                        on_exception // if there was an exception before, there is nothing to do
+                    )
+                }
+            }
+        )
+    }
 
     process_unguaranteed_data<T, NE>(
         get_data: () => Unguaranteed_Query_Result<T, NE>,

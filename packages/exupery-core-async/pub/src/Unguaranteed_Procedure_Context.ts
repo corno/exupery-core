@@ -2,6 +2,7 @@ import * as _et from 'exupery-core-types'
 
 import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
 import { Unguaranteed_Query_Result } from './Unguaranteed_Query_Result'
+import { Guaranteed_Query_Result } from './Guaranteed_Query_Result'
 
 export interface Unguaranteed_Procedure_Context<E> {
 
@@ -35,6 +36,12 @@ export interface Unguaranteed_Procedure_Context<E> {
         get_data: () => Unguaranteed_Query_Result<T, NE>,
         handle_exception: ($i: Guaranteed_Procedure_Context, $: NE) => Guaranteed_Procedure_Context,
         map_exception: ($: NE) => E,
+        execute_action: ($i: Unguaranteed_Procedure_Context<E>, $: T) => Unguaranteed_Procedure_Context<E>,
+    ): Unguaranteed_Procedure_Context<E>
+
+
+    process_guaranteed_data<T>(
+        get_data: () => Guaranteed_Query_Result<T>,
         execute_action: ($i: Unguaranteed_Procedure_Context<E>, $: T) => Unguaranteed_Procedure_Context<E>,
     ): Unguaranteed_Procedure_Context<E>
 

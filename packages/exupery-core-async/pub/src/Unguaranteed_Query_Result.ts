@@ -1,8 +1,6 @@
 import * as _et from "exupery-core-types"
 
-import { Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
 import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
-import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
 
 export interface Unguaranteed_Query_Result<T, E> {
     map_<NT>(
