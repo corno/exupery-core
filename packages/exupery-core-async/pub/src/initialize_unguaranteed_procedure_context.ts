@@ -36,10 +36,29 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
         map_exception: ($: NE) => E,
         handle_data: ($i: Unguaranteed_Procedure_Context<E>, $: T) => Unguaranteed_Procedure_Context<E>,
     ): Unguaranteed_Procedure_Context<E> {
-        return get_data().process(
-            handle_exception,
-            map_exception,
-            handle_data
+        return __execute_unguaranteed_action(
+            {
+                'execute': (on_success, on_exception) => {
+                    this.executer.execute(
+                        () => {
+                            get_data().__start(
+                                (value) => {
+                                    handle_data(initialize_unguaranteed_procedure_context(), value).__start(
+                                        on_success,
+                                        on_exception,
+                                    )
+                                },
+                                (exception) => {
+                                    handle_exception(initialize_guaranteed_procedure_context(), exception).__start(
+                                        () => on_exception(map_exception(exception)),
+                                    )
+                                }
+                            )
+                        },
+                        on_exception // if there was an exception before, there is nothing to do
+                    )
+                }
+            }
         )
     }
 
@@ -162,29 +181,34 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
         let exceptions: { [key: string]: E2 } = {}
         return __execute_unguaranteed_action({
             'execute': (on_success, on_exception) => {
-                create_asynchronous_processes_monitor(
-                    (monitor) => {
-                        $.map(($, key) => {
-                            monitor['report process started']()
-
-                            $.__start(
-                                () => {
-                                    monitor['report process finished']()
-                                },
-                                (e) => {
-                                    exceptions[key] = e
-                                    monitor['report process finished']()
-                                }
-                            )
-                        })
-                    },
+                this.executer.execute(
                     () => {
-                        if (Object.keys(exceptions).length === 0) {
-                            on_success()
-                        } else {
-                            on_exception(aggregate_exceptions(_ei.dictionary_literal(exceptions)))
-                        }
-                    }
+                        create_asynchronous_processes_monitor(
+                            (monitor) => {
+                                $.map(($, key) => {
+                                    monitor['report process started']()
+
+                                    $.__start(
+                                        () => {
+                                            monitor['report process finished']()
+                                        },
+                                        (e) => {
+                                            exceptions[key] = e
+                                            monitor['report process finished']()
+                                        }
+                                    )
+                                })
+                            },
+                            () => {
+                                if (Object.keys(exceptions).length === 0) {
+                                    on_success()
+                                } else {
+                                    on_exception(aggregate_exceptions(_ei.dictionary_literal(exceptions)))
+                                }
+                            }
+                        )
+                    },
+                    on_exception, // if there was an exception before, there is nothing to do
                 )
             }
         })
@@ -196,28 +220,33 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
         let exceptions: E2[] = []
         return __execute_unguaranteed_action({
             'execute': (on_success, on_exception) => {
-                create_asynchronous_processes_monitor(
-                    (monitor) => {
-                        $.map(($) => {
-                            monitor['report process started']()
-                            $.__start(
-                                () => {
-                                    monitor['report process finished']()
-                                },
-                                (e) => {
-                                    exceptions.push(e)
-                                    monitor['report process finished']()
-                                }
-                            )
-                        })
-                    },
+                this.executer.execute(
                     () => {
-                        if (exceptions.length === 0) {
-                            on_success()
-                        } else {
-                            on_exception(aggregate_exceptions(_ei.array_literal(exceptions)))
-                        }
-                    }
+                        create_asynchronous_processes_monitor(
+                            (monitor) => {
+                                $.map(($) => {
+                                    monitor['report process started']()
+                                    $.__start(
+                                        () => {
+                                            monitor['report process finished']()
+                                        },
+                                        (e) => {
+                                            exceptions.push(e)
+                                            monitor['report process finished']()
+                                        }
+                                    )
+                                })
+                            },
+                            () => {
+                                if (exceptions.length === 0) {
+                                    on_success()
+                                } else {
+                                    on_exception(aggregate_exceptions(_ei.array_literal(exceptions)))
+                                }
+                            }
+                        )
+                    },
+                    on_exception, // if there was an exception before, there is nothing to do
                 )
             }
         })
