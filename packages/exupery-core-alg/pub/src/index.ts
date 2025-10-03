@@ -13,8 +13,8 @@ export {
     array_literal,
     dictionary_literal,
     block,
+    transformation,
+    Unguaranteed_Transformation_Result,
 } from "exupery-core-internals"
-
-export * from "./unsafe_transaction_result"
 
 export * from "./build"
