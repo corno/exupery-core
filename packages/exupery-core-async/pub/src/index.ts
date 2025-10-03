@@ -1,10 +1,16 @@
 import * as _et from "exupery-core-types"
 import * as _ei from "exupery-core-internals"
 
+//types
+
 export * from "./procedure/Guaranteed_Procedure_Context"
 export * from "./procedure/Unguaranteed_Procedure_Context"
-export * from "./query/Guaranteed_Query_Result"
+export * from "./query/Guaranteed_Query"
 export * from "./query/Unguaranteed_Query_Result"
+export * from "./query/Guaranteed_Query_Result"
+export * from "./query/Unguaranteed_Query"
+
+//functions
 
 export * from "./query/merge_2_guaranteed_query_results"
 

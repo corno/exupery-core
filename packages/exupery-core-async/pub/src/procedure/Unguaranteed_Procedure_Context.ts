@@ -38,16 +38,15 @@ export interface Unguaranteed_Procedure_Context<E> {
      * secondly, the exception will be mapped into a new exception value that has the same type as the command's exception type.
      */
     process_unguaranteed_data<Params, Query_Result, New_Exception>(
-        get_action: () => Unguaranteed_Action<Params, E>,
+        action: Unguaranteed_Action<Params, E>,
         get_data: () => Unguaranteed_Query_Result<Query_Result, New_Exception>,
         handle_exception: ($i: Guaranteed_Procedure_Context, $: New_Exception) => Guaranteed_Procedure_Context,
         map_exception: ($: New_Exception) => E,
         get_parameters: ($: Query_Result) => Params,
     ): Unguaranteed_Procedure_Context<E>
 
-
     process_guaranteed_data<Params, Query_Result>(
-        get_action: () => Unguaranteed_Action<Params, E>,
+        action: Unguaranteed_Action<Params, E>,
         get_data: () => Guaranteed_Query_Result<Query_Result>,
         get_parameters: ($: Query_Result) => Params,
     ): Unguaranteed_Procedure_Context<E>
@@ -61,19 +60,19 @@ export interface Unguaranteed_Procedure_Context<E> {
     ): Guaranteed_Procedure_Context
 
     execute_unguaranteed<Params>(
-        get_action: () => Unguaranteed_Action<Params, E>,
+        action: Unguaranteed_Action<Params, E>,
         get_parameters: () => Params,
     ): Unguaranteed_Procedure_Context<E>
 
     execute_foreign<Params, NE>(
-        get_action: () => Unguaranteed_Action<Params, NE>,
+        action: Unguaranteed_Action<Params, NE>,
         get_parameters: () => Params,
         handle_exception: ($i: Guaranteed_Procedure_Context, $: NE) => Guaranteed_Procedure_Context,
         map: ($: NE) => E
     ): Unguaranteed_Procedure_Context<E>
 
     execute<Params>(
-        get_action: () => Guaranteed_Action<Params>,
+        action: Guaranteed_Action<Params>,
         get_parameters: () => Params
     ): Unguaranteed_Procedure_Context<E>
 

@@ -32,7 +32,7 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
     }
 
     process_guaranteed_data<Params, Query_Result>(
-        get_action: () => Unguaranteed_Action<Params, E>,
+        action: Unguaranteed_Action<Params, E>,
         get_data: () => Guaranteed_Query_Result<Query_Result>,
         get_parameters: ($: Query_Result) => Params,
     ): Unguaranteed_Procedure_Context<E> {
@@ -43,7 +43,6 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
                         () => {
                             get_data().__start(
                                 (value) => {
-                                    const action = get_action()
                                     const params = get_parameters(value)
                                     action(params).__start(
                                         on_success,
@@ -60,7 +59,7 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
     }
 
     process_unguaranteed_data<Params, Query_Result, New_Exception>(
-        get_action: () => Unguaranteed_Action<Params, E>,
+        action: Unguaranteed_Action<Params, E>,
         get_data: () => Unguaranteed_Query_Result<Query_Result, New_Exception>,
         handle_exception: ($i: Guaranteed_Procedure_Context, $: New_Exception) => Guaranteed_Procedure_Context,
         map_exception: ($: New_Exception) => E,
@@ -74,7 +73,6 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
                             get_data().__start(
                                 (value) => {
                                     //the data was successfully retrieved
-                                    const action = get_action()
                                     const params = get_parameters(value)
                                     action(params).__start(
                                         on_success,
@@ -149,16 +147,14 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
     }
 
     execute_unguaranteed<Params>(
-        get_action: () => Unguaranteed_Action<Params, E>,
+        action: Unguaranteed_Action<Params, E>,
         get_parameters: () => Params,
     ): Unguaranteed_Procedure_Context<E> {
         return new Unguaranteed_Command_Result_Class<E>({
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
                     () => {
-                        const action = get_action()
-                        const params = get_parameters()
-                        action(params).__start(
+                        action(get_parameters()).__start(
                             new_on_success,
                             new_on_exception,
                         )
@@ -170,7 +166,7 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
     }
 
     execute_foreign<Params, NE>(
-        get_action: () => Unguaranteed_Action<Params, NE>,
+        action: Unguaranteed_Action<Params, NE>,
         get_parameters: () => Params,
         handle_exception: ($i: Guaranteed_Procedure_Context, $: NE) => Guaranteed_Procedure_Context,
         map_exception: ($: NE) => E
@@ -179,9 +175,7 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
                     () => {
-                        const action = get_action()
-                        const params = get_parameters()
-                        action(params).__start(
+                        action(get_parameters()).__start(
                             new_on_success,
                             ($) => {
                                 handle_exception(initialize_guaranteed_procedure_context(), $).__start(
@@ -199,16 +193,14 @@ class Unguaranteed_Command_Result_Class<E> implements Unguaranteed_Procedure_Con
     }
 
     execute<Params>(
-        get_action: () => Guaranteed_Action<Params>,
+        action: Guaranteed_Action<Params>,
         get_parameters: () => Params
     ): Unguaranteed_Procedure_Context<E> {
         return new Unguaranteed_Command_Result_Class<E>({
             'execute': (new_on_success, new_on_exception) => {
                 this.executer.execute(
                     () => {
-                        const action = get_action()
-                        const params = get_parameters()
-                        action(params).__start(new_on_success)
+                        action(get_parameters()).__start(new_on_success)
                     },
                     new_on_exception,
                 )
