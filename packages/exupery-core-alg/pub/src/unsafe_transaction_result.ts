@@ -5,15 +5,20 @@ export interface Unsafe_Transformation_Result<T, E> {
      * @param set what to do when the value was set, returns the new type
      * @param not_set  what to do when the value was not set, returns the new type
      */
-    'process result'<NT>(
-        success: ($: T) => NT,
-        exception: ($: E) => NT,
-    ): NT
+    'process result'(
+        success: ($: T) => void,
+        exception: ($: E) => void,
+    ): void
 
     map<NT, NE>(
         handle_value: ($: T) => NT,
         handle_exception: ($: E) => NE
     ): Unsafe_Transformation_Result<NT, NE>
+
+    transform<NT>(
+        handle_value: ($: T) => NT,
+        handle_exception: ($: E) => NT
+    ): NT
 }
 
 export namespace transformation {
@@ -23,6 +28,9 @@ export namespace transformation {
     ): Unsafe_Transformation_Result<T, E> => {
         return {
             'process result': (success, exception_handler) => {
+                exception_handler(exception)
+            },
+            'transform': (success, exception_handler) => {
                 return exception_handler(exception)
             },
             'map': <NT, NE>(
@@ -39,6 +47,9 @@ export namespace transformation {
     ): Unsafe_Transformation_Result<T, E> => {
         return {
             'process result': (success, exception_handler) => {
+                success(value)
+            },
+            'transform': (success, exception_handler) => {
                 return success(value)
             },
             'map': <NT, NE>(
