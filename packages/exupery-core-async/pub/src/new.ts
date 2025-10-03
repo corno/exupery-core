@@ -1,6 +1,11 @@
-import * as _ea from 'exupery-core-internals'
-import * as _ed from 'exupery-core-dev'
+import * as _ei from 'exupery-core-internals'
 
+import { Unguaranteed_Query_Result } from "./query/Unguaranteed_Query_Result"
+import { Guaranteed_Query_Result } from "./query/Guaranteed_Query_Result"
+import { Guaranteed_Action } from "./procedure/Guaranteed_Procedure_Context"
+import { Unguaranteed_Action } from "./procedure/Unguaranteed_Procedure_Context"
+import { __execute_unguaranteed_action } from "./procedure/initialize_unguaranteed_procedure_context"
+import { __execute_guaranteed_action } from "./procedure/initialize_guaranteed_procedure_context"
 
 export type Error_Handler<Error> = (error: Error) => void
 
@@ -17,17 +22,17 @@ export type Guaranteed_Transformation_Without_Parameters<In, Out> = (
 export type Unguaranteed_Transformation_With_Parameters<In, Parameters, Out, Error> = (
     $: In,
     $p: Parameters,
-) => _ea.Unsafe_Transformation_Result<Out, Error>
+) => _ei.Unguaranteed_Transformation_Result<Out, Error>
 
 export type Unguaranteed_Transformation_Without_Parameters<In, Out, Error> = (
     $: In,
-) => _ea.Unsafe_Transformation_Result<Out, Error>
+) => _ei.Unguaranteed_Transformation_Result<Out, Error>
 
 
 
-export type Unguaranteed_Query<Parameters, Result, Error> = ($: Parameters) => _easync.Unguaranteed_Query_Result<Result, Error>
+export type Unguaranteed_Query<Parameters, Result, Error> = ($: Parameters) => Unguaranteed_Query_Result<Result, Error>
 
-export type Guaranteed_Query<Parameters, Result> = ($: Parameters) => _easync.Guaranteed_Query_Result<Result>
+export type Guaranteed_Query<Parameters, Result> = ($: Parameters) => Guaranteed_Query_Result<Result>
 
 
 
@@ -77,7 +82,7 @@ export namespace ut {
     export const g = <In, Out, Error>(
         the_transformation: Guaranteed_Transformation_Without_Parameters<In, Out>,
     ): Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
-        return ($: In) => _ea.transformation.successful(the_transformation($))
+        return ($: In) => _ei.transformation.successful(the_transformation($))
     }
 
 }
@@ -99,7 +104,7 @@ export namespace gt {
  * @param error_transform ($) => ....
  */
 export const eh = <Parameters, Error>(
-    action: _easync.Guaranteed_Action<Parameters>,
+    action: Guaranteed_Action<Parameters>,
     error_transform: Guaranteed_Transformation_Without_Parameters<Error, Parameters>,
 
 ): Error_Handler<Error> => {
@@ -117,9 +122,9 @@ export namespace u {
          * @param action a_my_action
          */
         export const g = <Parameters, Error>(
-            action: _easync.Guaranteed_Action<Parameters>,
-        ): _easync.Unguaranteed_Action<Parameters, Error> => ($: Parameters) => {
-            return _easync.__execute_unguaranteed_action({
+            action: Guaranteed_Action<Parameters>,
+        ): Unguaranteed_Action<Parameters, Error> => ($: Parameters) => {
+            return __execute_unguaranteed_action({
                 'execute': (
                     on_succes,
                     on_error,
@@ -134,11 +139,11 @@ export namespace u {
          * @param action a_my_action
          */
         export const u = <Parameters, Error, Action_Error>(
-            action: _easync.Unguaranteed_Action<Parameters, Action_Error>,
+            action: Unguaranteed_Action<Parameters, Action_Error>,
             error_transform: Guaranteed_Transformation_Without_Parameters<Action_Error, Error>,
             error_handler?: Error_Handler<Action_Error>,
-        ): _easync.Unguaranteed_Action<Parameters, Error> => ($: Parameters) => {
-            return _easync.__execute_unguaranteed_action({
+        ): Unguaranteed_Action<Parameters, Error> => ($: Parameters) => {
+            return __execute_unguaranteed_action({
                 'execute': (
                     on_succes,
                     on_error,
@@ -292,7 +297,7 @@ export namespace u {
             the_transformation: Guaranteed_Transformation_Without_Parameters<In, Out>,
         ): Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
             return ($: In) => {
-                return _ea.transformation.successful(the_transformation($))
+                return _ei.transformation.successful(the_transformation($))
             }
         }
 
@@ -302,11 +307,11 @@ export namespace u {
 
         /**
          * 
-         * @param action _easync.u.a.*(...)
-         * @param query _easync.u.q.*(...)
+         * @param action u.a.*(...)
+         * @param query u.q.*(...)
          */
         export const action = <Error, Parameters>(
-            action: _easync.Unguaranteed_Action<Parameters, Error>,
+            action: Unguaranteed_Action<Parameters, Error>,
             query: Unguaranteed.Query<Parameters, Error>,
         ): Unguaranteed.Procedure<Error> => {
             return {
@@ -340,7 +345,7 @@ export namespace u {
                     on_success,
                     on_error,
                 ) => {
-                    const length = _ea.array_literal(steps).__get_length()
+                    const length = _ei.array_literal(steps).__get_length()
                     const runStep = (index: number) => {
                         if (index >= length) {
                             on_success()
@@ -365,9 +370,9 @@ export namespace g {
     export namespace a {
 
         export const g = <Parameters>(
-            action: _easync.Guaranteed_Action<Parameters>,
-        ): _easync.Guaranteed_Action<Parameters> => ($: Parameters) => {
-            return _easync.__execute_guaranteed_action({
+            action: Guaranteed_Action<Parameters>,
+        ): Guaranteed_Action<Parameters> => ($: Parameters) => {
+            return __execute_guaranteed_action({
                 'execute': (
                     on_finished,
                 ) => {
@@ -419,7 +424,7 @@ export namespace g {
     export namespace p {
 
         export const action = <Parameters>(
-            action: _easync.Guaranteed_Action<Parameters>,
+            action: Guaranteed_Action<Parameters>,
             query: Guaranteed.Query<Parameters>,
         ): Guaranteed.Procedure => {
             return {
