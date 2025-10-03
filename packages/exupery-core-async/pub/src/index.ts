@@ -19,6 +19,8 @@ export * from "./query/run_unguaranteed_query"
 export * from "./procedure/initialize_guaranteed_procedure_context"
 export * from "./procedure/initialize_unguaranteed_procedure_context"
 
+export * from "./new"
+
 
 import { Guaranteed_Procedure_Context } from "./procedure/Guaranteed_Procedure_Context"
 import { Unguaranteed_Procedure_Context } from "./procedure/Unguaranteed_Procedure_Context"

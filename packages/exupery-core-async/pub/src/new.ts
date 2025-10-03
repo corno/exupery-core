@@ -6,6 +6,8 @@ import { Guaranteed_Action } from "./procedure/Guaranteed_Procedure_Context"
 import { Unguaranteed_Action } from "./procedure/Unguaranteed_Procedure_Context"
 import { __execute_unguaranteed_action } from "./procedure/initialize_unguaranteed_procedure_context"
 import { __execute_guaranteed_action } from "./procedure/initialize_guaranteed_procedure_context"
+import { Unguaranteed_Query } from './query/Unguaranteed_Query'
+import { Guaranteed_Query } from './query/Guaranteed_Query'
 
 export type Error_Handler<Error> = (error: Error) => void
 
@@ -27,14 +29,6 @@ export type Unguaranteed_Transformation_With_Parameters<In, Parameters, Out, Err
 export type Unguaranteed_Transformation_Without_Parameters<In, Out, Error> = (
     $: In,
 ) => _ei.Unguaranteed_Transformation_Result<Out, Error>
-
-
-
-export type Unguaranteed_Query<Parameters, Result, Error> = ($: Parameters) => Unguaranteed_Query_Result<Result, Error>
-
-export type Guaranteed_Query<Parameters, Result> = ($: Parameters) => Guaranteed_Query_Result<Result>
-
-
 
 
 export namespace Unguaranteed {
