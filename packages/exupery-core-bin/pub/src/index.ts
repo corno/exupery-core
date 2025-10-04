@@ -3,7 +3,7 @@ import * as _et from 'exupery-core-types'
 import * as _easync from 'exupery-core-async'
 
 
-export type Guaranteed_Main_Initializer = _easync.Initialize_Guaranteed_Procedure<Parameters>
+export type Guaranteed_Main_Initializer = _easync.Guaranteed_Procedure_Initializer<Parameters>
 
 /**
  * Runs a program main function, passing command line arguments (excluding
@@ -27,7 +27,7 @@ export type Error = {
     'exit code': number
 }
 
-export type Unguaranteed_Main_Initializer = _easync.Initialize_Unguaranteed_Procedure<Parameters, Error>
+export type Unguaranteed_Main_Initializer = _easync.Unguaranteed_Procedure_Initializer<Parameters, Error>
 
 /**
  * Runs a program main function, passing command line arguments (excluding
