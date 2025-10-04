@@ -24,7 +24,7 @@ export interface Unguaranteed_Procedure_Context<E> {
      * note that this is different from `catch`,
      * which would switch to the guaranteed context
      */
-    process_exception_deprecated<NE>(
+    x_process_exception_deprecated<NE>(
         handle: ($i: Guaranteed_Procedure_Context, $: E) => Guaranteed_Procedure_Context,
         map: ($: E) => NE
 
@@ -37,7 +37,7 @@ export interface Unguaranteed_Procedure_Context<E> {
      * first, the exception handler will be called, to report the exception.
      * secondly, the exception will be mapped into a new exception value that has the same type as the command's exception type.
      */
-    process_unguaranteed_data<Params, Query_Result, New_Exception>(
+    x_process_unguaranteed_data<Params, Query_Result, New_Exception>(
         action: Unguaranteed_Action<Params, E>,
         get_data: () => Unguaranteed_Query_Result<Query_Result, New_Exception>,
         handle_exception: ($i: Guaranteed_Procedure_Context, $: New_Exception) => Guaranteed_Procedure_Context,
@@ -45,43 +45,43 @@ export interface Unguaranteed_Procedure_Context<E> {
         get_parameters: ($: Query_Result) => Params,
     ): Unguaranteed_Procedure_Context<E>
 
-    process_guaranteed_data<Params, Query_Result>(
+    x_process_guaranteed_data<Params, Query_Result>(
         action: Unguaranteed_Action<Params, E>,
         get_data: () => Guaranteed_Query_Result<Query_Result>,
         get_parameters: ($: Query_Result) => Params,
     ): Unguaranteed_Procedure_Context<E>
 
-    throw_exception<E>(
+    x_throw_exception<E>(
         $: E
     ): Unguaranteed_Procedure_Context<E>
 
-    catch(
+    x_catch(
         handle_exception: ($i: Guaranteed_Procedure_Context, $: E) => Guaranteed_Procedure_Context
     ): Guaranteed_Procedure_Context
 
-    execute_unguaranteed<Params>(
+    x_execute_unguaranteed<Params>(
         action: Unguaranteed_Action<Params, E>,
         get_parameters: () => Params,
     ): Unguaranteed_Procedure_Context<E>
 
-    execute_foreign<Params, NE>(
+    x_execute_foreign<Params, NE>(
         action: Unguaranteed_Action<Params, NE>,
         get_parameters: () => Params,
         handle_exception: ($i: Guaranteed_Procedure_Context, $: NE) => Guaranteed_Procedure_Context,
         map: ($: NE) => E
     ): Unguaranteed_Procedure_Context<E>
 
-    execute<Params>(
+    x_execute<Params>(
         action: Guaranteed_Action<Params>,
         get_parameters: () => Params
     ): Unguaranteed_Procedure_Context<E>
 
-    execute_dictionary_unguaranteed<E2>(
+    x_execute_dictionary_unguaranteed<E2>(
         $: _et.Dictionary<Unguaranteed_Procedure_Context<E2>>,
         aggregate_exceptions: ($: _et.Dictionary<E2>) => E,
     ): Unguaranteed_Procedure_Context<E>
 
-    execute_multiple_unguaranteed<E2>(
+    x_execute_multiple_unguaranteed<E2>(
         $: _et.Array<Unguaranteed_Procedure_Context<E2>>,
         aggregate_exceptions: ($: _et.Array<E2>) => E,
     ): Unguaranteed_Procedure_Context<E>

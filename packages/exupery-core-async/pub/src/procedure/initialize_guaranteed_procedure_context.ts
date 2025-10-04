@@ -16,7 +16,7 @@ class Guaranteed_Procedure_Context_Class implements Guaranteed_Procedure_Context
     constructor(executer: Executer) {
         this.executer = executer
     }
-    execute<Params>(
+    x_execute<Params>(
         get_action: () => Guaranteed_Action<Params>,
         get_parameters: () => Params
     ): Guaranteed_Procedure_Context {
