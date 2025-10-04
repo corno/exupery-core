@@ -1,8 +1,8 @@
 import * as _et from "exupery-core-types"
 
-import { __run_guaranteed_query } from "./run_guaranteed_query"
-import { Unguaranteed_Query_Result } from "./Unguaranteed_Query_Result"
-import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
+import { __create_guaranteed_query } from "./create_guaranteed_query"
+import { _Unguaranteed_Query } from "./Unguaranteed_Query"
+import { _Guaranteed_Query } from "./Guaranteed_Query"
 
 
 /**
@@ -18,14 +18,14 @@ type Executer<T, E> = {
     ) => void
 }
 
-class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result<T, E> {
+class Unguaranteed_Query_Result_Class<T, E> implements _Unguaranteed_Query<T, E> {
     private executer: Executer<T, E>
     constructor(executer: Executer<T, E>) {
         this.executer = executer
     }
     map_<NT>(
         handle_value: ($: T) => NT
-    ): Unguaranteed_Query_Result<NT, E> {
+    ): _Unguaranteed_Query<NT, E> {
         return new Unguaranteed_Query_Result_Class<NT, E>({
             'execute': (on_value, on_exception) => {
                 this.executer.execute(
@@ -38,8 +38,8 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
         })
     }
     then<NT>(
-        handle_value: ($: T) => Guaranteed_Query_Result<NT>
-    ): Unguaranteed_Query_Result<NT, E> {
+        handle_value: ($: T) => _Guaranteed_Query<NT>
+    ): _Unguaranteed_Query<NT, E> {
         return new Unguaranteed_Query_Result_Class<NT, E>({
             'execute': (new_on_value, new_on_exception) => {
                 this.executer.execute(
@@ -54,8 +54,8 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
         })
     }
     then_unguaranteed<NT>(
-        handle_value: ($: T) => Unguaranteed_Query_Result<NT, E>
-    ): Unguaranteed_Query_Result<NT, E> {
+        handle_value: ($: T) => _Unguaranteed_Query<NT, E>
+    ): _Unguaranteed_Query<NT, E> {
         return new Unguaranteed_Query_Result_Class<NT, E>({
             'execute': (new_on_value, new_on_exception) => {
                 this.executer.execute(
@@ -72,7 +72,7 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
     }
     map_exception_<NE>(
         handle_exception: ($: E) => NE
-    ): Unguaranteed_Query_Result<T, NE> {
+    ): _Unguaranteed_Query<T, NE> {
         return new Unguaranteed_Query_Result_Class<T, NE>({
             'execute': (on_value, on_exception) => {
                 this.executer.execute(
@@ -86,9 +86,9 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
     }
 
     catch_(
-        handle_exception: ($: E) => Guaranteed_Query_Result<T>
-    ): Guaranteed_Query_Result<T> {
-        return __run_guaranteed_query<T>({
+        handle_exception: ($: E) => _Guaranteed_Query<T>
+    ): _Guaranteed_Query<T> {
+        return __create_guaranteed_query<T>({
             'execute': (on_value) => {
                 this.executer.execute(
                     on_value,
@@ -113,9 +113,9 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Result
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function __run_unguaranteed_query<T, E>(
+export function __create_unguaranteed_query<T, E>(
     executer: Executer<T, E>,
-): Unguaranteed_Query_Result<T, E> {
+): _Unguaranteed_Query<T, E> {
     return new Unguaranteed_Query_Result_Class<T, E>(executer)
 
 }

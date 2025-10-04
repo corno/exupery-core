@@ -1,8 +1,8 @@
 import * as _et from "exupery-core-types"
 
-import { Guaranteed_Action, Guaranteed_Procedure_Context } from "./Guaranteed_Procedure_Context"
-import { Unguaranteed_Procedure_Context } from "./Unguaranteed_Procedure_Context"
-import { __execute_unguaranteed_action } from "./initialize_unguaranteed_procedure_context"
+import { Initialize_Guaranteed_Procedure, Guaranteed_Procedure } from "./Guaranteed_Procedure"
+import { Unguaranteed_Procedure } from "./Unguaranteed_Procedure"
+import { __create_unguaranteed_procedure } from "./initialize_unguaranteed_procedure"
 
 type Executer = {
     'execute': (
@@ -11,16 +11,16 @@ type Executer = {
 }
 
 
-class Guaranteed_Procedure_Context_Class implements Guaranteed_Procedure_Context {
+class Guaranteed_Procedure_Class implements Guaranteed_Procedure {
     private executer: Executer
     constructor(executer: Executer) {
         this.executer = executer
     }
     x_execute<Params>(
-        get_action: () => Guaranteed_Action<Params>,
+        get_action: () => Initialize_Guaranteed_Procedure<Params>,
         get_parameters: () => Params
-    ): Guaranteed_Procedure_Context {
-        return __execute_guaranteed_action(
+    ): Guaranteed_Procedure {
+        return __create_guaranted_procedure(
             {
                 'execute': (on_finished) => {
                     this.executer.execute(
@@ -47,16 +47,16 @@ class Guaranteed_Procedure_Context_Class implements Guaranteed_Procedure_Context
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function __execute_guaranteed_action(
+export function __create_guaranted_procedure(
     executer: Executer,
-): Guaranteed_Procedure_Context {
-    return new Guaranteed_Procedure_Context_Class(executer)
+): Guaranteed_Procedure {
+    return new Guaranteed_Procedure_Class(executer)
 
 }
 
-export const initialize_guaranteed_procedure_context = (
-): Guaranteed_Procedure_Context => {
-    return new Guaranteed_Procedure_Context_Class({
+export const initialize_no_op_guaranteed_procedure = (
+): Guaranteed_Procedure => {
+    return new Guaranteed_Procedure_Class({
         'execute': (on_finished) => {
             on_finished() //nothing to do, call on_finished immediately
         }

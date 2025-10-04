@@ -1,19 +1,19 @@
 
 import * as pt from 'exupery-core-types'
 
-import { __run_guaranteed_query } from "./run_guaranteed_query"
-import { Guaranteed_Query_Result } from "./Guaranteed_Query_Result"
+import { __create_guaranteed_query } from "./create_guaranteed_query"
+import { _Guaranteed_Query } from "./Guaranteed_Query"
 
 export type Sync_Tuple_2<T1, T2> = {
     readonly 'first': T1
     readonly 'second': T2
 };
 
-export function merge_2_unguaranteed_query_results<T1, T2>(
-    first: Guaranteed_Query_Result<T1>,
-    second: Guaranteed_Query_Result<T2>,
-): Guaranteed_Query_Result<Sync_Tuple_2<T1, T2>> {
-    return __run_guaranteed_query(
+export function merge_2_unguaranteed_queries<T1, T2>(
+    first: _Guaranteed_Query<T1>,
+    second: _Guaranteed_Query<T2>,
+): _Guaranteed_Query<Sync_Tuple_2<T1, T2>> {
+    return __create_guaranteed_query(
         {
             'execute': (on_value) => {
                 let element_1_is_set = false

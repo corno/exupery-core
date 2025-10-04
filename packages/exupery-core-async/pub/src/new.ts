@@ -1,13 +1,13 @@
 import * as _ei from 'exupery-core-internals'
 
-import { Unguaranteed_Query_Result } from "./query/Unguaranteed_Query_Result"
-import { Guaranteed_Query_Result } from "./query/Guaranteed_Query_Result"
-import { Guaranteed_Action } from "./procedure/Guaranteed_Procedure_Context"
-import { Unguaranteed_Action } from "./procedure/Unguaranteed_Procedure_Context"
-import { __execute_unguaranteed_action } from "./procedure/initialize_unguaranteed_procedure_context"
-import { __execute_guaranteed_action } from "./procedure/initialize_guaranteed_procedure_context"
-import { Unguaranteed_Query } from './query/Unguaranteed_Query'
-import { Guaranteed_Query } from './query/Guaranteed_Query'
+import { _Unguaranteed_Query } from "./query/Unguaranteed_Query"
+import { _Guaranteed_Query } from "./query/Guaranteed_Query"
+import { Guaranteed_Procedure, Initialize_Guaranteed_Procedure } from "./procedure/Guaranteed_Procedure"
+import { Initialize_Unguaranteed_Procedure, Unguaranteed_Procedure } from "./procedure/Unguaranteed_Procedure"
+import { __create_unguaranteed_procedure } from "./procedure/initialize_unguaranteed_procedure"
+import { __create_guaranted_procedure } from "./procedure/initialize_guaranteed_procedure"
+import { Unguaranteed_Query_Initializer } from './query/Unguaranteed_Query_Initializer'
+import { Guaranteed_Query_Initializer } from './query/Guaranteed_Query_Initializer'
 
 export type Error_Handler<Error> = (error: Error) => void
 
@@ -33,13 +33,6 @@ export type Unguaranteed_Transformation_Without_Parameters<In, Out, Error> = (
 
 export namespace Unguaranteed {
 
-    export type Procedure<Error> = {
-        __start: (
-            on_success: () => void,
-            on_error: (error: Error) => void,
-        ) => void
-    }
-
     export type Query<Result, Error> = {
         __start: (
             on_success: (result: Result) => void,
@@ -50,12 +43,6 @@ export namespace Unguaranteed {
 }
 
 export namespace Guaranteed {
-
-    export type Procedure = {
-        __start: (
-            on_finished: () => void,
-        ) => void
-    }
 
     export type Query<Result> = {
         __start: (
@@ -98,7 +85,7 @@ export namespace gt {
  * @param error_transform ($) => ....
  */
 export const eh = <Parameters, Error>(
-    action: Guaranteed_Action<Parameters>,
+    action: Initialize_Guaranteed_Procedure<Parameters>,
     error_transform: Guaranteed_Transformation_Without_Parameters<Error, Parameters>,
 
 ): Error_Handler<Error> => {
@@ -116,9 +103,9 @@ export namespace u {
          * @param action a_my_action
          */
         export const g = <Parameters, Error>(
-            action: Guaranteed_Action<Parameters>,
-        ): Unguaranteed_Action<Parameters, Error> => ($: Parameters) => {
-            return __execute_unguaranteed_action({
+            action: Initialize_Guaranteed_Procedure<Parameters>,
+        ): Initialize_Unguaranteed_Procedure<Parameters, Error> => ($: Parameters) => {
+            return __create_unguaranteed_procedure({
                 'execute': (
                     on_succes,
                     on_error,
@@ -133,11 +120,11 @@ export namespace u {
          * @param action a_my_action
          */
         export const u = <Parameters, Error, Action_Error>(
-            action: Unguaranteed_Action<Parameters, Action_Error>,
+            action: Initialize_Unguaranteed_Procedure<Parameters, Action_Error>,
             error_transform: Guaranteed_Transformation_Without_Parameters<Action_Error, Error>,
             error_handler?: Error_Handler<Action_Error>,
-        ): Unguaranteed_Action<Parameters, Error> => ($: Parameters) => {
-            return __execute_unguaranteed_action({
+        ): Initialize_Unguaranteed_Procedure<Parameters, Error> => ($: Parameters) => {
+            return __create_unguaranteed_procedure({
                 'execute': (
                     on_succes,
                     on_error,
@@ -181,7 +168,7 @@ export namespace u {
          * @returns 
          */
         export const u = <Result_After_Transformation, Error, Parameters, Query_Result, Query_Error>(
-            the_query: Unguaranteed_Query<Parameters, Query_Result, Query_Error>,
+            the_query: Unguaranteed_Query_Initializer<Parameters, Query_Result, Query_Error>,
             parameters: Unguaranteed.Query<Parameters, Error>,
             result_transformation: Unguaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
             error_transform: Guaranteed_Transformation_Without_Parameters<Query_Error, Error>,
@@ -224,7 +211,7 @@ export namespace u {
          * @param result_transformation ($) => ...
          */
         export const g = <Result_After_Transformation, Error, Parameters, Query_Result>(
-            the_query: Guaranteed_Query<Parameters, Query_Result>,
+            the_query: Guaranteed_Query_Initializer<Parameters, Query_Result>,
             parameters: Unguaranteed.Query<Parameters, Error>,
             result_transformation: Unguaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
 
@@ -305,9 +292,9 @@ export namespace u {
          * @param query u.q.*(...)
          */
         export const action = <Error, Parameters>(
-            action: Unguaranteed_Action<Parameters, Error>,
+            action: Initialize_Unguaranteed_Procedure<Parameters, Error>,
             query: Unguaranteed.Query<Parameters, Error>,
-        ): Unguaranteed.Procedure<Error> => {
+        ): Unguaranteed_Procedure<Error> => {
             return {
                 __start: (
                     on_success,
@@ -332,8 +319,8 @@ export namespace u {
         }
 
         export const sequence = <Error>(
-            steps: Unguaranteed.Procedure<Error>[]
-        ): Unguaranteed.Procedure<Error> => {
+            steps: Unguaranteed_Procedure<Error>[]
+        ): Unguaranteed_Procedure<Error> => {
             return {
                 __start: (
                     on_success,
@@ -364,9 +351,9 @@ export namespace g {
     export namespace a {
 
         export const g = <Parameters>(
-            action: Guaranteed_Action<Parameters>,
-        ): Guaranteed_Action<Parameters> => ($: Parameters) => {
-            return __execute_guaranteed_action({
+            action: Initialize_Guaranteed_Procedure<Parameters>,
+        ): Initialize_Guaranteed_Procedure<Parameters> => ($: Parameters) => {
+            return __create_guaranted_procedure({
                 'execute': (
                     on_finished,
                 ) => {
@@ -391,7 +378,7 @@ export namespace g {
         }
 
         export const g = <Result_After_Transformation, Parameters, Query_Result>(
-            the_query: Guaranteed_Query<Parameters, Query_Result>,
+            the_query: Guaranteed_Query_Initializer<Parameters, Query_Result>,
             parameters: Guaranteed.Query<Parameters>,
             result_transformation: Guaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation>,
         ): Guaranteed.Query<Result_After_Transformation> => {
@@ -418,9 +405,9 @@ export namespace g {
     export namespace p {
 
         export const action = <Parameters>(
-            action: Guaranteed_Action<Parameters>,
+            action: Initialize_Guaranteed_Procedure<Parameters>,
             query: Guaranteed.Query<Parameters>,
-        ): Guaranteed.Procedure => {
+        ): Guaranteed_Procedure => {
             return {
                 __start: (
                     on_finished,

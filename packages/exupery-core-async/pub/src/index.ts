@@ -3,42 +3,42 @@ import * as _ei from "exupery-core-internals"
 
 //types
 
-export * from "./procedure/Guaranteed_Procedure_Context"
-export * from "./procedure/Unguaranteed_Procedure_Context"
-export * from "./query/Guaranteed_Query"
-export * from "./query/Unguaranteed_Query_Result"
-export * from "./query/Guaranteed_Query_Result"
+export * from "./procedure/Guaranteed_Procedure"
+export * from "./procedure/Unguaranteed_Procedure"
+export * from "./query/Guaranteed_Query_Initializer"
 export * from "./query/Unguaranteed_Query"
+export * from "./query/Guaranteed_Query"
+export * from "./query/Unguaranteed_Query_Initializer"
 
 //functions
 
-export * from "./query/merge_2_guaranteed_query_results"
+export * from "./query/merge_2_guaranteed_queries"
 
-export * from "./query/run_guaranteed_query"
-export * from "./query/run_unguaranteed_query"
-export * from "./procedure/initialize_guaranteed_procedure_context"
-export * from "./procedure/initialize_unguaranteed_procedure_context"
+export * from "./query/create_guaranteed_query"
+export * from "./query/create_unguaranteed_query"
+export * from "./procedure/initialize_guaranteed_procedure"
+export * from "./procedure/initialize_unguaranteed_procedure"
 
 export * from "./new"
 
 
-import { Guaranteed_Procedure_Context } from "./procedure/Guaranteed_Procedure_Context"
-import { Unguaranteed_Procedure_Context } from "./procedure/Unguaranteed_Procedure_Context"
-import { Guaranteed_Query_Result } from "./query/Guaranteed_Query_Result"
-import { Unguaranteed_Query_Result } from "./query/Unguaranteed_Query_Result"
+import { Guaranteed_Procedure } from "./procedure/Guaranteed_Procedure"
+import { Unguaranteed_Procedure } from "./procedure/Unguaranteed_Procedure"
+import { _Guaranteed_Query } from "./query/Guaranteed_Query"
+import { _Unguaranteed_Query } from "./query/Unguaranteed_Query"
 
-import { __execute_guaranteed_action, initialize_guaranteed_procedure_context } from "./procedure/initialize_guaranteed_procedure_context"
-import { __execute_unguaranteed_action, initialize_unguaranteed_procedure_context } from "./procedure/initialize_unguaranteed_procedure_context"
-import { __run_guaranteed_query } from "./query/run_guaranteed_query"
-import { __run_unguaranteed_query } from "./query/run_unguaranteed_query"
+import { __create_guaranted_procedure, initialize_no_op_guaranteed_procedure } from "./procedure/initialize_guaranteed_procedure"
+import { __create_unguaranteed_procedure, initialize_no_op_unguaranteed_procedure } from "./procedure/initialize_unguaranteed_procedure"
+import { __create_guaranteed_query } from "./query/create_guaranteed_query"
+import { __create_unguaranteed_query } from "./query/create_unguaranteed_query"
 
 
 export const query = {
     'guaranteed': {
         'create result': <T>(
             $: T
-        ): Guaranteed_Query_Result<T> => {
-            return __run_guaranteed_query(
+        ): _Guaranteed_Query<T> => {
+            return __create_guaranteed_query(
                 {
                     'execute': (on_value) => {
                         on_value($)
@@ -50,8 +50,8 @@ export const query = {
     'unguaranteed': {
         'create result': <T, E>(
             $: T
-        ): Unguaranteed_Query_Result<T, E> => {
-            return __run_unguaranteed_query(
+        ): _Unguaranteed_Query<T, E> => {
+            return __create_unguaranteed_query(
                 {
                     'execute': (on_value) => {
                         on_value($)
@@ -61,8 +61,8 @@ export const query = {
         },
         'raise exception': <T, E>(
             $: E
-        ): Unguaranteed_Query_Result<T, E> => {
-            return __run_unguaranteed_query(
+        ): _Unguaranteed_Query<T, E> => {
+            return __create_unguaranteed_query(
                 {
                     'execute': (on_value, on_exception) => {
                         on_exception($)
@@ -75,14 +75,14 @@ export const query = {
 
 export const command = {
     'guaranteed': {
-        'initialize': initialize_guaranteed_procedure_context
+        'initialize': initialize_no_op_guaranteed_procedure
     },
     'unguaranteed': {
-        'initialize': initialize_unguaranteed_procedure_context,
+        'initialize': initialize_no_op_unguaranteed_procedure,
         'raise exception': <E>(
             $: E
-        ): Unguaranteed_Procedure_Context<E> => {
-            return __execute_unguaranteed_action(
+        ): Unguaranteed_Procedure<E> => {
+            return __create_unguaranteed_procedure(
                 {
                     'execute': (on_success, on_exception) => {
                         on_exception($)
