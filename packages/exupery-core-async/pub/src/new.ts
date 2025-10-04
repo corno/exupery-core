@@ -180,7 +180,7 @@ export namespace u {
          * @param error_handler eh(...)
          * @returns 
          */
-        export const u = <Parameters, Error, Query_Result, Result_After_Transformation, Query_Error>(
+        export const u = <Result_After_Transformation, Error, Parameters, Query_Result, Query_Error>(
             the_query: Unguaranteed_Query<Parameters, Query_Result, Query_Error>,
             parameters: Unguaranteed.Query<Parameters, Error>,
             result_transformation: Unguaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
@@ -223,7 +223,7 @@ export namespace u {
          * @param parameters u.q.*()
          * @param result_transformation ($) => ...
          */
-        export const g = <Parameters, Query_Result, Error, Result_After_Transformation>(
+        export const g = <Result_After_Transformation, Error, Parameters, Query_Result>(
             the_query: Guaranteed_Query<Parameters, Query_Result>,
             parameters: Unguaranteed.Query<Parameters, Error>,
             result_transformation: Unguaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
@@ -390,7 +390,7 @@ export namespace g {
             }
         }
 
-        export const g = <Parameters, Query_Result, Result_After_Transformation>(
+        export const g = <Result_After_Transformation, Parameters, Query_Result>(
             the_query: Guaranteed_Query<Parameters, Query_Result>,
             parameters: Guaranteed.Query<Parameters>,
             result_transformation: Guaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation>,
