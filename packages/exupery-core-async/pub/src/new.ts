@@ -324,7 +324,7 @@ export namespace u {
             }
         }
 
-        export const array = <Element_Error>(
+        export const array = <Error, Element_Error>(
             the_array: _et.Array<Unguaranteed_Procedure<Element_Error>>,
             aggregate_exceptions: _ei.Guaranteed_Transformation_Without_Parameters<_et.Array<Element_Error>, Error>,
 
@@ -365,7 +365,7 @@ export namespace u {
             }
         }
 
-        export const dictionary = <Element_Error>(
+        export const dictionary = <Error, Element_Error>(
             the_dictionary: _et.Dictionary<Unguaranteed_Procedure<Element_Error>>,
             aggregate_exceptions: _ei.Guaranteed_Transformation_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
 
