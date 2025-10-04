@@ -16,9 +16,9 @@ class Guaranteed_Procedure_Class implements Guaranteed_Procedure {
     constructor(executer: Executer) {
         this.executer = executer
     }
-    x_execute<Params>(
-        get_action: () => Guaranteed_Procedure_Initializer<Params>,
-        get_parameters: () => Params
+    x_execute<Parameters>(
+        get_action: () => Guaranteed_Procedure_Initializer<Parameters>,
+        get_parameters: () => Parameters
     ): Guaranteed_Procedure {
         return __create_guaranted_procedure(
             {
