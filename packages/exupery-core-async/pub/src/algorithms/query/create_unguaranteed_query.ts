@@ -1,8 +1,8 @@
 import * as _et from "exupery-core-types"
 
 import { __create_guaranteed_query } from "./create_guaranteed_query"
-import { _Unguaranteed_Query } from "./Unguaranteed_Query"
-import { _Guaranteed_Query } from "./Guaranteed_Query"
+import { _Unguaranteed_Query } from "../../types/Unguaranteed_Query"
+import { _Guaranteed_Query } from "../../types/Guaranteed_Query"
 
 
 /**

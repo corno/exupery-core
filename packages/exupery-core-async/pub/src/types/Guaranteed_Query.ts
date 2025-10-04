@@ -26,3 +26,14 @@ export interface _Guaranteed_Query<T> {
 }
 
 export type Guaranteed_Query_Initializer<Parameters, Result> = ($: Parameters) => _Guaranteed_Query<Result>
+
+
+export namespace Guaranteed {
+
+    export type Query_<Result> = {
+        __start: (
+            on_finished: (result: Result) => void,
+        ) => void
+    }
+
+}

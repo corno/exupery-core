@@ -3,32 +3,32 @@ import * as _ei from "exupery-core-internals"
 
 //types
 
-export * from "./procedure/Guaranteed_Procedure"
-export * from "./procedure/Unguaranteed_Procedure"
-export * from "./query/Unguaranteed_Query"
-export * from "./query/Guaranteed_Query"
+export * from "./types/Guaranteed_Procedure"
+export * from "./types/Unguaranteed_Procedure"
+export * from "./types/Unguaranteed_Query"
+export * from "./types/Guaranteed_Query"
 
 //functions
 
-export * from "./query/merge_2_guaranteed_queries"
+export * from "./algorithms/query/merge_2_guaranteed_queries"
 
-export * from "./query/create_guaranteed_query"
-export * from "./query/create_unguaranteed_query"
-export * from "./procedure/initialize_guaranteed_procedure"
-export * from "./procedure/initialize_unguaranteed_procedure"
+export * from "./algorithms/query/create_guaranteed_query"
+export * from "./algorithms/query/create_unguaranteed_query"
+export * from "./algorithms/procedure/initialize_guaranteed_procedure"
+export * from "./algorithms/procedure/initialize_unguaranteed_procedure"
 
-export * from "./new"
+export * from "./shorthands"
 
 
-import { Guaranteed_Procedure } from "./procedure/Guaranteed_Procedure"
-import { Unguaranteed_Procedure } from "./procedure/Unguaranteed_Procedure"
-import { _Guaranteed_Query } from "./query/Guaranteed_Query"
-import { _Unguaranteed_Query } from "./query/Unguaranteed_Query"
+import { Guaranteed_Procedure } from "./types/Guaranteed_Procedure"
+import { Unguaranteed_Procedure } from "./types/Unguaranteed_Procedure"
+import { _Guaranteed_Query } from "./types/Guaranteed_Query"
+import { _Unguaranteed_Query } from "./types/Unguaranteed_Query"
 
-import { __create_guaranted_procedure, initialize_no_op_guaranteed_procedure } from "./procedure/initialize_guaranteed_procedure"
-import { __create_unguaranteed_procedure, initialize_no_op_unguaranteed_procedure } from "./procedure/initialize_unguaranteed_procedure"
-import { __create_guaranteed_query } from "./query/create_guaranteed_query"
-import { __create_unguaranteed_query } from "./query/create_unguaranteed_query"
+import { __create_guaranted_procedure, initialize_no_op_guaranteed_procedure } from "./algorithms/procedure/initialize_guaranteed_procedure"
+import { __create_unguaranteed_procedure, initialize_no_op_unguaranteed_procedure } from "./algorithms/procedure/initialize_unguaranteed_procedure"
+import { __create_guaranteed_query } from "./algorithms/query/create_guaranteed_query"
+import { __create_unguaranteed_query } from "./algorithms/query/create_unguaranteed_query"
 
 
 export const query = {

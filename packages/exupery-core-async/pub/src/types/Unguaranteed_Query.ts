@@ -30,3 +30,15 @@ export interface _Unguaranteed_Query<T, E> {
 }
 
 export type Unguaranteed_Query_Initializer<Parameters, Result, Error> = ($: Parameters) => _Unguaranteed_Query<Result, Error>
+
+
+export namespace Unguaranteed {
+
+    export type Query<Result, Error> = {
+        __start: (
+            on_success: (result: Result) => void,
+            on_error: (error: Error) => void,
+        ) => void
+    }
+
+}

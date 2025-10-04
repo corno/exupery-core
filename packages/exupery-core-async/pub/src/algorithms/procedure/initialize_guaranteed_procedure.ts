@@ -1,7 +1,6 @@
 import * as _et from "exupery-core-types"
 
-import { Guaranteed_Procedure_Initializer, Guaranteed_Procedure } from "./Guaranteed_Procedure"
-import { Unguaranteed_Procedure } from "./Unguaranteed_Procedure"
+import { Guaranteed_Procedure_Initializer, Guaranteed_Procedure } from "../../types/Guaranteed_Procedure"
 import { __create_unguaranteed_procedure } from "./initialize_unguaranteed_procedure"
 
 type Executer = {
