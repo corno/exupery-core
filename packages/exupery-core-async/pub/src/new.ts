@@ -1,4 +1,5 @@
 import * as _ei from 'exupery-core-internals'
+import * as _et from 'exupery-core-types'
 
 import { _Unguaranteed_Query } from "./query/Unguaranteed_Query"
 import { _Guaranteed_Query } from "./query/Guaranteed_Query"
@@ -8,28 +9,9 @@ import { __create_unguaranteed_procedure } from "./procedure/initialize_unguaran
 import { __create_guaranted_procedure } from "./procedure/initialize_guaranteed_procedure"
 import { Unguaranteed_Query_Initializer } from "./query/Unguaranteed_Query"
 import { Guaranteed_Query_Initializer } from "./query/Guaranteed_Query"
+import { create_asynchronous_processes_monitor } from './create_asynchronous_processes_monitor'
 
 export type Error_Handler<Error> = (error: Error) => void
-
-
-export type Guaranteed_Transformation_With_Parameters<In, Parameters, Out> = (
-    $: In,
-    $p: Parameters,
-) => Out
-
-export type Guaranteed_Transformation_Without_Parameters<In, Out> = (
-    $: In,
-) => Out
-
-export type Unguaranteed_Transformation_With_Parameters<In, Parameters, Out, Error> = (
-    $: In,
-    $p: Parameters,
-) => _ei.Unguaranteed_Transformation_Result<Out, Error>
-
-export type Unguaranteed_Transformation_Without_Parameters<In, Out, Error> = (
-    $: In,
-) => _ei.Unguaranteed_Transformation_Result<Out, Error>
-
 
 export namespace Unguaranteed {
 
@@ -55,14 +37,14 @@ export namespace Guaranteed {
 export namespace ut {
 
     export const u = <In, Out, Error>(
-        the_transformation: Unguaranteed_Transformation_Without_Parameters<In, Out, Error>,
-    ): Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
+        the_transformation: _ei.Unguaranteed_Transformation_Without_Parameters<In, Out, Error>,
+    ): _ei.Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
         return the_transformation
     }
 
     export const g = <In, Out, Error>(
-        the_transformation: Guaranteed_Transformation_Without_Parameters<In, Out>,
-    ): Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
+        the_transformation: _ei.Guaranteed_Transformation_Without_Parameters<In, Out>,
+    ): _ei.Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
         return ($: In) => _ei.transformation.successful(the_transformation($))
     }
 
@@ -71,8 +53,8 @@ export namespace ut {
 export namespace gt {
 
     export const g = <In, Out>(
-        the_transformation: Guaranteed_Transformation_Without_Parameters<In, Out>,
-    ): Guaranteed_Transformation_Without_Parameters<In, Out> => {
+        the_transformation: _ei.Guaranteed_Transformation_Without_Parameters<In, Out>,
+    ): _ei.Guaranteed_Transformation_Without_Parameters<In, Out> => {
         return ($: In) => the_transformation($)
     }
 
@@ -86,7 +68,7 @@ export namespace gt {
  */
 export const eh = <Parameters, Error>(
     action: Guaranteed_Procedure_Initializer<Parameters>,
-    error_transform: Guaranteed_Transformation_Without_Parameters<Error, Parameters>,
+    error_transform: _ei.Guaranteed_Transformation_Without_Parameters<Error, Parameters>,
 
 ): Error_Handler<Error> => {
     return ($: Error) => {
@@ -121,7 +103,7 @@ export namespace u {
          */
         export const u = <Parameters, Error, Action_Error>(
             action: Unguaranteed_Procedure_Initializer<Parameters, Action_Error>,
-            error_transform: Guaranteed_Transformation_Without_Parameters<Action_Error, Error>,
+            error_transform: _ei.Guaranteed_Transformation_Without_Parameters<Action_Error, Error>,
             error_handler?: Error_Handler<Action_Error>,
         ): Unguaranteed_Procedure_Initializer<Parameters, Error> => ($: Parameters) => {
             return __create_unguaranteed_procedure({
@@ -170,8 +152,8 @@ export namespace u {
         export const u = <Result_After_Transformation, Error, Parameters, Query_Result, Query_Error>(
             the_query: Unguaranteed_Query_Initializer<Parameters, Query_Result, Query_Error>,
             parameters: Unguaranteed.Query<Parameters, Error>,
-            result_transformation: Unguaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
-            error_transform: Guaranteed_Transformation_Without_Parameters<Query_Error, Error>,
+            result_transformation: _ei.Unguaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
+            error_transform: _ei.Guaranteed_Transformation_Without_Parameters<Query_Error, Error>,
             error_handler?: Error_Handler<Query_Error>,
 
         ): Unguaranteed.Query<Result_After_Transformation, Error> => {
@@ -213,7 +195,7 @@ export namespace u {
         export const g = <Result_After_Transformation, Error, Parameters, Query_Result>(
             the_query: Guaranteed_Query_Initializer<Parameters, Query_Result>,
             parameters: Unguaranteed.Query<Parameters, Error>,
-            result_transformation: Unguaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
+            result_transformation: _ei.Unguaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
 
         ): Unguaranteed.Query<Result_After_Transformation, Error> => {
             return {
@@ -250,11 +232,11 @@ export namespace u {
          * @returns 
          */
         export const u = <In, Out, Error, Transformation_Error>(
-            the_transformation: Unguaranteed_Transformation_Without_Parameters<In, Out, Transformation_Error>,
-            error_transform: Guaranteed_Transformation_Without_Parameters<Transformation_Error, Error>,
+            the_transformation: _ei.Unguaranteed_Transformation_Without_Parameters<In, Out, Transformation_Error>,
+            error_transform: _ei.Guaranteed_Transformation_Without_Parameters<Transformation_Error, Error>,
             error_handler?: Error_Handler<Transformation_Error>,
 
-        ): Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
+        ): _ei.Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
             return ($: In) => {
                 const result = the_transformation($)
                 return result.map(
@@ -275,8 +257,8 @@ export namespace u {
          * @param the_transformation ($) => ...
          */
         export const g = <In, Out, Error>(
-            the_transformation: Guaranteed_Transformation_Without_Parameters<In, Out>,
-        ): Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
+            the_transformation: _ei.Guaranteed_Transformation_Without_Parameters<In, Out>,
+        ): _ei.Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
             return ($: In) => {
                 return _ei.transformation.successful(the_transformation($))
             }
@@ -342,6 +324,88 @@ export namespace u {
             }
         }
 
+        export const array = <Element_Error>(
+            the_array: _et.Array<Unguaranteed_Procedure<Element_Error>>,
+            aggregate_exceptions: _ei.Guaranteed_Transformation_Without_Parameters<_et.Array<Element_Error>, Error>,
+
+        ): Unguaranteed_Procedure<Error> => {
+            return {
+                __start: (
+                    on_success,
+                    on_error,
+                ) => {
+
+                    const exceptions: Element_Error[] = []
+
+                    create_asynchronous_processes_monitor(
+                        (monitor) => {
+                            the_array.map(($) => {
+                                monitor['report process started']()
+
+                                $.__start(
+                                    () => {
+                                        monitor['report process finished']()
+                                    },
+                                    (e) => {
+                                        exceptions.push(e)
+                                        monitor['report process finished']()
+                                    }
+                                )
+                            })
+                        },
+                        () => {
+                            if (exceptions.length === 0) {
+                                on_success()
+                            } else {
+                                on_error(aggregate_exceptions(_ei.array_literal(exceptions)))
+                            }
+                        }
+                    )
+                }
+            }
+        }
+
+        export const dictionary = <Element_Error>(
+            the_dictionary: _et.Dictionary<Unguaranteed_Procedure<Element_Error>>,
+            aggregate_exceptions: _ei.Guaranteed_Transformation_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
+
+        ): Unguaranteed_Procedure<Error> => {
+            return {
+                __start: (
+                    on_success,
+                    on_error,
+                ) => {
+
+                    const exceptions: { [key: string]: Element_Error } = {}
+
+                    create_asynchronous_processes_monitor(
+                        (monitor) => {
+                            the_dictionary.map(($, key) => {
+                                monitor['report process started']()
+
+                                $.__start(
+                                    () => {
+                                        monitor['report process finished']()
+                                    },
+                                    (e) => {
+                                        exceptions[key] = e
+                                        monitor['report process finished']()
+                                    }
+                                )
+                            })
+                        },
+                        () => {
+                            if (Object.keys(exceptions).length === 0) {
+                                on_success()
+                            } else {
+                                on_error(aggregate_exceptions(_ei.dictionary_literal(exceptions)))
+                            }
+                        }
+                    )
+                }
+            }
+        }
+
     }
 
 }
@@ -380,7 +444,7 @@ export namespace g {
         export const g = <Result_After_Transformation, Parameters, Query_Result>(
             the_query: Guaranteed_Query_Initializer<Parameters, Query_Result>,
             parameters: Guaranteed.Query<Parameters>,
-            result_transformation: Guaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation>,
+            result_transformation: _ei.Guaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation>,
         ): Guaranteed.Query<Result_After_Transformation> => {
             return {
                 __start: (
