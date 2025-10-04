@@ -25,6 +25,24 @@ export interface Unguaranteed_Transformation_Result<T, E> {
     ): NT
 }
 
+export type Guaranteed_Transformation_With_Parameters<In, Parameters, Out> = (
+    $: In,
+    $p: Parameters,
+) => Out
+
+export type Guaranteed_Transformation_Without_Parameters<In, Out> = (
+    $: In,
+) => Out
+
+export type Unguaranteed_Transformation_With_Parameters<In, Parameters, Out, Error> = (
+    $: In,
+    $p: Parameters,
+) => Unguaranteed_Transformation_Result<Out, Error>
+
+export type Unguaranteed_Transformation_Without_Parameters<In, Out, Error> = (
+    $: In,
+) => Unguaranteed_Transformation_Result<Out, Error>
+
 export namespace transformation {
 
     export const failed = <T, E>(
