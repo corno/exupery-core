@@ -197,7 +197,7 @@ export namespace u {
                         (qr_in) => {
                             the_query(qr_in).__start(
                                 (result) => {
-                                    result_transformation(result)['process result'](
+                                    result_transformation(result).process(
                                         (x) => on_success(x),
                                         on_error,
                                     )
@@ -238,7 +238,7 @@ export namespace u {
                         (x) => {
                             the_query(x).__start(
                                 ($) => {
-                                    result_transformation($)['process result'](
+                                    result_transformation($).process(
                                         (x) => on_success(x),
                                         on_error,
                                     )
