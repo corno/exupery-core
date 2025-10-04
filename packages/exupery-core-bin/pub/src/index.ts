@@ -3,14 +3,14 @@ import * as _et from 'exupery-core-types'
 import * as _easync from 'exupery-core-async'
 
 
-export type Initialize_Guaranteed_Main = _easync.Initialize_Guaranteed_Procedure<Parameters>
+export type Guaranteed_Main_Initializer = _easync.Initialize_Guaranteed_Procedure<Parameters>
 
 /**
  * Runs a program main function, passing command line arguments (excluding
  * `node` and the script name)
  */
 export const run_guaranteed_main_procedure = (
-    main: Initialize_Guaranteed_Main
+    main: Guaranteed_Main_Initializer
 ): void => {
     main({
         'arguments': _ei.array_literal(process.argv.slice(2))
@@ -27,7 +27,7 @@ export type Error = {
     'exit code': number
 }
 
-export type Initialize_Unguaranteed_Main = _easync.Initialize_Unguaranteed_Procedure<Parameters, Error>
+export type Unguaranteed_Main_Initializer = _easync.Initialize_Unguaranteed_Procedure<Parameters, Error>
 
 /**
  * Runs a program main function, passing command line arguments (excluding
@@ -35,7 +35,7 @@ export type Initialize_Unguaranteed_Main = _easync.Initialize_Unguaranteed_Proce
  * returned value when the async value completes.
  */
 export const run_unguaranteed_main_procedure = (
-    main: Initialize_Unguaranteed_Main
+    main: Unguaranteed_Main_Initializer
 ): void => {
     main({
         'arguments': _ei.array_literal(process.argv.slice(2))

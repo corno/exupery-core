@@ -24,3 +24,5 @@ export interface _Guaranteed_Query<T> {
         on_value: ($: T) => void
     ): void
 }
+
+export type Guaranteed_Query_Initializer<Parameters, Result> = ($: Parameters) => _Guaranteed_Query<Result>

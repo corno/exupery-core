@@ -28,3 +28,5 @@ export interface _Unguaranteed_Query<T, E> {
         on_exception: ($: E) => void
     ): void
 }
+
+export type Unguaranteed_Query_Initializer<Parameters, Result, Error> = ($: Parameters) => _Unguaranteed_Query<Result, Error>

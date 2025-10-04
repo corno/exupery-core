@@ -2,12 +2,12 @@ import * as _ei from 'exupery-core-internals'
 
 import { _Unguaranteed_Query } from "./query/Unguaranteed_Query"
 import { _Guaranteed_Query } from "./query/Guaranteed_Query"
-import { Guaranteed_Procedure, Initialize_Guaranteed_Procedure } from "./procedure/Guaranteed_Procedure"
-import { Initialize_Unguaranteed_Procedure, Unguaranteed_Procedure } from "./procedure/Unguaranteed_Procedure"
+import { Guaranteed_Procedure, Guaranteed_Procedure_Initializer } from "./procedure/Guaranteed_Procedure"
+import { Unguaranteed_Procedure_Initializer, Unguaranteed_Procedure } from "./procedure/Unguaranteed_Procedure"
 import { __create_unguaranteed_procedure } from "./procedure/initialize_unguaranteed_procedure"
 import { __create_guaranted_procedure } from "./procedure/initialize_guaranteed_procedure"
-import { Unguaranteed_Query_Initializer } from './query/Unguaranteed_Query_Initializer'
-import { Guaranteed_Query_Initializer } from './query/Guaranteed_Query_Initializer'
+import { Unguaranteed_Query_Initializer } from "./query/Unguaranteed_Query"
+import { Guaranteed_Query_Initializer } from "./query/Guaranteed_Query"
 
 export type Error_Handler<Error> = (error: Error) => void
 
@@ -85,7 +85,7 @@ export namespace gt {
  * @param error_transform ($) => ....
  */
 export const eh = <Parameters, Error>(
-    action: Initialize_Guaranteed_Procedure<Parameters>,
+    action: Guaranteed_Procedure_Initializer<Parameters>,
     error_transform: Guaranteed_Transformation_Without_Parameters<Error, Parameters>,
 
 ): Error_Handler<Error> => {
@@ -103,8 +103,8 @@ export namespace u {
          * @param action a_my_action
          */
         export const g = <Parameters, Error>(
-            action: Initialize_Guaranteed_Procedure<Parameters>,
-        ): Initialize_Unguaranteed_Procedure<Parameters, Error> => ($: Parameters) => {
+            action: Guaranteed_Procedure_Initializer<Parameters>,
+        ): Unguaranteed_Procedure_Initializer<Parameters, Error> => ($: Parameters) => {
             return __create_unguaranteed_procedure({
                 'execute': (
                     on_succes,
@@ -120,10 +120,10 @@ export namespace u {
          * @param action a_my_action
          */
         export const u = <Parameters, Error, Action_Error>(
-            action: Initialize_Unguaranteed_Procedure<Parameters, Action_Error>,
+            action: Unguaranteed_Procedure_Initializer<Parameters, Action_Error>,
             error_transform: Guaranteed_Transformation_Without_Parameters<Action_Error, Error>,
             error_handler?: Error_Handler<Action_Error>,
-        ): Initialize_Unguaranteed_Procedure<Parameters, Error> => ($: Parameters) => {
+        ): Unguaranteed_Procedure_Initializer<Parameters, Error> => ($: Parameters) => {
             return __create_unguaranteed_procedure({
                 'execute': (
                     on_succes,
@@ -292,7 +292,7 @@ export namespace u {
          * @param query u.q.*(...)
          */
         export const action = <Error, Parameters>(
-            action: Initialize_Unguaranteed_Procedure<Parameters, Error>,
+            action: Unguaranteed_Procedure_Initializer<Parameters, Error>,
             query: Unguaranteed.Query<Parameters, Error>,
         ): Unguaranteed_Procedure<Error> => {
             return {
@@ -351,8 +351,8 @@ export namespace g {
     export namespace a {
 
         export const g = <Parameters>(
-            action: Initialize_Guaranteed_Procedure<Parameters>,
-        ): Initialize_Guaranteed_Procedure<Parameters> => ($: Parameters) => {
+            action: Guaranteed_Procedure_Initializer<Parameters>,
+        ): Guaranteed_Procedure_Initializer<Parameters> => ($: Parameters) => {
             return __create_guaranted_procedure({
                 'execute': (
                     on_finished,
@@ -405,7 +405,7 @@ export namespace g {
     export namespace p {
 
         export const action = <Parameters>(
-            action: Initialize_Guaranteed_Procedure<Parameters>,
+            action: Guaranteed_Procedure_Initializer<Parameters>,
             query: Guaranteed.Query<Parameters>,
         ): Guaranteed_Procedure => {
             return {

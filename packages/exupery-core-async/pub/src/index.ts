@@ -5,10 +5,8 @@ import * as _ei from "exupery-core-internals"
 
 export * from "./procedure/Guaranteed_Procedure"
 export * from "./procedure/Unguaranteed_Procedure"
-export * from "./query/Guaranteed_Query_Initializer"
 export * from "./query/Unguaranteed_Query"
 export * from "./query/Guaranteed_Query"
-export * from "./query/Unguaranteed_Query_Initializer"
 
 //functions
 

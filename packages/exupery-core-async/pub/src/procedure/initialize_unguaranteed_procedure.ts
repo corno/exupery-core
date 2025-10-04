@@ -7,8 +7,8 @@ import { __create_guaranteed_query } from "../query/create_guaranteed_query"
 import { _Unguaranteed_Query } from "../query/Unguaranteed_Query"
 import { _Guaranteed_Query } from "../query/Guaranteed_Query"
 
-import { Initialize_Unguaranteed_Procedure, Unguaranteed_Procedure } from "./Unguaranteed_Procedure"
-import { Initialize_Guaranteed_Procedure, Guaranteed_Procedure } from "./Guaranteed_Procedure"
+import { Unguaranteed_Procedure_Initializer, Unguaranteed_Procedure } from "./Unguaranteed_Procedure"
+import { Guaranteed_Procedure_Initializer, Guaranteed_Procedure } from "./Guaranteed_Procedure"
 import { __create_guaranted_procedure, initialize_no_op_guaranteed_procedure } from "./initialize_guaranteed_procedure"
 
 
