@@ -1,5 +1,5 @@
-import * as process from "process"
-import * as path from "path"
+import { cwd as process_cwd } from "process"
+import { relative as path_relative } from "path"
 
 export type Source_Location = {
     'file': string,
@@ -21,11 +21,11 @@ function get_line(e: Error, depth: number): string {
     const match = regex.exec(line);
 
     //determine the path relative to the current working directory
-    return path.relative(process.cwd(), (() => {
+    return path_relative(process_cwd(), (() => {
         if (match === null) {
             const begin = "    at /"
             if (line.startsWith(begin)) {
-                return path.relative(process.cwd(), line.substring(begin.length - 1));
+                return path_relative(process_cwd(), line.substring(begin.length - 1));
             } else {
                 throw new Error(`COULD NOT PARSE STACK LINE: ${line}`)
             }
