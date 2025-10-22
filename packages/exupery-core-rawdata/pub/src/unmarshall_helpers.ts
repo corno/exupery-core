@@ -3,11 +3,22 @@ import * as _ei from 'exupery-core-internals'
 
 import { Value } from "./types/instance"
 
-export const expect_object = ($: Value): _et.Dictionary<Value> => {
+export const expect_object = (
+    $: Value,
+    allowed_keys?: Set<string>
+): _et.Dictionary<Value> => {
     if (typeof $ !== 'object' || $ === null || Array.isArray($)) {
         _ei.panic("Expected object")
     }
-    return _ei.dictionary_literal($)
+    const result = _ei.dictionary_literal($)
+    if (allowed_keys) {
+        for (const key of Object.keys(result)) {
+            if (!allowed_keys.has(key)) {
+                _ei.panic(`Unexpected key '${key}'`)
+            }
+        }
+    }
+    return result
 }
 
 // export const resolve_object = <T, NT>(
