@@ -6,7 +6,6 @@ export * from "./imp/public/assert_unreachable"
 export * from "./imp/public/change_context"
 export * from "./imp/public/block"
 export * from "./imp/public/switch_state"
-export * from "./imp/public/get_location_info"
 export * from "./imp/public/set"
 export * from "./imp/public/not_set"
 
