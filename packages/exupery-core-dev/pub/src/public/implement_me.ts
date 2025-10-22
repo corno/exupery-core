@@ -1,4 +1,5 @@
-import * as pi from 'exupery-core-internals'
+
+import { get_location_info, location_to_string } from '../get_location_info'
 /**
  * use this function as a placeholder when you want to compile but have not fully developed all functionality yet.
  * 
@@ -7,5 +8,5 @@ import * as pi from 'exupery-core-internals'
  * @param message the string to be printed to stderr
  */
 export function implement_me(): never {
-    throw new Error(`IMPLEMENT ME @ ${pi.location_to_string(pi.get_location_info(1))}`)
+    throw new Error(`IMPLEMENT ME @ ${location_to_string(get_location_info(1))}`)
 }

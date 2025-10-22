@@ -2,7 +2,7 @@ export {
     get_location_info,
     location_to_string,
     Source_Location,
-} from "exupery-core-internals"
+} from "./get_location_info"
 
 export {
     array_literal as a, //this function is heavily used, to not clutter the code, it is abbreviated to just 'a'
