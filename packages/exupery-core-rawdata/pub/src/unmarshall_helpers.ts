@@ -90,6 +90,10 @@ export const expect_property = ($: _et.Dictionary<Value>, key: string): Value =>
     )
 }
 
+export const expect_optional_property = ($: _et.Dictionary<Value>, key: string): _et.Optional_Value<Value> => {
+    return $.__get_entry(key)
+}
+
 export const expect_array = ($: Value): _et.Array<Value> => {
     if (!Array.isArray($)) {
         _ei.panic("Expected array")
