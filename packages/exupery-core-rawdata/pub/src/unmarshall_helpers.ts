@@ -3,23 +3,35 @@ import * as _ei from 'exupery-core-internals'
 
 import { Value } from "./types/instance"
 
-export const expect_object = (
+export const expect_dictionary = (
     $: Value,
-    allowed_keys?: Set<string>
 ): _et.Dictionary<Value> => {
     if (typeof $ !== 'object' || $ === null || Array.isArray($)) {
         _ei.panic("Expected object")
     }
     const result = _ei.dictionary_literal($)
-    if (allowed_keys) {
-        for (const key of Object.keys(result)) {
-            if (!allowed_keys.has(key)) {
-                _ei.panic(`Unexpected key '${key}'`)
-            }
-        }
-    }
     return result
 }
+
+export const expect_verbose_type = (
+    $: Value,
+    allowed_properties: _et.Dictionary<null>
+): _et.Dictionary<Value> => {
+    if (typeof $ !== 'object' || $ === null || Array.isArray($)) {
+        _ei.panic("Expected object")
+    }
+    const keys: string[] = []
+    allowed_properties.map(($, key) => {
+        keys.push(key)
+    })
+    Object.keys($).forEach((key) => {
+        if (!keys.includes(key)) {
+            _ei.panic(`Unexpected property: '${key}'`)
+        }
+    })
+    return _ei.dictionary_literal($)
+}
+
 
 // export const resolve_object = <T, NT>(
 //     $: { [key: string]: T },
