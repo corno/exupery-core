@@ -3,6 +3,32 @@ import * as _ei from 'exupery-core-internals'
 
 import { Value } from "./types/instance"
 
+export type Typed_Value =
+    | ['string', string]
+    | ['number', number]
+    | ['boolean', boolean]
+    | ['null', null]
+    | ['array', _et.Array<Value>]
+    | ['object', _et.Dictionary<Value>]
+
+export const determine_type = ($: Value): Typed_Value => {
+    if (typeof $ === 'string') {
+        return ['string', $]
+    } else if (typeof $ === 'number') {
+        return ['number', $]
+    } else if (typeof $ === 'boolean') {
+        return ['boolean', $]
+    } else if ($ === null) {
+        return ['null', null]
+    } else if (Array.isArray($)) {
+        return ['array', _ei.array_literal($)]
+    } else if (typeof $ === 'object') {
+        return ['object', _ei.dictionary_literal($)]
+    } else {
+        _ei.panic(`Unknown type: ${typeof $}`)
+    }
+}
+
 export const expect_dictionary = (
     $: Value,
 ): _et.Dictionary<Value> => {
@@ -57,7 +83,7 @@ export const expect_verbose_type = (
 // }
 
 export const expect_property = ($: _et.Dictionary<Value>, key: string): Value => {
-    
+
     return $.__get_entry(key).transform(
         ($) => $,
         () => _ei.panic("no such entry")
