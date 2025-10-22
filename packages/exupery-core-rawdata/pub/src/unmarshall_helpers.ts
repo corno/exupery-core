@@ -145,3 +145,10 @@ export const expect_null = ($: Value): null => {
     }
     return null
 }
+
+export const expect_optional_null = ($: Value): _et.Optional_Value<Value> => {
+    if ($ !== null) {
+       return _ei.set($)
+    }
+    return _ei.not_set()
+}
