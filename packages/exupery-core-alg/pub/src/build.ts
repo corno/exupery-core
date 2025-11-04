@@ -1,10 +1,21 @@
 import * as _et from 'exupery-core-types'
 import * as _ei from 'exupery-core-internals'
 
-export const build_list = <T>($: ($c: {
+export type List_Builder<T> = {
     'add element': ($: T) => void
     'add list': ($: _et.Array<T>) => void
-}) => void): _et.Array<T> => {
+}
+
+export type Text_Builder = {
+    'add snippet': ($: string) => void
+    'add character': ($: number) => void
+}
+
+export type Dictionary_Builder<T> = {
+    'add entry': (key: string, value: T) => void
+}
+
+export const build_list = <T>($: ($c: List_Builder<T>) => void): _et.Array<T> => {
     const temp: T[] = []
     $({
         'add element': ($) => {
@@ -18,12 +29,7 @@ export const build_list = <T>($: ($c: {
 }
 
 export const build_text = (
-    $c: (
-        $c: {
-            'add snippet': ($: string) => void
-            'add character': ($: number) => void
-        }
-    ) => void
+    $c: ($c: Text_Builder) => void
 ) => {
     let out = ""
     $c({
@@ -38,9 +44,7 @@ export const build_text = (
 }
 
 export const build_dictionary = <T>(
-    $: (
-        $c: { 'add entry': (key: string, value: T) => void }
-    ) => void
+    $: ($c: Dictionary_Builder<T>) => void
 ): _et.Dictionary<T> => {
     const temp: { [key: string]: T } = {}
     $({
