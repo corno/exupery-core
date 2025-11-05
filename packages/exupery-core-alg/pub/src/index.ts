@@ -16,7 +16,7 @@ export {
      */
     panic as deprecated_panic,
 
-    
+
     array_literal,
     dictionary_literal,
     block,
@@ -30,4 +30,4 @@ export {
 
 export * from "./build"
 
-export * from "./refine_guard"
+export * from "./create_refinement_context"

@@ -23,6 +23,10 @@ export interface Refinement_Result<T, E> {
         handle_value: ($: T) => NT,
         handle_exception: ($: E) => NT
     ): NT
+
+    with_result<NT>(
+        handle_value: ($: T) => Refinement_Result<NT, E>,
+    ): Refinement_Result<NT, E>
 }
 
 export type Refinement_With_Parameters<In, Parameters, Out, Error> = (
@@ -47,6 +51,9 @@ export namespace refinement {
             'transform': (success, exception_handler) => {
                 return exception_handler(exception)
             },
+            'with_result': (success) => {
+                return failed(exception)
+            },
             'map': <NT, NE>(
                 handle_value: ($: T) => NT,
                 handle_exception: ($: E) => NE,
@@ -69,6 +76,9 @@ export namespace refinement {
                 success(value)
             },
             'transform': (success, exception_handler) => {
+                return success(value)
+            },
+            'with_result': (success) => {
                 return success(value)
             },
             'map': <NT, NE>(
