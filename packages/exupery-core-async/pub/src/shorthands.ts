@@ -19,7 +19,7 @@ import { Error_Handler } from "./types/Error_Handler"
  */
 export const eh = <Parameters, Error>(
     action: Guaranteed_Procedure_Initializer<Parameters>,
-    error_transform: _ei.Guaranteed_Transformation_Without_Parameters<Error, Parameters>,
+    error_transform: _ei.Transformation_Without_Parameters<Error, Parameters>,
 
 ): Error_Handler<Error> => {
     return ($: Error) => {
@@ -87,7 +87,7 @@ export namespace gq {
     export const g = <Result_After_Transformation, Parameters, Query_Result>(
         the_query: Guaranteed_Query_Initializer<Parameters, Query_Result>,
         parameters: Guaranteed.Query_<Parameters>,
-        result_transformation: _ei.Guaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation>,
+        result_transformation: _ei.Transformation_Without_Parameters<Query_Result, Result_After_Transformation>,
     ): Guaranteed.Query_<Result_After_Transformation> => {
         return {
             __start: (
@@ -117,8 +117,8 @@ export namespace gt {
      * @returns 
      */
     export const g = <In, Out>(
-        the_transformation: _ei.Guaranteed_Transformation_Without_Parameters<In, Out>,
-    ): _ei.Guaranteed_Transformation_Without_Parameters<In, Out> => {
+        the_transformation: _ei.Transformation_Without_Parameters<In, Out>,
+    ): _ei.Transformation_Without_Parameters<In, Out> => {
         return ($: In) => the_transformation($)
     }
 
@@ -195,7 +195,7 @@ export namespace up {
      */
     export const array = <Error, Element_Error>(
         the_array: _et.Array<Unguaranteed_Procedure<Element_Error>>,
-        aggregate_exceptions: _ei.Guaranteed_Transformation_Without_Parameters<_et.Array<Element_Error>, Error>,
+        aggregate_exceptions: _ei.Transformation_Without_Parameters<_et.Array<Element_Error>, Error>,
 
     ): Unguaranteed_Procedure<Error> => {
         return {
@@ -242,7 +242,7 @@ export namespace up {
      */
     export const dictionary = <Error, Element_Error>(
         the_dictionary: _et.Dictionary<Unguaranteed_Procedure<Element_Error>>,
-        aggregate_exceptions: _ei.Guaranteed_Transformation_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
+        aggregate_exceptions: _ei.Transformation_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
     ): Unguaranteed_Procedure<Error> => {
         return {
             __start: (
@@ -307,7 +307,7 @@ export namespace upi {
      */
     export const u = <Parameters, Error, Action_Error>(
         action: Unguaranteed_Procedure_Initializer<Parameters, Action_Error>,
-        error_transform: _ei.Guaranteed_Transformation_Without_Parameters<Action_Error, Error>,
+        error_transform: _ei.Transformation_Without_Parameters<Action_Error, Error>,
         error_handler?: Error_Handler<Action_Error>,
     ): Unguaranteed_Procedure_Initializer<Parameters, Error> => ($: Parameters) => {
         return __create_unguaranteed_procedure({
@@ -354,7 +354,7 @@ export namespace uq {
      * unguaranteed query
      * @param the_query uqi
      * @param parameters u.q
-     * @param result_transformation ut
+     * @param result_refinement ut
      * @param error_transform gt
      * @param error_handler eh
      * @returns 
@@ -362,8 +362,8 @@ export namespace uq {
     export const u = <Result_After_Transformation, Error, Parameters, Query_Result, Query_Error>(
         the_query: Unguaranteed_Query_Initializer<Parameters, Query_Result, Query_Error>,
         parameters: Unguaranteed.Query<Parameters, Error>,
-        result_transformation: _ei.Unguaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
-        error_transform: _ei.Guaranteed_Transformation_Without_Parameters<Query_Error, Error>,
+        result_refinement: _ei.Refinement_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
+        error_transform: _ei.Transformation_Without_Parameters<Query_Error, Error>,
         error_handler?: Error_Handler<Query_Error>,
     ): Unguaranteed.Query<Result_After_Transformation, Error> => {
         return {
@@ -375,7 +375,7 @@ export namespace uq {
                     (qr_in) => {
                         the_query(qr_in).__start(
                             (result) => {
-                                result_transformation(result).process(
+                                result_refinement(result).process(
                                     (x) => on_success(x),
                                     on_error,
                                 )
@@ -399,12 +399,12 @@ export namespace uq {
      * guaranteed query
      * @param the_query gqi
      * @param parameters u.q
-     * @param result_transformation ut
+     * @param result_refinement ut
      */
     export const g = <Result_After_Transformation, Error, Parameters, Query_Result>(
         the_query: Guaranteed_Query_Initializer<Parameters, Query_Result>,
         parameters: Unguaranteed.Query<Parameters, Error>,
-        result_transformation: _ei.Unguaranteed_Transformation_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
+        result_refinement: _ei.Refinement_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
 
     ): Unguaranteed.Query<Result_After_Transformation, Error> => {
         return {
@@ -416,7 +416,7 @@ export namespace uq {
                     (x) => {
                         the_query(x).__start(
                             ($) => {
-                                result_transformation($).process(
+                                result_refinement($).process(
                                     (x) => on_success(x),
                                     on_error,
                                 )
@@ -435,18 +435,18 @@ export namespace ut {
 
     /**
      * 
-     * @param the_transformation ut
+     * @param the_refinement ut
      * @param error_transform  gt
      * @param error_handler  eh
      * @returns 
      */
     export const u = <In, Out, Error, Transformation_Error>(
-        the_transformation: _ei.Unguaranteed_Transformation_Without_Parameters<In, Out, Transformation_Error>,
-        error_transform: _ei.Guaranteed_Transformation_Without_Parameters<Transformation_Error, Error>,
+        the_refinement: _ei.Refinement_Without_Parameters<In, Out, Transformation_Error>,
+        error_transform: _ei.Transformation_Without_Parameters<Transformation_Error, Error>,
         error_handler?: Error_Handler<Transformation_Error>,
-    ): _ei.Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
+    ): _ei.Refinement_Without_Parameters<In, Out, Error> => {
         return ($: In) => {
-            const result = the_transformation($)
+            const result = the_refinement($)
             return result.map(
                 (out) => out,
                 (transformation_error) => {
@@ -465,10 +465,10 @@ export namespace ut {
      * @param the_transformation gt
      */
     export const g = <In, Out, Error>(
-        the_transformation: _ei.Guaranteed_Transformation_Without_Parameters<In, Out>,
-    ): _ei.Unguaranteed_Transformation_Without_Parameters<In, Out, Error> => {
+        the_transformation: _ei.Transformation_Without_Parameters<In, Out>,
+    ): _ei.Refinement_Without_Parameters<In, Out, Error> => {
         return ($: In) => {
-            return _ei.transformation.successful(the_transformation($))
+            return _ei.refinement.successful(the_transformation($))
         }
     }
 
