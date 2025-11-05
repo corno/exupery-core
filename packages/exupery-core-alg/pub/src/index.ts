@@ -9,7 +9,14 @@ export {
     cc,
     au,
     ss,
-    panic,
+
+    /**
+     * panic should no longer be used,
+     * if it is used in a transformation, this means it is not a transformation but a refinement
+     */
+    panic as deprecated_panic,
+
+    
     array_literal,
     dictionary_literal,
     block,
