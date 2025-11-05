@@ -13,12 +13,12 @@ export {
     array_literal,
     dictionary_literal,
     block,
-    transformation,
-    Unguaranteed_Transformation_Result,
-    Unguaranteed_Transformation_With_Parameters,
-    Unguaranteed_Transformation_Without_Parameters,
-    Guaranteed_Transformation_Without_Parameters,
-    Guaranteed_Transformation_With_Parameters,
+    refinement,
+    Refinement_Result,
+    Refinement_With_Parameters,
+    Refinement_Without_Parameters,
+    Transformation_With_Parameters,
+    Transformation_Without_Parameters,
 } from "exupery-core-internals"
 
 export * from "./build"
