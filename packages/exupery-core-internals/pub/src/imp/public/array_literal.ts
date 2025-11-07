@@ -27,7 +27,7 @@ class Array_Class<T> implements _et.Array<T> {
             $i($)
         })
     }
-    __get_length() {
+    __get_number_of_elements() {
         return this.data.length
     }
     __get_element_at(index: number) {

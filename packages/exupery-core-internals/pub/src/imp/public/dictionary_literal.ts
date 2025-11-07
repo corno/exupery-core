@@ -35,7 +35,7 @@ class Dictionary<T> implements pt.Dictionary<T> {
         }))
     }
 
-    to_array(
+    deprecated_to_array(
         compare: pt.Compare_Function<T>,
     ): pt.Array<pt.Key_Value_Pair<T>> {
         const sorted_keys = this.source.slice().sort(compare)
@@ -53,30 +53,8 @@ class Dictionary<T> implements pt.Dictionary<T> {
         return not_set()
     }
 
-    __add_entry_if_not_exists(key: string, value: T): pt.Dictionary<T> {
-        for (let i = 0; i !== this.source.length; i += 1) {
-            const element = this.source[i]
-            if (element.key === key) {
-                return this
-            }
-        }
-        return new Dictionary([...this.source, { key: key, value: value }])
-    }
-
-    __add_entry_overwrite_if_exists(key: string, value: T): pt.Dictionary<T> {
-        return new Dictionary(this.source.map((entry) => {
-            if (entry.key === key) {
-                return { key: key, value: value }
-            } else {
-                return entry
-            }
-        }))
-    }
-
-    __remove_entry_if_exists(key: string): pt.Dictionary<T> {
-        return new Dictionary(this.source.filter((entry) => {
-            return entry.key !== key
-        }))
+    __get_number_of_entries(): number {
+        return this.source.length
     }
 
 }
