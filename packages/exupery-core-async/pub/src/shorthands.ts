@@ -171,7 +171,7 @@ export namespace up {
                 on_success,
                 on_error,
             ) => {
-                const length = _ei.array_literal(steps).__get_length()
+                const length = _ei.array_literal(steps).__get_number_of_elements()
                 const runStep = (index: number) => {
                     if (index >= length) {
                         on_success()
