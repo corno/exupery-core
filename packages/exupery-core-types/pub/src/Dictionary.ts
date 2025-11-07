@@ -25,7 +25,7 @@ export interface Dictionary<T> {
      * This method is only to be used by resources
      * iterates over all entries in a sorted manner
      */
-    to_array(
+    deprecated_to_array(
         compare: Compare_Function<T>,
     ): Array<Key_Value_Pair<T>>
 
@@ -39,18 +39,6 @@ export interface Dictionary<T> {
         key: string
     ): Optional_Value<T>
 
-    __add_entry_if_not_exists(
-        key: string,
-        value: T
-    ): Dictionary<T>
-
-    __add_entry_overwrite_if_exists(
-        key: string,
-        value: T
-    ): Dictionary<T>
-
-    __remove_entry_if_exists(
-        key: string
-    ): Dictionary<T>
+    __get_number_of_entries(): number
 
 }

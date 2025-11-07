@@ -27,7 +27,7 @@ export interface Array<T> {
      * This method is only to be used by resources
      * 
      */
-    __get_length(): number
+    __get_number_of_elements(): number
 
     /**
      * This method is only to be used by resources
