@@ -12,16 +12,21 @@ export type Error = {
     'exit code': number
 }
 
+export type Resources = null
+
 /**
  * Runs a program main function, passing command line arguments (excluding
  * `node` and the script name)
  */
 export const run_guaranteed_main_procedure = (
-    main: _easync.Guaranteed_Procedure_Initializer<Parameters>
+    main: _easync.Guaranteed_Procedure_Initializer<Parameters, Resources>
 ): void => {
-    main({
-        'arguments': _ei.array_literal(process.argv.slice(2))
-    }).__start(
+    main(
+        {
+            'arguments': _ei.array_literal(process.argv.slice(2))
+        },
+        null,
+    ).__start(
         () => { }
     )
 }
@@ -31,11 +36,14 @@ export const run_guaranteed_main_procedure = (
  * returned value when the async value completes.
  */
 export const run_unguaranteed_main_procedure = (
-    main: _easync.Unguaranteed_Procedure_Initializer<Parameters, Error>
+    main: _easync.Unguaranteed_Procedure_Initializer<Parameters, Resources, Error>
 ): void => {
-    main({
-        'arguments': _ei.array_literal(process.argv.slice(2))
-    }).__start(
+    main(
+        {
+            'arguments': _ei.array_literal(process.argv.slice(2))
+        },
+        null
+    ).__start(
         () => {
         },
         ($) => {
