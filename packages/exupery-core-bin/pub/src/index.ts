@@ -19,7 +19,7 @@ export type Resources = null
  * `node` and the script name)
  */
 export const run_guaranteed_main_procedure = (
-    main: _easync.Guaranteed_Procedure_Initializer<Parameters, Resources>
+    main: _easync.Guaranteed_Procedure<Parameters, Resources>
 ): void => {
     main(
         {
@@ -36,7 +36,7 @@ export const run_guaranteed_main_procedure = (
  * returned value when the async value completes.
  */
 export const run_unguaranteed_main_procedure = (
-    main: _easync.Unguaranteed_Procedure_Initializer<Parameters, Error, Resources>
+    main: _easync.Unguaranteed_Procedure<Parameters, Error, Resources>
 ): void => {
     main(
         {
