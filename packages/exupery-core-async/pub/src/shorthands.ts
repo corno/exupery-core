@@ -17,7 +17,7 @@ import { Error_Handler } from "./types/Error_Handler"
  * @param action gpi
  * @param error_transform gt
  */
-export const eh = <Parameters, Resources, Error>(
+export const eh = <Parameters, Error, Resources>(
     action: Guaranteed_Procedure_Initializer<Parameters, Resources>,
     error_transform: _ei.Transformation_Without_Parameters<Error, Parameters>,
     resources: Resources,
@@ -134,7 +134,7 @@ export namespace up {
      * @param query u.q
      */
     export const action = <Error, Parameters, Resources>(
-        action: Unguaranteed_Procedure_Initializer<Parameters, Resources, Error>,
+        action: Unguaranteed_Procedure_Initializer<Parameters, Error, Resources>,
         query: Basic_Unguaranteed_Query_Promise<Parameters, Error>,
         resources: Resources,
     ): Unguaranteed_Procedure_Promise<Error> => {
@@ -291,10 +291,10 @@ export namespace upi {
      * 
      * @param action gpi
      */
-    export const g = <Parameters, Resources, Error>(
+    export const g = <Parameters, Error, Resources>(
         action: Guaranteed_Procedure_Initializer<Parameters, Resources>,
         $r: Resources,
-    ): Unguaranteed_Procedure_Initializer<Parameters, Resources, Error> => ($: Parameters) => {
+    ): Unguaranteed_Procedure_Initializer<Parameters, Error, Resources> => ($: Parameters) => {
         return __create_unguaranteed_procedure({
             'execute': (
                 on_succes,
@@ -309,11 +309,11 @@ export namespace upi {
      * 
      * @param action upi
      */
-    export const u = <Parameters, Resources, Error, Action_Error>(
-        action: Unguaranteed_Procedure_Initializer<Parameters, Resources, Action_Error>,
+    export const u = <Parameters, Error, Action_Error, Resources>(
+        action: Unguaranteed_Procedure_Initializer<Parameters, Action_Error, Resources>,
         error_transform: _ei.Transformation_Without_Parameters<Action_Error, Error>,
         error_handler?: Error_Handler<Action_Error>,
-    ): Unguaranteed_Procedure_Initializer<Parameters, Resources, Error> => ($: Parameters, $r: Resources) => {
+    ): Unguaranteed_Procedure_Initializer<Parameters, Error, Resources> => ($: Parameters, $r: Resources) => {
         return __create_unguaranteed_procedure({
             'execute': (
                 on_succes,
