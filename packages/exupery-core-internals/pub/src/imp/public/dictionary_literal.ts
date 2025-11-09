@@ -24,17 +24,6 @@ class Dictionary<T> implements pt.Dictionary<T> {
             }
         }))
     }
-    __map_with_key<NT>(
-        $v: (entry: T, key: string) => NT
-    ) {
-        return new Dictionary(this.source.map(($) => {
-            return {
-                key: $.key,
-                value: $v($.value, $.key),
-            }
-        }))
-    }
-
     deprecated_to_array(
         compare: pt.Compare_Function<T>,
     ): pt.Array<pt.Key_Value_Pair<T>> {
