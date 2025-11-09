@@ -36,7 +36,7 @@ export const run_guaranteed_main_procedure = (
  * returned value when the async value completes.
  */
 export const run_unguaranteed_main_procedure = (
-    main: _easync.Unguaranteed_Procedure_Initializer<Parameters, Resources, Error>
+    main: _easync.Unguaranteed_Procedure_Initializer<Parameters, Error, Resources>
 ): void => {
     main(
         {
