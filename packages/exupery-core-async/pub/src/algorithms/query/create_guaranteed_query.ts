@@ -1,6 +1,6 @@
 import * as _et from "exupery-core-types"
 
-import { _Guaranteed_Query } from "../../types/Guaranteed_Query"
+import { Guaranteed_Query_Promise } from "../../types/Guaranteed_Query"
 
 type Executer<T> = {
     'execute': (
@@ -9,7 +9,7 @@ type Executer<T> = {
 }
 
 
-class Guaranteed_Query_Result_Class<T> implements _Guaranteed_Query<T> {
+class Guaranteed_Query_Result_Class<T> implements Guaranteed_Query_Promise<T> {
     private executer: Executer<T>
     constructor(executer: Executer<T>) {
         this.executer = executer
@@ -17,7 +17,7 @@ class Guaranteed_Query_Result_Class<T> implements _Guaranteed_Query<T> {
 
     map<NT>(
         handle_value: ($: T) => NT
-    ): _Guaranteed_Query<NT> {
+    ): Guaranteed_Query_Promise<NT> {
         return __create_guaranteed_query(
             {
                 'execute': (on_value) => {
@@ -31,8 +31,8 @@ class Guaranteed_Query_Result_Class<T> implements _Guaranteed_Query<T> {
         )
     }
     then<NT>(
-        handle_value: ($: T) => _Guaranteed_Query<NT>
-    ): _Guaranteed_Query<NT> {
+        handle_value: ($: T) => Guaranteed_Query_Promise<NT>
+    ): Guaranteed_Query_Promise<NT> {
         return __create_guaranteed_query(
             {
                 'execute': (on_value) => {
@@ -60,7 +60,7 @@ class Guaranteed_Query_Result_Class<T> implements _Guaranteed_Query<T> {
  */
 export function __create_guaranteed_query<T>(
     executer: Executer<T>,
-): _Guaranteed_Query<T> {
+): Guaranteed_Query_Promise<T> {
     return new Guaranteed_Query_Result_Class<T>(executer)
 
 }

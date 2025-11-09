@@ -1,6 +1,6 @@
 import * as _et from "exupery-core-types"
 
-import { Guaranteed_Procedure_Initializer, Guaranteed_Procedure } from "../../types/Guaranteed_Procedure"
+import { Guaranteed_Procedure_Initializer, Guaranteed_Procedure_Promise } from "../../types/Guaranteed_Procedure"
 import { __create_unguaranteed_procedure } from "./initialize_unguaranteed_procedure"
 
 type Executer = {
@@ -10,15 +10,16 @@ type Executer = {
 }
 
 
-class Guaranteed_Procedure_Class implements Guaranteed_Procedure {
+class Guaranteed_Procedure_Class implements Guaranteed_Procedure_Promise {
     private executer: Executer
     constructor(executer: Executer) {
         this.executer = executer
     }
-    x_execute<Parameters>(
-        get_action: () => Guaranteed_Procedure_Initializer<Parameters>,
-        get_parameters: () => Parameters
-    ): Guaranteed_Procedure {
+    x_execute<Parameters, Resources>(
+        get_action: () => Guaranteed_Procedure_Initializer<Parameters, Resources>,
+        get_parameters: () => Parameters,
+        get_resources: () => Resources
+    ): Guaranteed_Procedure_Promise {
         return __create_guaranted_procedure(
             {
                 'execute': (on_finished) => {
@@ -26,7 +27,8 @@ class Guaranteed_Procedure_Class implements Guaranteed_Procedure {
                         () => {
                             const action = get_action()
                             const params = get_parameters()
-                            action(params).__start(on_finished)
+                            const resources = get_resources()
+                            action(params, resources).__start(on_finished)
                         }
                     )
                 }
@@ -48,13 +50,13 @@ class Guaranteed_Procedure_Class implements Guaranteed_Procedure {
  */
 export function __create_guaranted_procedure(
     executer: Executer,
-): Guaranteed_Procedure {
+): Guaranteed_Procedure_Promise {
     return new Guaranteed_Procedure_Class(executer)
 
 }
 
 export const initialize_no_op_guaranteed_procedure = (
-): Guaranteed_Procedure => {
+): Guaranteed_Procedure_Promise => {
     return new Guaranteed_Procedure_Class({
         'execute': (on_finished) => {
             on_finished() //nothing to do, call on_finished immediately

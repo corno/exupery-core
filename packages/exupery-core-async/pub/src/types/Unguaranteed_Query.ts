@@ -1,44 +1,40 @@
 import * as _et from "exupery-core-types"
 
-import { _Guaranteed_Query } from "./Guaranteed_Query"
+import { Guaranteed_Query_Promise } from "./Guaranteed_Query"
 
-export interface _Unguaranteed_Query<T, E> {
+
+export type Unguaranteed_Query_Initializer<Parameters, Result, Error, Resources> = ($: Parameters, $r: Resources) => Unguaranteed_Query_Promise<Result, Error>
+
+export type Unguaranteed_Query_Promise<Result, Error> = {
     map_<NT>(
-        handle_value: ($: T) => NT
-    ): _Unguaranteed_Query<NT, E>
+        handle_value: ($: Result) => NT
+    ): Unguaranteed_Query_Promise<NT, Error>
 
     map_exception_<NE>(
-        handle_exception: ($: E) => NE
-    ): _Unguaranteed_Query<T, NE>
+        handle_exception: ($: Error) => NE
+    ): Unguaranteed_Query_Promise<Result, NE>
 
     then<NT>(
-        handle_value: ($: T) => _Guaranteed_Query<NT>
-    ): _Unguaranteed_Query<NT, E>
-    
+        handle_value: ($: Result) => Guaranteed_Query_Promise<NT>
+    ): Unguaranteed_Query_Promise<NT, Error>
+
     then_unguaranteed<NT>(
-        handle_value: ($: T) => _Unguaranteed_Query<NT, E>
-    ): _Unguaranteed_Query<NT, E>
+        handle_value: ($: Result) => Unguaranteed_Query_Promise<NT, Error>
+    ): Unguaranteed_Query_Promise<NT, Error>
 
     catch_(
-        handle_exception: ($: E) => _Guaranteed_Query<T>
-    ): _Guaranteed_Query<T>
+        handle_exception: ($: Error) => Guaranteed_Query_Promise<Result>
+    ): Guaranteed_Query_Promise<Result>
 
     __start(
-        on_value: ($: T) => void,
-        on_exception: ($: E) => void
+        on_success: ($: Result) => void,
+        on_error: ($: Error) => void
     ): void
 }
 
-export type Unguaranteed_Query_Initializer<Parameters, Result, Error> = ($: Parameters) => _Unguaranteed_Query<Result, Error>
-
-
-export namespace Unguaranteed {
-
-    export type Query<Result, Error> = {
-        __start: (
-            on_success: (result: Result) => void,
-            on_error: (error: Error) => void,
-        ) => void
-    }
-
+export type Basic_Unguaranteed_Query_Promise<Result, Error> = {
+    __start: (
+        on_success: (result: Result) => void,
+        on_error: (error: Error) => void,
+    ) => void
 }

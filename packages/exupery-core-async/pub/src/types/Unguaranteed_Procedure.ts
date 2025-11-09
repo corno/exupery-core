@@ -1,11 +1,11 @@
 import * as _et from 'exupery-core-types'
 
-import { _Unguaranteed_Query } from "./Unguaranteed_Query"
-import { _Guaranteed_Query } from "./Guaranteed_Query"
+import { Unguaranteed_Query_Promise } from "./Unguaranteed_Query"
+import { Guaranteed_Query_Promise } from "./Guaranteed_Query"
 
-export type Unguaranteed_Procedure_Initializer<Parameters, Error> = ($: Parameters) => Unguaranteed_Procedure<Error>
+export type Unguaranteed_Procedure_Initializer<Parameters, Resources, Error> = ($: Parameters, $r: Resources) => Unguaranteed_Procedure_Promise<Error>
 
-export interface Unguaranteed_Procedure<Error> {
+export interface Unguaranteed_Procedure_Promise<Error> {
         __start: (
             on_success: () => void,
             on_error: (error: Error) => void,

@@ -20,10 +20,10 @@ export * from "./algorithms/procedure/initialize_unguaranteed_procedure"
 export * from "./shorthands"
 
 
-import { Guaranteed_Procedure } from "./types/Guaranteed_Procedure"
-import { Unguaranteed_Procedure } from "./types/Unguaranteed_Procedure"
-import { _Guaranteed_Query } from "./types/Guaranteed_Query"
-import { _Unguaranteed_Query } from "./types/Unguaranteed_Query"
+import { Guaranteed_Procedure_Promise } from "./types/Guaranteed_Procedure"
+import { Unguaranteed_Procedure_Promise } from "./types/Unguaranteed_Procedure"
+import { Guaranteed_Query_Promise } from "./types/Guaranteed_Query"
+import { Unguaranteed_Query_Promise } from "./types/Unguaranteed_Query"
 
 import { __create_guaranted_procedure, initialize_no_op_guaranteed_procedure } from "./algorithms/procedure/initialize_guaranteed_procedure"
 import { __create_unguaranteed_procedure, initialize_no_op_unguaranteed_procedure } from "./algorithms/procedure/initialize_unguaranteed_procedure"
@@ -35,7 +35,7 @@ export const query = {
     'guaranteed': {
         'create result': <T>(
             $: T
-        ): _Guaranteed_Query<T> => {
+        ): Guaranteed_Query_Promise<T> => {
             return __create_guaranteed_query(
                 {
                     'execute': (on_value) => {
@@ -48,7 +48,7 @@ export const query = {
     'unguaranteed': {
         'create result': <T, E>(
             $: T
-        ): _Unguaranteed_Query<T, E> => {
+        ): Unguaranteed_Query_Promise<T, E> => {
             return __create_unguaranteed_query(
                 {
                     'execute': (on_value) => {
@@ -59,7 +59,7 @@ export const query = {
         },
         'raise exception': <T, E>(
             $: E
-        ): _Unguaranteed_Query<T, E> => {
+        ): Unguaranteed_Query_Promise<T, E> => {
             return __create_unguaranteed_query(
                 {
                     'execute': (on_value, on_exception) => {
@@ -79,7 +79,7 @@ export const command = {
         'initialize': initialize_no_op_unguaranteed_procedure,
         'raise exception': <E>(
             $: E
-        ): Unguaranteed_Procedure<E> => {
+        ): Unguaranteed_Procedure_Promise<E> => {
             return __create_unguaranteed_procedure(
                 {
                     'execute': (on_success, on_exception) => {
