@@ -35,7 +35,7 @@ class Unguaranteed_Procedure_Promise_Class<E> implements Unguaranteed_Procedure_
         this.executer.execute(on_success, on_exception)
     }
 
-    transform_error<NE>(
+    map_error<NE>(
         handle_error: (error: E) => NE
     ): Unguaranteed_Procedure_Promise<NE> {
         return new Unguaranteed_Procedure_Promise_Class<NE>({

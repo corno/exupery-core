@@ -11,7 +11,7 @@ export type Unguaranteed_Procedure_Promise<Error> = {
         on_error: (error: Error) => void,
     ) => void
 
-    transform_error<NE>(
+    map_error<NE>(
         handle_error: (error: Error) => NE
     ): Unguaranteed_Procedure_Promise<NE>
 }
