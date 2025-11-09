@@ -22,18 +22,32 @@ type Executer<E> = {
     ) => void
 }
 
-class Unguaranteed_Procedure_Class<E> implements Unguaranteed_Procedure_Promise<E> {
+class Unguaranteed_Procedure_Promise_Class<E> implements Unguaranteed_Procedure_Promise<E> {
     private executer: Executer<E>
     constructor(executer: Executer<E>) {
         this.executer = executer
     }
-
 
     __start(
         on_success: () => void,
         on_exception: ($: E) => void,
     ): void {
         this.executer.execute(on_success, on_exception)
+    }
+
+    transform_error<NE>(
+        handle_error: (error: E) => NE
+    ): Unguaranteed_Procedure_Promise<NE> {
+        return new Unguaranteed_Procedure_Promise_Class<NE>({
+            'execute': (on_success, on_exception) => {
+                this.executer.execute(
+                    on_success,
+                    (error) => {
+                        on_exception(handle_error(error))
+                    }
+                )
+            }
+        })
     }
 }
 
@@ -45,15 +59,6 @@ class Unguaranteed_Procedure_Class<E> implements Unguaranteed_Procedure_Promise<
 export function __create_unguaranteed_procedure<E>(
     executer: Executer<E>,
 ): Unguaranteed_Procedure_Promise<E> {
-    return new Unguaranteed_Procedure_Class<E>(executer)
+    return new Unguaranteed_Procedure_Promise_Class<E>(executer)
 
-}
-
-export const initialize_no_op_unguaranteed_procedure = <E>(
-): Unguaranteed_Procedure_Promise<E> => {
-    return new Unguaranteed_Procedure_Class<E>({
-        'execute': (on_success, on_exception) => {
-            on_success() //nothing to do, call on_finished immediately
-        }
-    })
 }

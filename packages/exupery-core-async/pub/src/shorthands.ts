@@ -1,8 +1,8 @@
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
-import { Unguaranteed_Query_Promise, Basic_Unguaranteed_Query_Promise } from "./types/Unguaranteed_Query"
-import { Guaranteed_Query_Promise, Basic_Guaranteed_Query_Promise } from "./types/Guaranteed_Query"
+import { Basic_Unguaranteed_Query_Promise } from "./types/Unguaranteed_Query"
+import { Basic_Guaranteed_Query_Promise } from "./types/Guaranteed_Query"
 import { Guaranteed_Procedure_Promise, Guaranteed_Procedure } from "./types/Guaranteed_Procedure"
 import { Unguaranteed_Procedure, Unguaranteed_Procedure_Promise } from "./types/Unguaranteed_Procedure"
 import { __create_unguaranteed_procedure } from "./algorithms/procedure/initialize_unguaranteed_procedure"
@@ -138,11 +138,12 @@ export namespace up {
         query: Basic_Unguaranteed_Query_Promise<Parameters, Error>,
         resources: Resources,
     ): Unguaranteed_Procedure_Promise<Error> => {
-        return {
-            __start: (
+        return __create_unguaranteed_procedure({
+            'execute': (
                 on_success,
                 on_error,
             ) => {
+
                 //run the query
                 query.__start(
                     (query_result) => {
@@ -158,7 +159,7 @@ export namespace up {
                     on_error,
                 )
             }
-        }
+        })
     }
 
     /**
@@ -169,11 +170,12 @@ export namespace up {
     export const sequence = <Error>(
         steps: Unguaranteed_Procedure_Promise<Error>[]
     ): Unguaranteed_Procedure_Promise<Error> => {
-        return {
-            __start: (
+        return __create_unguaranteed_procedure({
+            'execute': (
                 on_success,
                 on_error,
             ) => {
+
                 const length = _ei.array_literal(steps).__get_number_of_elements()
                 const runStep = (index: number) => {
                     if (index >= length) {
@@ -187,7 +189,7 @@ export namespace up {
                 }
                 runStep(0)
             }
-        }
+        })
     }
 
     /**
@@ -201,8 +203,8 @@ export namespace up {
         aggregate_exceptions: _ei.Transformation_Without_Parameters<_et.Array<Element_Error>, Error>,
 
     ): Unguaranteed_Procedure_Promise<Error> => {
-        return {
-            __start: (
+        return __create_unguaranteed_procedure({
+            'execute': (
                 on_success,
                 on_error,
             ) => {
@@ -234,7 +236,7 @@ export namespace up {
                     }
                 )
             }
-        }
+        })
     }
 
     /**
@@ -247,8 +249,8 @@ export namespace up {
         the_dictionary: _et.Dictionary<Unguaranteed_Procedure_Promise<Element_Error>>,
         aggregate_exceptions: _ei.Transformation_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
     ): Unguaranteed_Procedure_Promise<Error> => {
-        return {
-            __start: (
+        return __create_unguaranteed_procedure({
+            'execute': (
                 on_success,
                 on_error,
             ) => {
@@ -280,7 +282,7 @@ export namespace up {
                     }
                 )
             }
-        }
+        })
     }
 
 }

@@ -5,9 +5,13 @@ import { Guaranteed_Query_Promise } from "./Guaranteed_Query"
 
 export type Unguaranteed_Procedure<Parameters, Error, Resources> = ($: Parameters, $r: Resources) => Unguaranteed_Procedure_Promise<Error>
 
-export interface Unguaranteed_Procedure_Promise<Error> {
-        __start: (
-            on_success: () => void,
-            on_error: (error: Error) => void,
-        ) => void
-    }
+export type Unguaranteed_Procedure_Promise<Error> = {
+    __start: (
+        on_success: () => void,
+        on_error: (error: Error) => void,
+    ) => void
+
+    transform_error<NE>(
+        handle_error: (error: Error) => NE
+    ): Unguaranteed_Procedure_Promise<NE>
+}

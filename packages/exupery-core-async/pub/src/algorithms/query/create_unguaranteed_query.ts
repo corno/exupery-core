@@ -18,7 +18,7 @@ type Executer<T, E> = {
     ) => void
 }
 
-class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Promise<T, E> {
+class Unguaranteed_Query_Result_Promise_Class<T, E> implements Unguaranteed_Query_Promise<T, E> {
     private executer: Executer<T, E>
     constructor(executer: Executer<T, E>) {
         this.executer = executer
@@ -26,7 +26,7 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Promis
     map_<NT>(
         handle_value: ($: T) => NT
     ): Unguaranteed_Query_Promise<NT, E> {
-        return new Unguaranteed_Query_Result_Class<NT, E>({
+        return new Unguaranteed_Query_Result_Promise_Class<NT, E>({
             'execute': (on_value, on_exception) => {
                 this.executer.execute(
                     ($) => {
@@ -40,7 +40,7 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Promis
     then<NT>(
         handle_value: ($: T) => Guaranteed_Query_Promise<NT>
     ): Unguaranteed_Query_Promise<NT, E> {
-        return new Unguaranteed_Query_Result_Class<NT, E>({
+        return new Unguaranteed_Query_Result_Promise_Class<NT, E>({
             'execute': (new_on_value, new_on_exception) => {
                 this.executer.execute(
                     ($) => {
@@ -56,7 +56,7 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Promis
     then_unguaranteed<NT>(
         handle_value: ($: T) => Unguaranteed_Query_Promise<NT, E>
     ): Unguaranteed_Query_Promise<NT, E> {
-        return new Unguaranteed_Query_Result_Class<NT, E>({
+        return new Unguaranteed_Query_Result_Promise_Class<NT, E>({
             'execute': (new_on_value, new_on_exception) => {
                 this.executer.execute(
                     ($) => {
@@ -73,7 +73,7 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Promis
     map_exception_<NE>(
         handle_exception: ($: E) => NE
     ): Unguaranteed_Query_Promise<T, NE> {
-        return new Unguaranteed_Query_Result_Class<T, NE>({
+        return new Unguaranteed_Query_Result_Promise_Class<T, NE>({
             'execute': (on_value, on_exception) => {
                 this.executer.execute(
                     on_value,
@@ -116,6 +116,6 @@ class Unguaranteed_Query_Result_Class<T, E> implements Unguaranteed_Query_Promis
 export function __create_unguaranteed_query<T, E>(
     executer: Executer<T, E>,
 ): Unguaranteed_Query_Promise<T, E> {
-    return new Unguaranteed_Query_Result_Class<T, E>(executer)
+    return new Unguaranteed_Query_Result_Promise_Class<T, E>(executer)
 
 }

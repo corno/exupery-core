@@ -9,7 +9,7 @@ type Executer<T> = {
 }
 
 
-class Guaranteed_Query_Result_Class<T> implements Guaranteed_Query_Promise<T> {
+class Guaranteed_Query_Result_Promise_Class<T> implements Guaranteed_Query_Promise<T> {
     private executer: Executer<T>
     constructor(executer: Executer<T>) {
         this.executer = executer
@@ -61,6 +61,6 @@ class Guaranteed_Query_Result_Class<T> implements Guaranteed_Query_Promise<T> {
 export function __create_guaranteed_query<T>(
     executer: Executer<T>,
 ): Guaranteed_Query_Promise<T> {
-    return new Guaranteed_Query_Result_Class<T>(executer)
+    return new Guaranteed_Query_Result_Promise_Class<T>(executer)
 
 }
