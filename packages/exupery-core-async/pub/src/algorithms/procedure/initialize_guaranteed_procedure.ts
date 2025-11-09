@@ -1,6 +1,6 @@
 import * as _et from "exupery-core-types"
 
-import { Guaranteed_Procedure_Initializer, Guaranteed_Procedure_Promise } from "../../types/Guaranteed_Procedure"
+import { Guaranteed_Procedure, Guaranteed_Procedure_Promise } from "../../types/Guaranteed_Procedure"
 import { __create_unguaranteed_procedure } from "./initialize_unguaranteed_procedure"
 
 type Executer = {
@@ -16,7 +16,7 @@ class Guaranteed_Procedure_Class implements Guaranteed_Procedure_Promise {
         this.executer = executer
     }
     x_execute<Parameters, Resources>(
-        get_action: () => Guaranteed_Procedure_Initializer<Parameters, Resources>,
+        get_action: () => Guaranteed_Procedure<Parameters, Resources>,
         get_parameters: () => Parameters,
         get_resources: () => Resources
     ): Guaranteed_Procedure_Promise {

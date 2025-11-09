@@ -3,7 +3,7 @@ import * as _et from "exupery-core-types"
 import { Guaranteed_Query_Promise } from "./Guaranteed_Query"
 
 
-export type Unguaranteed_Query_Initializer<Parameters, Result, Error, Resources> = ($: Parameters, $r: Resources) => Unguaranteed_Query_Promise<Result, Error>
+export type Unguaranteed_Query<Parameters, Result, Error, Resources> = ($: Parameters, $r: Resources) => Unguaranteed_Query_Promise<Result, Error>
 
 export type Unguaranteed_Query_Promise<Result, Error> = {
     map_<NT>(

@@ -1,5 +1,5 @@
 
-export type Guaranteed_Query_Initializer<Parameters, Result, Resources> = ($: Parameters, $r: Resources) => Guaranteed_Query_Promise<Result>
+export type Guaranteed_Query<Parameters, Result, Resources> = ($: Parameters, $r: Resources) => Guaranteed_Query_Promise<Result>
 /**
  * A value that will asynchronously become available.
  * Similar to the concept of a promise, but with a smaller API.
