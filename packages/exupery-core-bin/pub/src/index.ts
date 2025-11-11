@@ -7,6 +7,7 @@ import * as d_copy from "exupery-resources/dist/interface/generated/pareto/schem
 import * as d_execute_any_procedure_executable from "exupery-resources/dist/interface/generated/pareto/schemas/execute_any_procedure_executable/data_types/target"
 import * as d_execute_any_smelly_procedure_executable from "exupery-resources/dist/interface/generated/pareto/schemas/execute_any_smelly_procedure_executable/data_types/target"
 import * as d_execute_any_query_executable from "exupery-resources/dist/interface/generated/pareto/schemas/execute_any_query_executable/data_types/target"
+import * as d_get_instream_data from "exupery-resources/dist/interface/generated/pareto/schemas/get_instream_data/data_types/target"
 import * as d_log from "exupery-resources/dist/interface/generated/pareto/schemas/log/data_types/target"
 import * as d_log_error from "exupery-resources/dist/interface/generated/pareto/schemas/log_error/data_types/target"
 import * as d_make_directory from "exupery-resources/dist/interface/generated/pareto/schemas/make_directory/data_types/source"
@@ -31,6 +32,7 @@ import { $$ as p_write_to_stdout } from "./algorithms/procedures/guaranteed/writ
 
 
 import { $$ as q_execute_any_query_executable } from "./algorithms/queries/unguaranteed/execute_any_query_executable"
+import { $$ as q_get_instream_data } from "./algorithms/queries/guaranteed/get_instream_data"
 import { $$ as q_read_directory } from "./algorithms/queries/unguaranteed/read_directory"
 import { $$ as q_read_file } from "./algorithms/queries/unguaranteed/read_file"
 import { $$ as q_stat } from "./algorithms/queries/unguaranteed/stat"
@@ -42,6 +44,8 @@ export type Parameters = {
 export type Error = {
     'exit code': number
 }
+
+type temp_instream_parameters = null
 
 export type Available_Standard_Resources = {
     'procedures': {
@@ -58,6 +62,7 @@ export type Available_Standard_Resources = {
     },
     'queries': {
         'execute any query executable': _easync.Unguaranteed_Query<d_execute_any_query_executable.Parameters, d_execute_any_query_executable.Result, d_execute_any_query_executable.Error, null>,
+        'get instream data': _easync.Guaranteed_Query<temp_instream_parameters, d_get_instream_data.Result, null>,
         'read directory': _easync.Unguaranteed_Query<d_read_directory.Parameters, d_read_directory.Result, d_read_directory.Error, null>,
         'read file': _easync.Unguaranteed_Query<d_read_file.Parameters, d_read_file.Result, d_read_file.Error, null>,
         'stat': _easync.Unguaranteed_Query<d_stat.Parameters, d_stat.Result, d_stat.Error, null>,
@@ -80,6 +85,7 @@ const create_available_resources = (): Available_Standard_Resources => {
         },
         'queries': {
             'execute any query executable': q_execute_any_query_executable,
+            'get instream data': q_get_instream_data,
             'read directory': q_read_directory,
             'read file': q_read_file,
             'stat': q_stat,
