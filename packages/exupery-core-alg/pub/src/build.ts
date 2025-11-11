@@ -43,18 +43,33 @@ export const build_text = (
     return out
 }
 
-export const build_dictionary = <T>(
-    $: ($c: Dictionary_Builder<T>) => void
-): _et.Dictionary<T> => {
-    const temp: { [key: string]: T } = {}
-    $({
-        'add entry': (key, $) => {
-            if (key in temp) {
-                _ei.panic(`duplicate key in dictionary literal: ${key}`)
-            }
-            temp[key] = $
-        }
-    })
-    return _ei.dictionary_literal(temp)
+export type Key_Value_Pair<T> = {
+    'key': string,
+    'value': T,
 }
 
+export const group_list = <T>(
+    list: _et.Array<Key_Value_Pair<T>>,
+): _et.Dictionary<_et.Array<T>> => {
+    const temp: { [key: string]: T[] } = {}
+    list.__for_each(($) => {
+        if (temp[$.key] === undefined) {
+            temp[$.key] = []
+        }
+        temp[$.key].push($.value)
+    })
+    return _ei.dictionary_literal(temp).map(($) => _ei.array_literal($))
+}
+
+export const group_dictionary = <T>(
+    dictionary: _et.Dictionary<Key_Value_Pair<T>>,
+): _et.Dictionary<_et.Dictionary<T>> => {
+    const temp: { [key: string]: { [key: string]: T } } = {}
+    dictionary.map(($, key) => {
+        if (temp[$.key] === undefined) {
+            temp[$.key] = {}
+        }
+        temp[$.key][key] = $.value
+    })
+    return _ei.dictionary_literal(temp).map(($) => _ei.dictionary_literal($))
+}
