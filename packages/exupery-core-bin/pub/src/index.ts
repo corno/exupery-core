@@ -5,6 +5,7 @@ import * as _easync from 'exupery-core-async'
 
 import * as d_copy from "exupery-resources/dist/interface/generated/pareto/schemas/copy/data_types/source"
 import * as d_execute_any_procedure_executable from "exupery-resources/dist/interface/generated/pareto/schemas/execute_any_procedure_executable/data_types/target"
+import * as d_execute_any_smelly_procedure_executable from "exupery-resources/dist/interface/generated/pareto/schemas/execute_any_smelly_procedure_executable/data_types/target"
 import * as d_execute_any_query_executable from "exupery-resources/dist/interface/generated/pareto/schemas/execute_any_query_executable/data_types/target"
 import * as d_log from "exupery-resources/dist/interface/generated/pareto/schemas/log/data_types/target"
 import * as d_log_error from "exupery-resources/dist/interface/generated/pareto/schemas/log_error/data_types/target"
@@ -19,6 +20,7 @@ import * as d_write_to_stdout from "exupery-resources/dist/interface/generated/p
 
 import { $$ as p_copy_signature } from "exupery-resources/dist/implementation/algorithms/procedures/unguaranteed/copy"
 import { $$ as p_execute_any_procedure_executable } from "exupery-resources/dist/implementation/algorithms/procedures/unguaranteed/execute_any_procedure_executable"
+import { $$ as p_execute_any_smelly_procedure_executable } from "exupery-resources/dist/implementation/algorithms/procedures/unguaranteed/execute_any_smelly_procedure_executable"
 import { $$ as p_log } from "exupery-resources/dist/implementation/algorithms/procedures/guaranteed/log"
 import { $$ as p_log_error } from "exupery-resources/dist/implementation/algorithms/procedures/guaranteed/log_error"
 import { $$ as p_make_directory } from "exupery-resources/dist/implementation/algorithms/procedures/unguaranteed/make_directory"
@@ -45,6 +47,7 @@ export type Available_Standard_Resources = {
     'procedures': {
         'copy': _easync.Unguaranteed_Procedure<d_copy.Parameters, d_copy.Error, null>,
         'execute any procedure executable': _easync.Unguaranteed_Procedure<d_execute_any_procedure_executable.Parameters, d_execute_any_procedure_executable.Error, null>,
+        'execute any smelly procedure executable': _easync.Unguaranteed_Procedure<d_execute_any_smelly_procedure_executable.Parameters, d_execute_any_smelly_procedure_executable.Error, null>,
         'log error': _easync.Guaranteed_Procedure<d_log_error.Parameters, null>,
         'log': _easync.Guaranteed_Procedure<d_log.Parameters, null>,
         'make directory': _easync.Unguaranteed_Procedure<d_make_directory.Parameters, d_make_directory.Error, null>,
@@ -66,6 +69,7 @@ const create_available_resources = (): Available_Standard_Resources => {
         'procedures': {
             'copy': p_copy_signature,
             'execute any procedure executable': p_execute_any_procedure_executable,
+            'execute any smelly procedure executable': p_execute_any_smelly_procedure_executable,
             'log error': p_log_error,
             'log': p_log,
             'make directory': p_make_directory,
