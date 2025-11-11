@@ -29,6 +29,6 @@
   "dependencies": {
     "exupery-core-async": "^0.3.5",
     "exupery-core-internals": "^0.3.0",
-    "exupery-resources": "^0.3.4"
+    "exupery-resources": "^0.3.5"
   }
 }

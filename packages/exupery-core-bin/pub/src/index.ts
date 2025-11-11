@@ -18,22 +18,22 @@ import * as d_write_file from "exupery-resources/dist/interface/generated/pareto
 import * as d_write_to_stderr from "exupery-resources/dist/interface/generated/pareto/schemas/write_to_stderr/data_types/target"
 import * as d_write_to_stdout from "exupery-resources/dist/interface/generated/pareto/schemas/write_to_stdout/data_types/target"
 
-import { $$ as p_copy_signature } from "exupery-resources/dist/implementation/algorithms/procedures/unguaranteed/copy"
-import { $$ as p_execute_any_procedure_executable } from "exupery-resources/dist/implementation/algorithms/procedures/unguaranteed/execute_any_procedure_executable"
-import { $$ as p_execute_any_smelly_procedure_executable } from "exupery-resources/dist/implementation/algorithms/procedures/unguaranteed/execute_any_smelly_procedure_executable"
-import { $$ as p_log } from "exupery-resources/dist/implementation/algorithms/procedures/guaranteed/log"
-import { $$ as p_log_error } from "exupery-resources/dist/implementation/algorithms/procedures/guaranteed/log_error"
-import { $$ as p_make_directory } from "exupery-resources/dist/implementation/algorithms/procedures/unguaranteed/make_directory"
-import { $$ as p_remove } from "exupery-resources/dist/implementation/algorithms/procedures/unguaranteed/remove"
-import { $$ as p_write_file } from "exupery-resources/dist/implementation/algorithms/procedures/unguaranteed/write_file"
-import { $$ as p_write_to_stderr } from "exupery-resources/dist/implementation/algorithms/procedures/guaranteed/write_to_stderr"
-import { $$ as p_write_to_stdout } from "exupery-resources/dist/implementation/algorithms/procedures/guaranteed/write_to_stdout"
+import { $$ as p_copy_signature } from "./algorithms/procedures/unguaranteed/copy"
+import { $$ as p_execute_any_procedure_executable } from "./algorithms/procedures/unguaranteed/execute_any_procedure_executable"
+import { $$ as p_execute_any_smelly_procedure_executable } from "./algorithms/procedures/unguaranteed/execute_any_smelly_procedure_executable"
+import { $$ as p_log } from "./algorithms/procedures/guaranteed/log"
+import { $$ as p_log_error } from "./algorithms/procedures/guaranteed/log_error"
+import { $$ as p_make_directory } from "./algorithms/procedures/unguaranteed/make_directory"
+import { $$ as p_remove } from "./algorithms/procedures/unguaranteed/remove"
+import { $$ as p_write_file } from "./algorithms/procedures/unguaranteed/write_file"
+import { $$ as p_write_to_stderr } from "./algorithms/procedures/guaranteed/write_to_stderr"
+import { $$ as p_write_to_stdout } from "./algorithms/procedures/guaranteed/write_to_stdout"
 
 
-import { $$ as q_execute_any_query_executable } from "exupery-resources/dist/implementation/algorithms/queries/unguaranteed/execute_any_query_executable"
-import { $$ as q_read_directory } from "exupery-resources/dist/implementation/algorithms/queries/unguaranteed/read_directory"
-import { $$ as q_read_file } from "exupery-resources/dist/implementation/algorithms/queries/unguaranteed/read_file"
-import { $$ as q_stat } from "exupery-resources/dist/implementation/algorithms/queries/unguaranteed/stat"
+import { $$ as q_execute_any_query_executable } from "./algorithms/queries/unguaranteed/execute_any_query_executable"
+import { $$ as q_read_directory } from "./algorithms/queries/unguaranteed/read_directory"
+import { $$ as q_read_file } from "./algorithms/queries/unguaranteed/read_file"
+import { $$ as q_stat } from "./algorithms/queries/unguaranteed/stat"
 
 export type Parameters = {
     'arguments': _et.Array<string>,
