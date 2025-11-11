@@ -73,3 +73,19 @@ export const group_dictionary = <T>(
     })
     return _ei.dictionary_literal(temp).map(($) => _ei.dictionary_literal($))
 }
+
+export const deprecated_build_dictionary = <T>(
+    $: ($c: Dictionary_Builder<T>) => void
+): _et.Dictionary<T> => {
+    const temp: { [key: string]: T } = {}
+    $({
+        'add entry': (key, $) => {
+            if (key in temp) {
+                _ei.panic(`duplicate key in dictionary literal: ${key}`)
+            }
+            temp[key] = $
+        }
+    })
+    return _ei.dictionary_literal(temp)
+}
+
