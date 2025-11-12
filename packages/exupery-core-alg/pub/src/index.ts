@@ -31,3 +31,5 @@ export {
 export * from "./build"
 
 export * from "./create_refinement_context"
+
+export * from "./text_to_character_list"
