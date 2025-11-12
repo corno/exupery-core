@@ -1,39 +1,7 @@
-import { cwd as process_cwd } from "process"
-import { relative as path_relative } from "path"
-
 export type Source_Location = {
     'file': string,
     'line': number,
     'column': number,
-}
-
-/**
- * 
- * @returns the string on the specified line
- */
-function get_line(e: Error, depth: number): string {
-    const regex = /\((.*)\)$/
-    //const regex = /\((.*):(\d+):(\d+)\)$/ //further splitted; file,line,column,
-    if (e.stack === undefined) {
-        throw new Error("NO STACK INFO")
-    }
-    const line = e.stack.split("\n")[depth + 2]
-    const match = regex.exec(line);
-
-    //determine the path relative to the current working directory
-    return path_relative(process_cwd(), (() => {
-        if (match === null) {
-            const begin = "    at /"
-            if (line.startsWith(begin)) {
-                return path_relative(process_cwd(), line.substring(begin.length - 1));
-            } else {
-                throw new Error(`COULD NOT PARSE STACK LINE: ${line}`)
-            }
-        } else {
-            return match[1]
-        }
-    })())
-
 }
 
 /**
@@ -47,6 +15,34 @@ export function get_location_info(depth: number): Source_Location {
     //we create an error, not to be thrown but to be disected for its stack
     const e = new Error(); //don't move this statement to another function, it will change the depth of its stack
 
+
+    function get_line(e: Error, depth: number): string {
+
+
+        if (e.stack === undefined) {
+            throw new Error(`NO STACK INFO`)
+        }
+        const line = e.stack.split("\n")[depth + 2]  //get the right line from the stack (the first two lines are "Error" and this function call)
+
+        const regex = /\((.*)\)$/ //matches the content inside parentheses at the end of a line (the file path with line and column)
+
+        const match = regex.exec(line);
+
+        if (match !== null) {
+            //we have a match
+            return match[1]
+        }
+
+        const begin = "    at /"
+        if (line.startsWith(begin)) {
+            return line.substring(begin.length - 1)
+        }
+
+        throw new Error(`COULD NOT PARSE STACK LINE: ${line}`)
+
+
+    }
+    
     const line = get_line(e, depth)
     const split = line.split(":")
     if (split.length !== 3) {
