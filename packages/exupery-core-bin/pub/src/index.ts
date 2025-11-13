@@ -65,7 +65,7 @@ export type Available_Standard_Resources = {
         'get instream data': _easync.Guaranteed_Query<temp_instream_parameters, d_get_instream_data.Result, null>,
         'read directory': _easync.Unguaranteed_Query<d_read_directory.Parameters, d_read_directory.Result, d_read_directory.Error, null>,
         'read file': _easync.Unguaranteed_Query<d_read_file.Parameters, d_read_file.Result, d_read_file.Error, null>,
-        'stat': _easync.Unguaranteed_Query<d_stat.Parameters, d_stat.Result, d_stat.Error, null>,
+        //'stat': _easync.Unguaranteed_Query<d_stat.Parameters, d_stat.Result, d_stat.Error, null>,
     }
 }
 
@@ -88,7 +88,7 @@ const create_available_resources = (): Available_Standard_Resources => {
             'get instream data': q_get_instream_data,
             'read directory': q_read_directory,
             'read file': q_read_file,
-            'stat': q_stat,
+            // 'stat': q_stat,
         }
     }
 }
@@ -107,7 +107,8 @@ export const run_guaranteed_main_procedure = <Main_Resources>(
         },
         initialize_resources(create_available_resources()),
     ).__start(
-        () => { }
+        () => {
+        }
     )
 }
 
