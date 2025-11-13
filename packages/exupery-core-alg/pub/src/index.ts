@@ -29,6 +29,7 @@ export {
 } from "exupery-core-internals"
 
 export * from "./build"
+export * from "./group"
 
 export * from "./create_refinement_context"
 
