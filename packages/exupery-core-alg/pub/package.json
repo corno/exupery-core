@@ -1,6 +1,6 @@
 {
   "name": "exupery-core-alg",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "license": "ISC",
   "description": "the exupery core package for developing algorithms (as opposed to data types)",
   "author": "Corno",
