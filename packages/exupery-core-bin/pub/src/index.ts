@@ -49,23 +49,23 @@ type temp_instream_parameters = null
 
 export type Available_Standard_Resources = {
     'procedures': {
-        'copy': _et.Unguaranteed_Procedure<d_copy.Parameters, d_copy.Error, null>,
-        'execute any procedure executable': _et.Unguaranteed_Procedure<d_execute_any_procedure_executable.Parameters, d_execute_any_procedure_executable.Error, null>,
-        'execute any smelly procedure executable': _et.Unguaranteed_Procedure<d_execute_any_smelly_procedure_executable.Parameters, d_execute_any_smelly_procedure_executable.Error, null>,
-        'log error': _et.Guaranteed_Procedure<d_log_error.Parameters, null>,
-        'log': _et.Guaranteed_Procedure<d_log.Parameters, null>,
-        'make directory': _et.Unguaranteed_Procedure<d_make_directory.Parameters, d_make_directory.Error, null>,
-        'remove': _et.Unguaranteed_Procedure<d_remove.Parameters, d_remove.Error, null>
-        'write file': _et.Unguaranteed_Procedure<d_write_file.Parameters, d_write_file.Error, null>,
-        'write to stderr': _et.Guaranteed_Procedure<d_write_to_stderr.Parameters, null>,
-        'write to stdout': _et.Guaranteed_Procedure<d_write_to_stdout.Parameters, null>,
+        'copy': _et.Unguaranteed_Procedure_Primed_With_Resources<d_copy.Parameters, d_copy.Error>
+        'execute any procedure executable': _et.Unguaranteed_Procedure_Primed_With_Resources<d_execute_any_procedure_executable.Parameters, d_execute_any_procedure_executable.Error>
+        'execute any smelly procedure executable': _et.Unguaranteed_Procedure_Primed_With_Resources<d_execute_any_smelly_procedure_executable.Parameters, d_execute_any_smelly_procedure_executable.Error>
+        'log error': _et.Guaranteed_Procedure_Primed_With_Resources<d_log_error.Parameters>
+        'log': _et.Guaranteed_Procedure_Primed_With_Resources<d_log.Parameters>
+        'make directory': _et.Unguaranteed_Procedure_Primed_With_Resources<d_make_directory.Parameters, d_make_directory.Error>
+        'remove': _et.Unguaranteed_Procedure_Primed_With_Resources<d_remove.Parameters, d_remove.Error>
+        'write file': _et.Unguaranteed_Procedure_Primed_With_Resources<d_write_file.Parameters, d_write_file.Error>
+        'write to stderr': _et.Guaranteed_Procedure_Primed_With_Resources<d_write_to_stderr.Parameters>
+        'write to stdout': _et.Guaranteed_Procedure_Primed_With_Resources<d_write_to_stdout.Parameters>
     },
     'queries': {
-        'execute any query executable': _et.Unguaranteed_Query<d_execute_any_query_executable.Parameters, d_execute_any_query_executable.Result, d_execute_any_query_executable.Error, null>,
-        'get instream data': _et.Guaranteed_Query<temp_instream_parameters, d_get_instream_data.Result, null>,
-        'read directory': _et.Unguaranteed_Query<d_read_directory.Parameters, d_read_directory.Result, d_read_directory.Error, null>,
-        'read file': _et.Unguaranteed_Query<d_read_file.Parameters, d_read_file.Result, d_read_file.Error, null>,
-        //'stat': _et.Unguaranteed_Query<d_stat.Parameters, d_stat.Result, d_stat.Error, null>,
+        'execute any query executable': _et.Unguaranteed_Query_Primed_With_Resources<d_execute_any_query_executable.Parameters, d_execute_any_query_executable.Result, d_execute_any_query_executable.Error>
+        'get instream data': _et.Guaranteed_Query_Primed_With_Resources<temp_instream_parameters, d_get_instream_data.Result>
+        'read directory': _et.Unguaranteed_Query_Primed_With_Resources<d_read_directory.Parameters, d_read_directory.Result, d_read_directory.Error>
+        'read file': _et.Unguaranteed_Query_Primed_With_Resources<d_read_file.Parameters, d_read_file.Result, d_read_file.Error>
+        //'stat': _et.Unguaranteed_Query_Primed_With_Resources<d_stat.Parameters, d_stat.Result, d_stat.Error>
     }
 }
 
@@ -101,11 +101,10 @@ export const run_guaranteed_main_procedure = <Main_Resources>(
     initialize_resources: ($r: Available_Standard_Resources) => Main_Resources,
     main: _et.Guaranteed_Procedure<Parameters, Main_Resources>
 ): void => {
-    main(
+    main(initialize_resources(create_available_resources()))(
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },
-        initialize_resources(create_available_resources()),
     ).__start(
         () => {
         }
@@ -121,11 +120,11 @@ export const run_unguaranteed_main_procedure = <Main_Resources>(
     initialize_resources: ($r: Available_Standard_Resources) => Main_Resources,
     main: _et.Unguaranteed_Procedure<Parameters, Error, Main_Resources>
 ): void => {
-    main(
+    main(initialize_resources(create_available_resources()))(
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },
-        initialize_resources(create_available_resources())
+        
     ).__start(
         () => {
         },

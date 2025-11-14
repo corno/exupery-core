@@ -14,7 +14,7 @@ import { spawn } from "node:child_process"
  * The executable being executed is assumed to only cause side effects
  * and not return any meaningful data, std::out is therefor ignored
  */
-export const $$: _et.Unguaranteed_Procedure<d.Parameters, d.Error, null> = (
+export const $$: _et.Unguaranteed_Procedure_Primed_With_Resources<d.Parameters, d.Error> = (
     $p,
 ) => {
     const args = $p.args.__get_raw_copy()
