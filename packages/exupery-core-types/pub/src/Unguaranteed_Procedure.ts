@@ -1,5 +1,7 @@
 
-export type Unguaranteed_Procedure<Parameters, Error, Resources> = ($: Parameters, $r: Resources) => Unguaranteed_Procedure_Promise<Error>
+export type Unguaranteed_Procedure<Parameters, Error, Resources> = ($r: Resources) => Unguaranteed_Procedure_Primed_With_Resources<Parameters, Error>
+
+export type Unguaranteed_Procedure_Primed_With_Resources<Parameters, Error> = ($: Parameters) => Unguaranteed_Procedure_Promise<Error>
 
 export type Unguaranteed_Procedure_Promise<Error> = {
     __start: (
