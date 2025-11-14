@@ -21,11 +21,6 @@ export {
     dictionary_literal,
     block,
     refinement,
-    Refinement_Result,
-    Refinement_With_Parameters,
-    Refinement_Without_Parameters,
-    Transformation_With_Parameters,
-    Transformation_Without_Parameters,
 } from "exupery-core-internals"
 
 export * from "./build"
