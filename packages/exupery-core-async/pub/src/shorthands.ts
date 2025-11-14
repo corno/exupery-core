@@ -19,7 +19,7 @@ export const eh = <Parameters, Error, Resources>(
     resources: Resources,
 ): Error_Handler<Error> => {
     return ($: Error) => {
-        action(error_transform($), resources,).__start(() => { })
+        action(resources)(error_transform($)).__start(() => { })
     }
 }
 
@@ -44,7 +44,7 @@ export namespace gp {
                 query.__start(
                     (query_result) => {
                         //run the action
-                        action(query_result, $r).__start(
+                        action($r)(query_result).__start(
                             on_finished
                         )
                     },
@@ -93,7 +93,7 @@ export namespace gq {
             ) => {
                 parameters.__start(
                     (qr_in) => {
-                        the_query(qr_in, resources).__start(
+                        the_query(resources)(qr_in).__start(
                             (result) => {
                                 on_finished(result_transformation(result))
                             },
@@ -144,7 +144,7 @@ export namespace up {
                 query.__start(
                     (query_result) => {
                         //run the action
-                        action(query_result, resources).__start(
+                        action(resources)(query_result).__start(
                             on_success,
                             (error) => {
                                 //transform the error
@@ -292,13 +292,13 @@ export namespace upi {
     export const g = <Parameters, Error, Resources>(
         action: _et.Guaranteed_Procedure<Parameters, Resources>,
         $r: Resources,
-    ): _et.Unguaranteed_Procedure<Parameters, Error, Resources> => ($: Parameters) => {
+    ): _et.Unguaranteed_Procedure<Parameters, Error, Resources> => () => ($: Parameters) => {
         return __create_unguaranteed_procedure({
             'execute': (
                 on_succes,
                 on_error,
             ) => {
-                action($, $r).__start(on_succes)
+                action($r)($).__start(on_succes)
             }
         })
     }
@@ -311,13 +311,13 @@ export namespace upi {
         action: _et.Unguaranteed_Procedure<Parameters, Action_Error, Resources>,
         error_transform: _et.Transformer_Without_Parameters<Action_Error, Error>,
         error_handler?: Error_Handler<Action_Error>,
-    ): _et.Unguaranteed_Procedure<Parameters, Error, Resources> => ($: Parameters, $r: Resources) => {
+    ): _et.Unguaranteed_Procedure<Parameters, Error, Resources> => ($r: Resources) => ($: Parameters) => {
         return __create_unguaranteed_procedure({
             'execute': (
                 on_succes,
                 on_error,
             ) => {
-                action($, $r).__start(
+                action($r)($).__start(
                     on_succes,
                     (error) => {
                         if (error_handler !== undefined) {
@@ -376,7 +376,7 @@ export namespace uq {
             ) => {
                 parameters.__start(
                     (qr_in) => {
-                        the_query(qr_in, resources).__start(
+                        the_query(resources)(qr_in).__start(
                             (result) => {
                                 result_refinement(result).process(
                                     (x) => on_success(x),
@@ -417,7 +417,7 @@ export namespace uq {
             ) => {
                 parameters.__start(
                     (x) => {
-                        the_query(x, resources).__start(
+                        the_query(resources)(x).__start(
                             ($) => {
                                 result_refinement($).process(
                                     (x) => on_success(x),
