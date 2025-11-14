@@ -1,0 +1,50 @@
+import * as _et from 'exupery-core-types'
+import * as _ei from 'exupery-core-internals'
+
+import  { unguaranteed_query_dictionary } from "../query/unguaranteed_query_dictionary"
+
+import { __create_unguaranteed_procedure } from '../algorithms/procedure/initialize_unguaranteed_procedure'
+import { Basic_Unguaranteed_Query_Promise } from '../types/Basic_Unguaranteed_Query'
+
+export type Conditional_Multiple_Error <Precondition_Error, Procedure_Error> =
+| ['preconditions', _et.Dictionary<Precondition_Error>]
+| ['procedure', Procedure_Error]
+
+export const conditional_multiple = <Precondition_Error, Procedure_Error>(
+    preconditions: _et.Dictionary<Basic_Unguaranteed_Query_Promise<boolean, Precondition_Error>>,
+    procedure: _et.Unguaranteed_Procedure_Promise<Procedure_Error>,
+): _et.Unguaranteed_Procedure_Promise<Conditional_Multiple_Error<Precondition_Error, Procedure_Error>> => {
+    return __create_unguaranteed_procedure({
+        'execute': (on_success, on_exception) => {
+            unguaranteed_query_dictionary(
+                preconditions,
+            ).__start(
+                ($) => {
+                    let has_errors = false
+                    $.map(($) => {
+                        if (!$) {
+                            has_errors = true
+                        }
+                    })
+                    if (!has_errors) {
+                        // all preconditions passed
+                        procedure.__start(
+                            on_success,
+                            (e) => {
+                                on_exception(
+                                    ['procedure', e]
+                                )
+                            }
+                        )
+                    } else {
+                        //the preconditions failed, so we are *successfully* skipping the procedure
+                        on_success()
+                    }
+                },
+                ($) => {
+                    on_exception(['preconditions', $])
+                }
+            )
+        }
+    })
+}
