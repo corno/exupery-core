@@ -1,4 +1,3 @@
-import * as _et from "exupery-core-types"
 
 import { Guaranteed_Query_Promise } from "./Guaranteed_Query"
 

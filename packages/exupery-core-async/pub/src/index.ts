@@ -5,8 +5,8 @@ import * as _ei from "exupery-core-internals"
 
 export * from "./types/Guaranteed_Procedure"
 export * from "./types/Unguaranteed_Procedure"
-export * from "./types/Unguaranteed_Query"
-export * from "./types/Guaranteed_Query"
+export * from "./types/Basic_Unguaranteed_Query"
+export * from "./types/Basic_Guaranteed_Query"
 
 //functions
 
@@ -20,8 +20,8 @@ export * from "./algorithms/procedure/initialize_unguaranteed_procedure"
 export * from "./shorthands"
 
 
-import { Guaranteed_Query_Promise } from "./types/Guaranteed_Query"
-import { Unguaranteed_Query_Promise } from "./types/Unguaranteed_Query"
+import { Guaranteed_Query_Promise } from "./types/Basic_Guaranteed_Query"
+import { Unguaranteed_Query_Promise } from "./types/Basic_Unguaranteed_Query"
 
 import { __create_guaranted_procedure } from "./algorithms/procedure/initialize_guaranteed_procedure"
 import { __create_unguaranteed_procedure } from "./algorithms/procedure/initialize_unguaranteed_procedure"

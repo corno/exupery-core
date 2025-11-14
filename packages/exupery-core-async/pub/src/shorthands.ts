@@ -1,14 +1,14 @@
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
-import { Basic_Unguaranteed_Query_Promise } from "./types/Unguaranteed_Query"
-import { Basic_Guaranteed_Query_Promise } from "./types/Guaranteed_Query"
+import { Basic_Unguaranteed_Query_Promise } from "./types/Basic_Unguaranteed_Query"
+import { Basic_Guaranteed_Query_Promise } from "./types/Basic_Guaranteed_Query"
 import { Guaranteed_Procedure_Promise, Guaranteed_Procedure } from "./types/Guaranteed_Procedure"
 import { Unguaranteed_Procedure, Unguaranteed_Procedure_Promise } from "./types/Unguaranteed_Procedure"
 import { __create_unguaranteed_procedure } from "./algorithms/procedure/initialize_unguaranteed_procedure"
 import { __create_guaranted_procedure } from "./algorithms/procedure/initialize_guaranteed_procedure"
-import { Unguaranteed_Query } from "./types/Unguaranteed_Query"
-import { Guaranteed_Query } from "./types/Guaranteed_Query"
+import { Unguaranteed_Query } from "./types/Basic_Unguaranteed_Query"
+import { Guaranteed_Query } from "./types/Basic_Guaranteed_Query"
 import { create_asynchronous_processes_monitor } from "./create_asynchronous_processes_monitor"
 import { Error_Handler } from "./types/Error_Handler"
 

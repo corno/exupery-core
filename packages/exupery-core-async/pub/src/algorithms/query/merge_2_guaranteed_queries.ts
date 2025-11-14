@@ -2,7 +2,7 @@
 import * as pt from 'exupery-core-types'
 
 import { __create_guaranteed_query } from "./create_guaranteed_query"
-import { Guaranteed_Query_Promise } from "../../types/Guaranteed_Query"
+import { Guaranteed_Query_Promise } from "../../types/Basic_Guaranteed_Query"
 
 export type Sync_Tuple_2<T1, T2> = {
     readonly 'first': T1

@@ -1,6 +1,6 @@
 import * as _et from "exupery-core-types"
 
-import { Guaranteed_Query_Promise } from "../../types/Guaranteed_Query"
+import { Guaranteed_Query_Promise } from "../../types/Basic_Guaranteed_Query"
 
 type Executer<T> = {
     'execute': (

@@ -2,8 +2,8 @@ import * as _et from "exupery-core-types"
 import * as _ei from "exupery-core-internals"
 
 import { __create_guaranteed_query } from "../query/create_guaranteed_query"
-import { Unguaranteed_Query_Promise } from "../../types/Unguaranteed_Query"
-import { Guaranteed_Query_Promise } from "../../types/Guaranteed_Query"
+import { Unguaranteed_Query_Promise } from "../../types/Basic_Unguaranteed_Query"
+import { Guaranteed_Query_Promise } from "../../types/Basic_Guaranteed_Query"
 
 import { Unguaranteed_Procedure_Promise } from "../../types/Unguaranteed_Procedure"
 import { __create_guaranted_procedure } from "./initialize_guaranteed_procedure"
