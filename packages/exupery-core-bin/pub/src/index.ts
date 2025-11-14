@@ -19,16 +19,16 @@ import * as d_write_file from "exupery-resources/dist/interface/generated/pareto
 import * as d_write_to_stderr from "exupery-resources/dist/interface/generated/pareto/schemas/write_to_stderr/data_types/target"
 import * as d_write_to_stdout from "exupery-resources/dist/interface/generated/pareto/schemas/write_to_stdout/data_types/target"
 
-import { $$ as p_copy_signature } from "./algorithms/procedures/unguaranteed/copy"
-import { $$ as p_execute_any_procedure_executable } from "./algorithms/procedures/unguaranteed/execute_any_procedure_executable"
-import { $$ as p_execute_any_smelly_procedure_executable } from "./algorithms/procedures/unguaranteed/execute_any_smelly_procedure_executable"
-import { $$ as p_log } from "./algorithms/procedures/guaranteed/log"
-import { $$ as p_log_error } from "./algorithms/procedures/guaranteed/log_error"
-import { $$ as p_make_directory } from "./algorithms/procedures/unguaranteed/make_directory"
-import { $$ as p_remove } from "./algorithms/procedures/unguaranteed/remove"
-import { $$ as p_write_file } from "./algorithms/procedures/unguaranteed/write_file"
-import { $$ as p_write_to_stderr } from "./algorithms/procedures/guaranteed/write_to_stderr"
-import { $$ as p_write_to_stdout } from "./algorithms/procedures/guaranteed/write_to_stdout"
+import { $$ as p_copy_signature } from "./algorithms/procedures/copy"
+import { $$ as p_execute_any_procedure_executable } from "./algorithms/procedures/execute_any_procedure_executable"
+import { $$ as p_execute_any_smelly_procedure_executable } from "./algorithms/procedures/execute_any_smelly_procedure_executable"
+import { $$ as p_log } from "./algorithms/procedures/log"
+import { $$ as p_log_error } from "./algorithms/procedures/log_error"
+import { $$ as p_make_directory } from "./algorithms/procedures/make_directory"
+import { $$ as p_remove } from "./algorithms/procedures/remove"
+import { $$ as p_write_file } from "./algorithms/procedures/write_file"
+import { $$ as p_write_to_stderr } from "./algorithms/procedures/write_to_stderr"
+import { $$ as p_write_to_stdout } from "./algorithms/procedures/write_to_stdout"
 
 
 import { $$ as q_execute_any_query_executable } from "./algorithms/queries/unguaranteed/execute_any_query_executable"
@@ -49,23 +49,23 @@ type temp_instream_parameters = null
 
 export type Available_Standard_Resources = {
     'procedures': {
-        'copy': _et.Unguaranteed_Procedure_Primed_With_Resources<d_copy.Parameters, d_copy.Error>
-        'execute any procedure executable': _et.Unguaranteed_Procedure_Primed_With_Resources<d_execute_any_procedure_executable.Parameters, d_execute_any_procedure_executable.Error>
-        'execute any smelly procedure executable': _et.Unguaranteed_Procedure_Primed_With_Resources<d_execute_any_smelly_procedure_executable.Parameters, d_execute_any_smelly_procedure_executable.Error>
+        'copy': _et.Procedure_Primed_With_Resources<d_copy.Parameters, d_copy.Error>
+        'execute any procedure executable': _et.Procedure_Primed_With_Resources<d_execute_any_procedure_executable.Parameters, d_execute_any_procedure_executable.Error>
+        'execute any smelly procedure executable': _et.Procedure_Primed_With_Resources<d_execute_any_smelly_procedure_executable.Parameters, d_execute_any_smelly_procedure_executable.Error>
         'log error': _et.Guaranteed_Procedure_Primed_With_Resources<d_log_error.Parameters>
         'log': _et.Guaranteed_Procedure_Primed_With_Resources<d_log.Parameters>
-        'make directory': _et.Unguaranteed_Procedure_Primed_With_Resources<d_make_directory.Parameters, d_make_directory.Error>
-        'remove': _et.Unguaranteed_Procedure_Primed_With_Resources<d_remove.Parameters, d_remove.Error>
-        'write file': _et.Unguaranteed_Procedure_Primed_With_Resources<d_write_file.Parameters, d_write_file.Error>
+        'make directory': _et.Procedure_Primed_With_Resources<d_make_directory.Parameters, d_make_directory.Error>
+        'remove': _et.Procedure_Primed_With_Resources<d_remove.Parameters, d_remove.Error>
+        'write file': _et.Procedure_Primed_With_Resources<d_write_file.Parameters, d_write_file.Error>
         'write to stderr': _et.Guaranteed_Procedure_Primed_With_Resources<d_write_to_stderr.Parameters>
         'write to stdout': _et.Guaranteed_Procedure_Primed_With_Resources<d_write_to_stdout.Parameters>
     },
     'queries': {
-        'execute any query executable': _et.Unguaranteed_Query_Primed_With_Resources<d_execute_any_query_executable.Parameters, d_execute_any_query_executable.Result, d_execute_any_query_executable.Error>
+        'execute any query executable': _et.Query_Primed_With_Resources<d_execute_any_query_executable.Parameters, d_execute_any_query_executable.Result, d_execute_any_query_executable.Error>
         'get instream data': _et.Guaranteed_Query_Primed_With_Resources<temp_instream_parameters, d_get_instream_data.Result>
-        'read directory': _et.Unguaranteed_Query_Primed_With_Resources<d_read_directory.Parameters, d_read_directory.Result, d_read_directory.Error>
-        'read file': _et.Unguaranteed_Query_Primed_With_Resources<d_read_file.Parameters, d_read_file.Result, d_read_file.Error>
-        //'stat': _et.Unguaranteed_Query_Primed_With_Resources<d_stat.Parameters, d_stat.Result, d_stat.Error>
+        'read directory': _et.Query_Primed_With_Resources<d_read_directory.Parameters, d_read_directory.Result, d_read_directory.Error>
+        'read file': _et.Query_Primed_With_Resources<d_read_file.Parameters, d_read_file.Result, d_read_file.Error>
+        //'stat': _et.Query_Primed_With_Resources<d_stat.Parameters, d_stat.Result, d_stat.Error>
     }
 }
 
@@ -116,7 +116,7 @@ export const run_guaranteed_main_procedure = (
  * returned value when the async value completes.
  */
 export const run_unguaranteed_main_procedure = (
-    get_main: ($r: Available_Standard_Resources) => _et.Unguaranteed_Procedure_Primed_With_Resources<Parameters, Error>,
+    get_main: ($r: Available_Standard_Resources) => _et.Procedure_Primed_With_Resources<Parameters, Error>,
 ): void => {
     get_main(create_available_resources())(
         {

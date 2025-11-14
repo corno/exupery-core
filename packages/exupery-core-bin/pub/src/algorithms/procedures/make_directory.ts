@@ -8,7 +8,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/ma
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/unguaranteed/make_directory"
 
 
-export const $$: _et.Unguaranteed_Procedure_Primed_With_Resources<d.Parameters, d.Error> = (
+export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = (
     $p,
 ) => {
     const __possibly_escape_filename = (path: string, escape: boolean): string => {

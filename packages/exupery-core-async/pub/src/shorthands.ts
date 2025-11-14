@@ -2,10 +2,10 @@ import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
 import { Basic_Query_Promise } from "./types/Basic_Query"
-import { __create_unguaranteed_procedure } from "./algorithms/procedure/initialize_procedure"
+import { __create_procedure } from "./algorithms/procedure/initialize_procedure"
 import { create_asynchronous_processes_monitor } from "./create_asynchronous_processes_monitor"
 import { Error_Handler } from "./types/Error_Handler"
-export namespace up {
+export namespace p {
 
     /**
      * 
@@ -17,7 +17,7 @@ export namespace up {
         query: Basic_Query_Promise<Parameters, Error>,
         resources: Resources,
     ): _et.Procedure_Promise<Error> => {
-        return __create_unguaranteed_procedure({
+        return __create_procedure({
             'execute': (
                 on_success,
                 on_error,
@@ -49,7 +49,7 @@ export namespace up {
     export const sequence = <Error>(
         steps: _et.Procedure_Promise<Error>[]
     ): _et.Procedure_Promise<Error> => {
-        return __create_unguaranteed_procedure({
+        return __create_procedure({
             'execute': (
                 on_success,
                 on_error,
@@ -82,7 +82,7 @@ export namespace up {
         aggregate_exceptions: _et.Transformer_Without_Parameters<_et.Array<Element_Error>, Error>,
 
     ): _et.Procedure_Promise<Error> => {
-        return __create_unguaranteed_procedure({
+        return __create_procedure({
             'execute': (
                 on_success,
                 on_error,
@@ -128,7 +128,7 @@ export namespace up {
         the_dictionary: _et.Dictionary<_et.Procedure_Promise<Element_Error>>,
         aggregate_exceptions: _et.Transformer_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
     ): _et.Procedure_Promise<Error> => {
-        return __create_unguaranteed_procedure({
+        return __create_procedure({
             'execute': (
                 on_success,
                 on_error,
@@ -166,7 +166,7 @@ export namespace up {
 
 }
 
-export namespace upi {
+export namespace pi {
 
 
     /**
@@ -178,7 +178,7 @@ export namespace upi {
         error_transform: _et.Transformer_Without_Parameters<Action_Error, Error>,
         error_handler?: Error_Handler<Action_Error>,
     ): _et.Procedure<Parameters, Error, Resources> => ($r: Resources) => ($: Parameters) => {
-        return __create_unguaranteed_procedure({
+        return __create_procedure({
             'execute': (
                 on_succes,
                 on_error,
@@ -198,7 +198,7 @@ export namespace upi {
 
 }
 
-export namespace uq {
+export namespace q {
 
     /**
      * 
@@ -219,7 +219,7 @@ export namespace uq {
     }
 
     /**
-     * unguaranteed query
+     * query
      * @param the_query uqi
      * @param parameters u.q
      * @param result_refinement ut
@@ -267,7 +267,7 @@ export namespace uq {
 
 }
 
-export namespace ut {
+export namespace t {
 
     /**
      * 

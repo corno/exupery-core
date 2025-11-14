@@ -1,6 +1,6 @@
 import * as _et from 'exupery-core-types'
 import * as _ei from 'exupery-core-internals'
-import { __create_unguaranteed_procedure } from '../algorithms/procedure/initialize_procedure'
+import { __create_procedure } from '../algorithms/procedure/initialize_procedure'
 
 export type Assert_Async_Error<Assertion_Error, Procedure_Error> =
     | ['assertion error', Assertion_Error]
@@ -11,7 +11,7 @@ export const assert_async = <Assertion_Error, Procedure_Error>(
     assertion: _et.Query_Promise<boolean, Assertion_Error>,
     procedure: _et.Procedure_Promise<Procedure_Error>,
 ): _et.Procedure_Promise<Assert_Async_Error<Assertion_Error, Procedure_Error>> => {
-    return __create_unguaranteed_procedure({
+    return __create_procedure({
         'execute': (on_success, on_exception) => {
             assertion.__start(
                 ($) => {

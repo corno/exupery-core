@@ -21,14 +21,14 @@ export * from "./procedure/conditional_sync"
 export * from "./procedure/sequence"
 export * from "./procedure/three_steps"
 export * from "./procedure/two_steps"
-export * from "./procedure/unguaranteed_procedure_dictionary"
+export * from "./procedure/procedure_dictionary"
 
 // query exports
 export * from "./query/transform_query"
-export * from "./query/unguaranteed_query_dictionary"
+export * from "./query/query_dictionary"
 
-import { __create_unguaranteed_procedure } from "./algorithms/procedure/initialize_procedure"
-import { __create_unguaranteed_query } from "./algorithms/query/create_query"
+import { __create_procedure } from "./algorithms/procedure/initialize_procedure"
+import { __create_query } from "./algorithms/query/create_query"
 
 
 
@@ -37,7 +37,7 @@ export const query = {
     'create result': <T, E>(
         $: T
     ): _et.Query_Promise<T, E> => {
-        return __create_unguaranteed_query(
+        return __create_query(
             {
                 'execute': (on_value) => {
                     on_value($)
@@ -48,7 +48,7 @@ export const query = {
     'raise exception': <T, E>(
         $: E
     ): _et.Query_Promise<T, E> => {
-        return __create_unguaranteed_query(
+        return __create_query(
             {
                 'execute': (on_value, on_exception) => {
                     on_exception($)

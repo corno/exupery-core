@@ -1,6 +1,6 @@
 import * as _et from 'exupery-core-types'
 
-import { __create_unguaranteed_procedure } from '../algorithms/procedure/initialize_procedure'
+import { __create_procedure } from '../algorithms/procedure/initialize_procedure'
 
 export type Assert_Sync_Error<Procedure_Error> =
     | ['assertion failed', null]
@@ -10,7 +10,7 @@ export const assert_sync = <Assertion_Error, Procedure_Error>(
     assertion: boolean,
     procedure: _et.Procedure_Promise<Procedure_Error>,
 ): _et.Procedure_Promise<Assert_Sync_Error<Procedure_Error>> => {
-    return __create_unguaranteed_procedure({
+    return __create_procedure({
         'execute': (on_success, on_exception) => {
             if (!assertion) {
                 on_exception(['assertion failed', null])
