@@ -8,49 +8,51 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/re
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/unguaranteed/remove"
 
 
-export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = (
-    $p,
-) => {
-    const __possibly_escape_filename = (path: string, escape: boolean): string => {
-        if (escape) {
-            return path.replace(/ /g, '_')
+export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = {
+    'execute with synchrounous data': (
+        $p,
+    ) => {
+        const __possibly_escape_filename = (path: string, escape: boolean): string => {
+            if (escape) {
+                return path.replace(/ /g, '_')
+            }
+            return path
         }
-        return path
-    }
-    return _easync.__create_procedure({
-        'execute': (on_success, on_exception) => {
-            fs_rm(
-                __possibly_escape_filename($p.path.path, $p.path['escape spaces in path']),
-                {
-                    'recursive': true,
-                },
-                (err) => {
+        return _easync.__create_procedure({
+            'execute': (on_success, on_exception) => {
+                fs_rm(
+                    __possibly_escape_filename($p.path.path, $p.path['escape spaces in path']),
+                    {
+                        'recursive': true,
+                    },
+                    (err) => {
 
-                    if (err) {
-                        if (err.code === 'ENOENT' && !$p['error if not exists']) {
-                            on_success()
+                        if (err) {
+                            if (err.code === 'ENOENT' && !$p['error if not exists']) {
+                                on_success()
+                            } else {
+                                on_exception(_ei.block((): d.Error => {
+                                    if (err.code === 'ENOENT') {
+                                        return ['node does not exist', null]
+                                    }
+                                    if (err.code === 'EACCES' || err.code === 'EPERM') {
+                                        return ['permission denied', null]
+                                    }
+                                    // if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
+                                    //     return ['node is not a directory', null]
+                                    // }
+                                    // if (err.code === 'ERR_FS_EISDIR') {
+                                    //     return ['node is a directory', null]
+                                    // }
+                                    return _ei.panic(`unhandled fs.rm error code: ${err.code}`)
+                                }))
+                            }
                         } else {
-                            on_exception(_ei.block((): d.Error => {
-                                if (err.code === 'ENOENT') {
-                                    return ['node does not exist', null]
-                                }
-                                if (err.code === 'EACCES' || err.code === 'EPERM') {
-                                    return ['permission denied', null]
-                                }
-                                // if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
-                                //     return ['node is not a directory', null]
-                                // }
-                                // if (err.code === 'ERR_FS_EISDIR') {
-                                //     return ['node is a directory', null]
-                                // }
-                                return _ei.panic(`unhandled fs.rm error code: ${err.code}`)
-                            }))
+                            on_success()
                         }
-                    } else {
-                        on_success()
                     }
-                }
-            )
-        }
-    })
+                )
+            }
+        })
+    }
 }

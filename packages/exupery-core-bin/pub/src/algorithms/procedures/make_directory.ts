@@ -8,35 +8,37 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/ma
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/unguaranteed/make_directory"
 
 
-export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = (
-    $p,
-) => {
-    const __possibly_escape_filename = (path: string, escape: boolean): string => {
-        if (escape) {
-            return path.replace(/ /g, '_')
+export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = {
+    'execute with synchrounous data': (
+        $p,
+    ) => {
+        const __possibly_escape_filename = (path: string, escape: boolean): string => {
+            if (escape) {
+                return path.replace(/ /g, '_')
+            }
+            return path
         }
-        return path
-    }
-    return _easync.__create_procedure({
-        'execute': (on_success, on_exception) => {
-            fs_mkdir(
-                __possibly_escape_filename($p.path, $p['escape spaces in path']),
-                {
-                    'recursive': true,
-                },
-                (err, path) => {
-                    if (err) {
-                        on_exception(_ei.block((): d.Error => {
-                            if (err.code === 'EEXIST') {
-                                return ['directory already exists', null]
-                            }
-                            return _ei.panic(`unhandled fs.mkdir error code: ${err.code}`)
-                        }))
-                    } else {
-                        on_success()
+        return _easync.__create_procedure({
+            'execute': (on_success, on_exception) => {
+                fs_mkdir(
+                    __possibly_escape_filename($p.path, $p['escape spaces in path']),
+                    {
+                        'recursive': true,
+                    },
+                    (err, path) => {
+                        if (err) {
+                            on_exception(_ei.block((): d.Error => {
+                                if (err.code === 'EEXIST') {
+                                    return ['directory already exists', null]
+                                }
+                                return _ei.panic(`unhandled fs.mkdir error code: ${err.code}`)
+                            }))
+                        } else {
+                            on_success()
+                        }
                     }
-                }
-            )
-        }
-    })
+                )
+            }
+        })
+    }
 }

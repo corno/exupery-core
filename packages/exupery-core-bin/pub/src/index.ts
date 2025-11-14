@@ -102,7 +102,7 @@ const create_available_resources = (): Available_Standard_Resources => {
 export const run_main_procedure = (
     get_main: ($r: Available_Standard_Resources) => _et.Procedure_Primed_With_Resources<Parameters, Error>,
 ): void => {
-    get_main(create_available_resources())(
+    get_main(create_available_resources())['execute with synchrounous data'](
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },
