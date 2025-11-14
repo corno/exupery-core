@@ -32,10 +32,3 @@ export type Unguaranteed_Query_Promise<Result, Error> = {
         on_error: ($: Error) => void
     ): void
 }
-
-export type Basic_Unguaranteed_Query_Promise<Result, Error> = {
-    __start: (
-        on_success: (result: Result) => void,
-        on_error: (error: Error) => void,
-    ) => void
-}
