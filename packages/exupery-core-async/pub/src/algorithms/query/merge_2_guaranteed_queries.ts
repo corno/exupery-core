@@ -1,8 +1,7 @@
 
-import * as pt from 'exupery-core-types'
+import * as _et from 'exupery-core-types'
 
 import { __create_guaranteed_query } from "./create_guaranteed_query"
-import { Guaranteed_Query_Promise } from "../../types/Basic_Guaranteed_Query"
 
 export type Sync_Tuple_2<T1, T2> = {
     readonly 'first': T1
@@ -10,9 +9,9 @@ export type Sync_Tuple_2<T1, T2> = {
 };
 
 export function merge_2_unguaranteed_queries<T1, T2>(
-    first: Guaranteed_Query_Promise<T1>,
-    second: Guaranteed_Query_Promise<T2>,
-): Guaranteed_Query_Promise<Sync_Tuple_2<T1, T2>> {
+    first: _et.Guaranteed_Query_Promise<T1>,
+    second: _et.Guaranteed_Query_Promise<T2>,
+): _et.Guaranteed_Query_Promise<Sync_Tuple_2<T1, T2>> {
     return __create_guaranteed_query(
         {
             'execute': (on_value) => {

@@ -3,8 +3,6 @@ import * as _ei from "exupery-core-internals"
 
 //types
 
-export * from "./types/Guaranteed_Procedure"
-export * from "./types/Unguaranteed_Procedure"
 export * from "./types/Basic_Unguaranteed_Query"
 export * from "./types/Basic_Guaranteed_Query"
 
@@ -19,10 +17,6 @@ export * from "./algorithms/procedure/initialize_unguaranteed_procedure"
 
 export * from "./shorthands"
 
-
-import { Guaranteed_Query_Promise } from "./types/Basic_Guaranteed_Query"
-import { Unguaranteed_Query_Promise } from "./types/Basic_Unguaranteed_Query"
-
 import { __create_guaranted_procedure } from "./algorithms/procedure/initialize_guaranteed_procedure"
 import { __create_unguaranteed_procedure } from "./algorithms/procedure/initialize_unguaranteed_procedure"
 import { __create_guaranteed_query } from "./algorithms/query/create_guaranteed_query"
@@ -33,7 +27,7 @@ export const query = {
     'guaranteed': {
         'create result': <T>(
             $: T
-        ): Guaranteed_Query_Promise<T> => {
+        ): _et.Guaranteed_Query_Promise<T> => {
             return __create_guaranteed_query(
                 {
                     'execute': (on_value) => {
@@ -46,7 +40,7 @@ export const query = {
     'unguaranteed': {
         'create result': <T, E>(
             $: T
-        ): Unguaranteed_Query_Promise<T, E> => {
+        ): _et.Unguaranteed_Query_Promise<T, E> => {
             return __create_unguaranteed_query(
                 {
                     'execute': (on_value) => {
@@ -57,7 +51,7 @@ export const query = {
         },
         'raise exception': <T, E>(
             $: E
-        ): Unguaranteed_Query_Promise<T, E> => {
+        ): _et.Unguaranteed_Query_Promise<T, E> => {
             return __create_unguaranteed_query(
                 {
                     'execute': (on_value, on_exception) => {

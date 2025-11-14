@@ -3,12 +3,8 @@ import * as _et from 'exupery-core-types'
 
 import { Basic_Unguaranteed_Query_Promise } from "./types/Basic_Unguaranteed_Query"
 import { Basic_Guaranteed_Query_Promise } from "./types/Basic_Guaranteed_Query"
-import { Guaranteed_Procedure_Promise, Guaranteed_Procedure } from "./types/Guaranteed_Procedure"
-import { Unguaranteed_Procedure, Unguaranteed_Procedure_Promise } from "./types/Unguaranteed_Procedure"
 import { __create_unguaranteed_procedure } from "./algorithms/procedure/initialize_unguaranteed_procedure"
 import { __create_guaranted_procedure } from "./algorithms/procedure/initialize_guaranteed_procedure"
-import { Unguaranteed_Query } from "./types/Basic_Unguaranteed_Query"
-import { Guaranteed_Query } from "./types/Basic_Guaranteed_Query"
 import { create_asynchronous_processes_monitor } from "./create_asynchronous_processes_monitor"
 import { Error_Handler } from "./types/Error_Handler"
 
@@ -18,8 +14,8 @@ import { Error_Handler } from "./types/Error_Handler"
  * @param error_transform gt
  */
 export const eh = <Parameters, Error, Resources>(
-    action: Guaranteed_Procedure<Parameters, Resources>,
-    error_transform: _ei.Transformation_Without_Parameters<Error, Parameters>,
+    action: _et.Guaranteed_Procedure<Parameters, Resources>,
+    error_transform: _et.Transformer_Without_Parameters<Error, Parameters>,
     resources: Resources,
 ): Error_Handler<Error> => {
     return ($: Error) => {
@@ -36,10 +32,10 @@ export namespace gp {
      * @returns 
      */
     export const action = <Parameters, Resources>(
-        action: Guaranteed_Procedure<Parameters, Resources>,
+        action: _et.Guaranteed_Procedure<Parameters, Resources>,
         query: Basic_Guaranteed_Query_Promise<Parameters>,
         $r: Resources,
-    ): Guaranteed_Procedure_Promise => {
+    ): _et.Guaranteed_Procedure_Promise => {
         return {
             __start: (
                 on_finished,
@@ -86,9 +82,9 @@ export namespace gq {
      * @returns 
      */
     export const g = <Result_After_Transformation, Parameters, Query_Result, Resources>(
-        the_query: Guaranteed_Query<Parameters, Query_Result, Resources>,
+        the_query: _et.Guaranteed_Query<Parameters, Query_Result, Resources>,
         parameters: Basic_Guaranteed_Query_Promise<Parameters>,
-        result_transformation: _ei.Transformation_Without_Parameters<Query_Result, Result_After_Transformation>,
+        result_transformation: _et.Transformer_Without_Parameters<Query_Result, Result_After_Transformation>,
         resources: Resources,
     ): Basic_Guaranteed_Query_Promise<Result_After_Transformation> => {
         return {
@@ -119,8 +115,8 @@ export namespace gt {
      * @returns 
      */
     export const g = <In, Out>(
-        the_transformation: _ei.Transformation_Without_Parameters<In, Out>,
-    ): _ei.Transformation_Without_Parameters<In, Out> => {
+        the_transformation: _et.Transformer_Without_Parameters<In, Out>,
+    ): _et.Transformer_Without_Parameters<In, Out> => {
         return ($: In) => the_transformation($)
     }
 
@@ -134,10 +130,10 @@ export namespace up {
      * @param query u.q
      */
     export const action = <Error, Parameters, Resources>(
-        action: Unguaranteed_Procedure<Parameters, Error, Resources>,
+        action: _et.Unguaranteed_Procedure<Parameters, Error, Resources>,
         query: Basic_Unguaranteed_Query_Promise<Parameters, Error>,
         resources: Resources,
-    ): Unguaranteed_Procedure_Promise<Error> => {
+    ): _et.Unguaranteed_Procedure_Promise<Error> => {
         return __create_unguaranteed_procedure({
             'execute': (
                 on_success,
@@ -168,8 +164,8 @@ export namespace up {
      * @returns 
      */
     export const sequence = <Error>(
-        steps: Unguaranteed_Procedure_Promise<Error>[]
-    ): Unguaranteed_Procedure_Promise<Error> => {
+        steps: _et.Unguaranteed_Procedure_Promise<Error>[]
+    ): _et.Unguaranteed_Procedure_Promise<Error> => {
         return __create_unguaranteed_procedure({
             'execute': (
                 on_success,
@@ -199,10 +195,10 @@ export namespace up {
      * @returns 
      */
     export const array = <Error, Element_Error>(
-        the_array: _et.Array<Unguaranteed_Procedure_Promise<Element_Error>>,
-        aggregate_exceptions: _ei.Transformation_Without_Parameters<_et.Array<Element_Error>, Error>,
+        the_array: _et.Array<_et.Unguaranteed_Procedure_Promise<Element_Error>>,
+        aggregate_exceptions: _et.Transformer_Without_Parameters<_et.Array<Element_Error>, Error>,
 
-    ): Unguaranteed_Procedure_Promise<Error> => {
+    ): _et.Unguaranteed_Procedure_Promise<Error> => {
         return __create_unguaranteed_procedure({
             'execute': (
                 on_success,
@@ -246,9 +242,9 @@ export namespace up {
      * @returns 
      */
     export const dictionary = <Error, Element_Error>(
-        the_dictionary: _et.Dictionary<Unguaranteed_Procedure_Promise<Element_Error>>,
-        aggregate_exceptions: _ei.Transformation_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
-    ): Unguaranteed_Procedure_Promise<Error> => {
+        the_dictionary: _et.Dictionary<_et.Unguaranteed_Procedure_Promise<Element_Error>>,
+        aggregate_exceptions: _et.Transformer_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
+    ): _et.Unguaranteed_Procedure_Promise<Error> => {
         return __create_unguaranteed_procedure({
             'execute': (
                 on_success,
@@ -294,9 +290,9 @@ export namespace upi {
      * @param action gpi
      */
     export const g = <Parameters, Error, Resources>(
-        action: Guaranteed_Procedure<Parameters, Resources>,
+        action: _et.Guaranteed_Procedure<Parameters, Resources>,
         $r: Resources,
-    ): Unguaranteed_Procedure<Parameters, Error, Resources> => ($: Parameters) => {
+    ): _et.Unguaranteed_Procedure<Parameters, Error, Resources> => ($: Parameters) => {
         return __create_unguaranteed_procedure({
             'execute': (
                 on_succes,
@@ -312,10 +308,10 @@ export namespace upi {
      * @param action upi
      */
     export const u = <Parameters, Error, Action_Error, Resources>(
-        action: Unguaranteed_Procedure<Parameters, Action_Error, Resources>,
-        error_transform: _ei.Transformation_Without_Parameters<Action_Error, Error>,
+        action: _et.Unguaranteed_Procedure<Parameters, Action_Error, Resources>,
+        error_transform: _et.Transformer_Without_Parameters<Action_Error, Error>,
         error_handler?: Error_Handler<Action_Error>,
-    ): Unguaranteed_Procedure<Parameters, Error, Resources> => ($: Parameters, $r: Resources) => {
+    ): _et.Unguaranteed_Procedure<Parameters, Error, Resources> => ($: Parameters, $r: Resources) => {
         return __create_unguaranteed_procedure({
             'execute': (
                 on_succes,
@@ -366,11 +362,11 @@ export namespace uq {
      * @returns 
      */
     export const u = <Result_After_Transformation, Error, Parameters, Query_Result, Query_Error, Resources>(
-        the_query: Unguaranteed_Query<Parameters, Query_Result, Query_Error, Resources>,
+        the_query: _et.Unguaranteed_Query<Parameters, Query_Result, Query_Error, Resources>,
         parameters: Basic_Unguaranteed_Query_Promise<Parameters, Error>,
         resources: Resources,
-        result_refinement: _ei.Refinement_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
-        error_transform: _ei.Transformation_Without_Parameters<Query_Error, Error>,
+        result_refinement: _et.Refiner_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
+        error_transform: _et.Transformer_Without_Parameters<Query_Error, Error>,
         error_handler?: Error_Handler<Query_Error>,
     ): Basic_Unguaranteed_Query_Promise<Result_After_Transformation, Error> => {
         return {
@@ -409,9 +405,9 @@ export namespace uq {
      * @param result_refinement ut
      */
     export const g = <Result_After_Transformation, Error, Parameters, Query_Result, Resources>(
-        the_query: Guaranteed_Query<Parameters, Query_Result, Resources>,
+        the_query: _et.Guaranteed_Query<Parameters, Query_Result, Resources>,
         parameters: Basic_Unguaranteed_Query_Promise<Parameters, Error>,
-        result_refinement: _ei.Refinement_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
+        result_refinement: _et.Refiner_Without_Parameters<Query_Result, Result_After_Transformation, Error>,
         resources: Resources
     ): Basic_Unguaranteed_Query_Promise<Result_After_Transformation, Error> => {
         return {
@@ -448,10 +444,10 @@ export namespace ut {
      * @returns 
      */
     export const u = <In, Out, Error, Transformation_Error>(
-        the_refinement: _ei.Refinement_Without_Parameters<In, Out, Transformation_Error>,
-        error_transform: _ei.Transformation_Without_Parameters<Transformation_Error, Error>,
+        the_refinement: _et.Refiner_Without_Parameters<In, Out, Transformation_Error>,
+        error_transform: _et.Transformer_Without_Parameters<Transformation_Error, Error>,
         error_handler?: Error_Handler<Transformation_Error>,
-    ): _ei.Refinement_Without_Parameters<In, Out, Error> => {
+    ): _et.Refiner_Without_Parameters<In, Out, Error> => {
         return ($: In) => {
             const result = the_refinement($)
             return result.map(
@@ -472,8 +468,8 @@ export namespace ut {
      * @param the_transformation gt
      */
     export const g = <In, Out, Error>(
-        the_transformation: _ei.Transformation_Without_Parameters<In, Out>,
-    ): _ei.Refinement_Without_Parameters<In, Out, Error> => {
+        the_transformation: _et.Transformer_Without_Parameters<In, Out>,
+    ): _et.Refiner_Without_Parameters<In, Out, Error> => {
         return ($: In) => {
             return _ei.refinement.successful(the_transformation($))
         }

@@ -1,6 +1,5 @@
 import * as _et from "exupery-core-types"
 
-import { Guaranteed_Procedure, Guaranteed_Procedure_Promise } from "../../types/Guaranteed_Procedure"
 import { __create_unguaranteed_procedure } from "./initialize_unguaranteed_procedure"
 
 type Executer = {
@@ -10,7 +9,7 @@ type Executer = {
 }
 
 
-class Guaranteed_Procedure_Promise_Class implements Guaranteed_Procedure_Promise {
+class Guaranteed_Procedure_Promise_Class implements _et.Guaranteed_Procedure_Promise {
     private executer: Executer
     constructor(executer: Executer) {
         this.executer = executer
@@ -30,6 +29,6 @@ class Guaranteed_Procedure_Promise_Class implements Guaranteed_Procedure_Promise
  */
 export function __create_guaranted_procedure(
     executer: Executer,
-): Guaranteed_Procedure_Promise {
+): _et.Guaranteed_Procedure_Promise {
     return new Guaranteed_Procedure_Promise_Class(executer)
 }

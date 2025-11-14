@@ -2,10 +2,7 @@ import * as _et from "exupery-core-types"
 import * as _ei from "exupery-core-internals"
 
 import { __create_guaranteed_query } from "../query/create_guaranteed_query"
-import { Unguaranteed_Query_Promise } from "../../types/Basic_Unguaranteed_Query"
-import { Guaranteed_Query_Promise } from "../../types/Basic_Guaranteed_Query"
 
-import { Unguaranteed_Procedure_Promise } from "../../types/Unguaranteed_Procedure"
 import { __create_guaranted_procedure } from "./initialize_guaranteed_procedure"
 
 
@@ -22,7 +19,7 @@ type Executer<E> = {
     ) => void
 }
 
-class Unguaranteed_Procedure_Promise_Class<E> implements Unguaranteed_Procedure_Promise<E> {
+class Unguaranteed_Procedure_Promise_Class<E> implements _et.Unguaranteed_Procedure_Promise<E> {
     private executer: Executer<E>
     constructor(executer: Executer<E>) {
         this.executer = executer
@@ -37,7 +34,7 @@ class Unguaranteed_Procedure_Promise_Class<E> implements Unguaranteed_Procedure_
 
     map_error<NE>(
         handle_error: (error: E) => NE
-    ): Unguaranteed_Procedure_Promise<NE> {
+    ): _et.Unguaranteed_Procedure_Promise<NE> {
         return new Unguaranteed_Procedure_Promise_Class<NE>({
             'execute': (on_success, on_exception) => {
                 this.executer.execute(
@@ -58,7 +55,7 @@ class Unguaranteed_Procedure_Promise_Class<E> implements Unguaranteed_Procedure_
  */
 export function __create_unguaranteed_procedure<E>(
     executer: Executer<E>,
-): Unguaranteed_Procedure_Promise<E> {
+): _et.Unguaranteed_Procedure_Promise<E> {
     return new Unguaranteed_Procedure_Promise_Class<E>(executer)
 
 }
