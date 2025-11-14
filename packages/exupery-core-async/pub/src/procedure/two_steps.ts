@@ -1,14 +1,14 @@
 import * as _et from 'exupery-core-types'
-import { __create_unguaranteed_procedure } from '../algorithms/procedure/initialize_unguaranteed_procedure'
+import { __create_unguaranteed_procedure } from '../algorithms/procedure/initialize_procedure'
 
 export type Two_Steps_Error<Step_1_Error, Step_2_Error> =
     | ['step1', Step_1_Error]
     | ['step2', Step_2_Error]
 
 export const two_steps = <Step_1_Error, Step_2_Error>(
-    step_1: _et.Unguaranteed_Procedure_Promise<Step_1_Error>,
-    step_2: _et.Unguaranteed_Procedure_Promise<Step_2_Error>,
-): _et.Unguaranteed_Procedure_Promise<Two_Steps_Error<Step_1_Error, Step_2_Error>> => {
+    step_1: _et.Procedure_Promise<Step_1_Error>,
+    step_2: _et.Procedure_Promise<Step_2_Error>,
+): _et.Procedure_Promise<Two_Steps_Error<Step_1_Error, Step_2_Error>> => {
     return __create_unguaranteed_procedure({
         'execute': (on_success, on_exception) => {
             step_1.__start(

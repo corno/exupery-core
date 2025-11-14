@@ -1,10 +1,6 @@
 import * as _et from "exupery-core-types"
 import * as _ei from "exupery-core-internals"
 
-import { __create_guaranteed_query } from "../query/create_guaranteed_query"
-
-import { __create_guaranted_procedure } from "./initialize_guaranteed_procedure"
-
 
 /**
  * this function contains the body in which the async value or exception is executed
@@ -19,7 +15,7 @@ type Executer<E> = {
     ) => void
 }
 
-class Unguaranteed_Procedure_Promise_Class<E> implements _et.Unguaranteed_Procedure_Promise<E> {
+class Procedure_Promise_Class<E> implements _et.Procedure_Promise<E> {
     private executer: Executer<E>
     constructor(executer: Executer<E>) {
         this.executer = executer
@@ -34,8 +30,8 @@ class Unguaranteed_Procedure_Promise_Class<E> implements _et.Unguaranteed_Proced
 
     map_error<NE>(
         handle_error: (error: E) => NE
-    ): _et.Unguaranteed_Procedure_Promise<NE> {
-        return new Unguaranteed_Procedure_Promise_Class<NE>({
+    ): _et.Procedure_Promise<NE> {
+        return new Procedure_Promise_Class<NE>({
             'execute': (on_success, on_exception) => {
                 this.executer.execute(
                     on_success,
@@ -55,7 +51,7 @@ class Unguaranteed_Procedure_Promise_Class<E> implements _et.Unguaranteed_Proced
  */
 export function __create_unguaranteed_procedure<E>(
     executer: Executer<E>,
-): _et.Unguaranteed_Procedure_Promise<E> {
-    return new Unguaranteed_Procedure_Promise_Class<E>(executer)
+): _et.Procedure_Promise<E> {
+    return new Procedure_Promise_Class<E>(executer)
 
 }

@@ -1,11 +1,11 @@
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
-import { Basic_Unguaranteed_Query_Promise } from '../types/Basic_Unguaranteed_Query'
-import { __create_unguaranteed_query } from '../algorithms/query/create_unguaranteed_query'
+import { Basic_Query_Promise } from '../types/Basic_Query'
+import { __create_unguaranteed_query } from '../algorithms/query/create_query'
 
 export const unguaranteed_query_dictionary = <Result, Error>(
-    $: _et.Dictionary<Basic_Unguaranteed_Query_Promise<Result, Error>>,
-): _et.Unguaranteed_Query_Promise<_et.Dictionary<Result>, _et.Dictionary<Error>> => {
+    $: _et.Dictionary<Basic_Query_Promise<Result, Error>>,
+): _et.Query_Promise<_et.Dictionary<Result>, _et.Dictionary<Error>> => {
     return __create_unguaranteed_query({
         'execute': (on_success, on_exception) => {
             let count_down = $.__get_number_of_entries()

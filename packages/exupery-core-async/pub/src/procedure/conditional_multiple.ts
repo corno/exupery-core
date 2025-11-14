@@ -3,17 +3,17 @@ import * as _ei from 'exupery-core-internals'
 
 import  { unguaranteed_query_dictionary } from "../query/unguaranteed_query_dictionary"
 
-import { __create_unguaranteed_procedure } from '../algorithms/procedure/initialize_unguaranteed_procedure'
-import { Basic_Unguaranteed_Query_Promise } from '../types/Basic_Unguaranteed_Query'
+import { __create_unguaranteed_procedure } from '../algorithms/procedure/initialize_procedure'
+import { Basic_Query_Promise } from '../types/Basic_Query'
 
 export type Conditional_Multiple_Error <Precondition_Error, Procedure_Error> =
 | ['preconditions', _et.Dictionary<Precondition_Error>]
 | ['procedure', Procedure_Error]
 
 export const conditional_multiple = <Precondition_Error, Procedure_Error>(
-    preconditions: _et.Dictionary<Basic_Unguaranteed_Query_Promise<boolean, Precondition_Error>>,
-    procedure: _et.Unguaranteed_Procedure_Promise<Procedure_Error>,
-): _et.Unguaranteed_Procedure_Promise<Conditional_Multiple_Error<Precondition_Error, Procedure_Error>> => {
+    preconditions: _et.Dictionary<Basic_Query_Promise<boolean, Precondition_Error>>,
+    procedure: _et.Procedure_Promise<Procedure_Error>,
+): _et.Procedure_Promise<Conditional_Multiple_Error<Precondition_Error, Procedure_Error>> => {
     return __create_unguaranteed_procedure({
         'execute': (on_success, on_exception) => {
             unguaranteed_query_dictionary(

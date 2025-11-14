@@ -15,7 +15,7 @@ export type Query_Promise<Result, Error> = {
     ): Query_Promise<Result, NE>
 
 
-    then_unguaranteed<NT>(
+    then<NT>(
         handle_value: ($: Result) => Query_Promise<NT, Error>
     ): Query_Promise<NT, Error>
 

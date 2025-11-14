@@ -1,10 +1,10 @@
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
-import { __create_unguaranteed_procedure } from '../algorithms/procedure/initialize_unguaranteed_procedure'
+import { __create_unguaranteed_procedure } from '../algorithms/procedure/initialize_procedure'
 
 export const unguaranteed_procedure_dictionary = <Error>(
-    $: _et.Dictionary<_et.Unguaranteed_Procedure_Promise<Error>>,
-): _et.Unguaranteed_Procedure_Promise<_et.Dictionary<Error>> => {
+    $: _et.Dictionary<_et.Procedure_Promise<Error>>,
+): _et.Procedure_Promise<_et.Dictionary<Error>> => {
     return __create_unguaranteed_procedure({
         'execute': (on_success, on_exception) => {
             let count_down = $.__get_number_of_entries()
