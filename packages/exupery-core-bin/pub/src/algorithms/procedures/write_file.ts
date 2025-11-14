@@ -10,26 +10,35 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/wr
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/unguaranteed/write_file"
 
 
-export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = {
-    'execute with synchrounous data': (
-        $p,
-    ) => {
-        const __possibly_escape_filename = (path: string, escape: boolean): string => {
-            if (escape) {
-                return path.replace(/ /g, '_')
-            }
-            return path
-        }
-        return _easync.__create_procedure({
-            'execute': (on_success, on_exception) => {
+export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _easync.create_procedure_primed_with_resources((
+    $p,
+) => {
+    return _easync.__create_procedure_promise({
+        'execute': (on_success, on_exception) => {
 
-                const fname = __possibly_escape_filename($p.path.path, $p.path['escape spaces in path'])
-                fs_mkdir(
-                    path_dirname(fname),
-                    {
-                        'recursive': true
-                    },
-                    (err, path) => {
+            const __possibly_escape_filename = (path: string, escape: boolean): string => {
+                if (escape) {
+                    return path.replace(/ /g, '_')
+                }
+                return path
+            }
+            const fname = __possibly_escape_filename($p.path.path, $p.path['escape spaces in path'])
+            fs_mkdir(
+                path_dirname(fname),
+                {
+                    'recursive': true
+                },
+                (err, path) => {
+                    if (err) {
+                        on_exception(_ei.block((): d.Error => {
+                            if (err.code === 'EACCES' || err.code === 'EPERM') {
+                                return ['permission denied', null]
+                            }
+                            return _ei.panic(`unhandled fs.writeFile error code: ${err.code}`)
+                        }))
+                        return
+                    }
+                    fs_writeFile(fname, $p.data, (err) => {
                         if (err) {
                             on_exception(_ei.block((): d.Error => {
                                 if (err.code === 'EACCES' || err.code === 'EPERM') {
@@ -37,23 +46,12 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = {
                                 }
                                 return _ei.panic(`unhandled fs.writeFile error code: ${err.code}`)
                             }))
-                            return
+                        } else {
+                            on_success()
                         }
-                        fs_writeFile(fname, $p.data, (err) => {
-                            if (err) {
-                                on_exception(_ei.block((): d.Error => {
-                                    if (err.code === 'EACCES' || err.code === 'EPERM') {
-                                        return ['permission denied', null]
-                                    }
-                                    return _ei.panic(`unhandled fs.writeFile error code: ${err.code}`)
-                                }))
-                            } else {
-                                on_success()
-                            }
-                        })
-                    }
-                )
-            }
-        })
-    }
-}
+                    })
+                }
+            )
+        }
+    })
+})

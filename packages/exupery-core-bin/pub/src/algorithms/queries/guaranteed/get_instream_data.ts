@@ -8,7 +8,7 @@ import { Signature } from "exupery-resources/dist/interface/algorithms/queries/g
 
 export const $$: _et.Query_Primed_With_Resources<null, d.Result, null> = (
 ) => {
-    return _easync.__create_query({
+    return _easync.__create_query_promise({
         'execute': (on_value) => {
             
             const stdin = process.stdin;

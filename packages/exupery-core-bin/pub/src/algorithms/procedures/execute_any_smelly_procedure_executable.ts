@@ -14,53 +14,50 @@ import { spawn } from "node:child_process"
  * The executable being executed is assumed to only cause side effects
  * and not return any meaningful data, std::out is therefor ignored
  */
-export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = {
-    'execute with synchrounous data': (
-        $p,
-    ) => {
-        const args = $p.args.__get_raw_copy()
-        return _easync.__create_procedure({
-            'execute': (on_success, on_exception) => {
+export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _easync.create_procedure_primed_with_resources( (
+    $p,
+) => {
+    const args = $p.args.__get_raw_copy()
+    return _easync.__create_procedure_promise({
+        'execute': (on_success, on_exception) => {
 
-                const child = spawn($p.program, args, {
-                    shell: false, // ✅ direct execution, no shell
-                })
+            const child = spawn($p.program, args, {
+                shell: false, // ✅ direct execution, no shell
+            })
 
-                let stderrData = ""
+            let stderrData = ""
 
-                let stdoutData = ""
+            let stdoutData = ""
 
-                child.stdout.on("data", chunk => {
-                    stdoutData += chunk.toString("utf8")
-                })
+            child.stdout.on("data", chunk => {
+                stdoutData += chunk.toString("utf8")
+            })
 
-                child.stderr.on("data", chunk => {
-                    stderrData += chunk.toString("utf8")
-                })
+            child.stderr.on("data", chunk => {
+                stderrData += chunk.toString("utf8")
+            })
 
-                child.on("error", err => {
+            child.on("error", err => {
+                on_exception(_ei.block((): d.Error => {
+                    return ['failed to spawn', { message: err instanceof Error ? err.message : `${err}` }]
+                }))
+            })
+
+            child.on("close", exitCode => {
+                //what does an exit code of null even mean?
+                
+                if (exitCode === 0) {
+                    on_success()
+                } else {
                     on_exception(_ei.block((): d.Error => {
-                        return ['failed to spawn', { message: err instanceof Error ? err.message : `${err}` }]
+                        return ['non zero exit code', {
+                             'exit code': exitCode === null ? _ei.not_set() : _ei.set(exitCode),
+                            'stderr': stderrData,
+                            'stdout': stdoutData,
+                        }]
                     }))
-                })
-
-                child.on("close", exitCode => {
-                    //what does an exit code of null even mean?
-
-                    if (exitCode === 0) {
-                        on_success()
-                    } else {
-                        on_exception(_ei.block((): d.Error => {
-                            return ['non zero exit code', {
-                                'exit code': exitCode === null ? _ei.not_set() : _ei.set(exitCode),
-                                'stderr': stderrData,
-                                'stdout': stdoutData,
-                            }]
-                        }))
-                    }
-                })
-            }
-        })
-    }
-
-}
+                }
+            })
+        }
+    })
+})

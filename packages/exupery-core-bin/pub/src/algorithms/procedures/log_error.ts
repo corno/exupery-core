@@ -6,17 +6,15 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/lo
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/guaranteed/log_error"
 
 
-export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, null> = {
-    'execute with synchrounous data': (
-        $p,
-    ) => {
-        return _easync.__create_procedure({
-            'execute': (on_success) => {
-                $p.lines.__for_each(($) => {
-                    process.stderr.write($ + `\n`)
-                })
-                on_success()
-            }
-        })
-    }
-}
+export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, null> = _easync.create_procedure_primed_with_resources((
+    $p,
+) => {
+    return _easync.__create_procedure_promise({
+        'execute': (on_success) => {
+            $p.lines.__for_each(($) => {
+                process.stderr.write($ + `\n`)
+            })
+            on_success()
+        }
+    })
+})

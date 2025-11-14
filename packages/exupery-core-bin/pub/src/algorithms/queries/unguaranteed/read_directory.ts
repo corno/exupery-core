@@ -17,7 +17,7 @@ export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, d.Error
         }
         return path
     }
-    return _easync.__create_query({
+    return _easync.__create_query_promise({
         'execute': (on_value, on_exception) => {
             fs_readdir(__possibly_escape_filename($p.path.path, $p.path['escape spaces in path']), {
                 'encoding': 'utf-8',
