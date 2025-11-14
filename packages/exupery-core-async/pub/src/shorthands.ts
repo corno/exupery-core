@@ -27,7 +27,7 @@ export namespace p {
                 query.__start(
                     (query_result) => {
                         //run the action
-                        action(resources)(query_result).__start(
+                        action(resources)['execute with synchrounous data'](query_result).__start(
                             on_success,
                             (error) => {
                                 //transform the error
@@ -177,25 +177,26 @@ export namespace pi {
         action: _et.Procedure<Parameters, Action_Error, Resources>,
         error_transform: _et.Transformer_Without_Parameters<Action_Error, Error>,
         error_handler?: Error_Handler<Action_Error>,
-    ): _et.Procedure<Parameters, Error, Resources> => ($r: Resources) => ($: Parameters) => {
-        return __create_procedure({
-            'execute': (
-                on_succes,
-                on_error,
-            ) => {
-                action($r)($).__start(
+    ): _et.Procedure<Parameters, Error, Resources> => ($r: Resources) => ({
+        'execute with synchrounous data': ($: Parameters) => {
+            return __create_procedure({
+                'execute': (
                     on_succes,
-                    (error) => {
-                        if (error_handler !== undefined) {
-                            error_handler(error)
+                    on_error,
+                ) => {
+                    action($r)['execute with synchrounous data']($).__start(
+                        on_succes,
+                        (error) => {
+                            if (error_handler !== undefined) {
+                                error_handler(error)
+                            }
+                            on_error(error_transform(error))
                         }
-                        on_error(error_transform(error))
-                    }
-                )
-            }
-        })
-    }
-
+                    )
+                }
+            })
+        }
+    })
 }
 
 export namespace q {

@@ -9,7 +9,7 @@ export const execute_with_async_data = <Parameters, Error>(
         'execute': (on_success, on_exception) => {
             query.__start(
                 (query_result) => {
-                    procedure(query_result).__start(
+                    procedure["execute with synchrounous data"](query_result).__start(
                         on_success,
                         on_exception,
                     )
