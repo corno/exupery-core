@@ -49,23 +49,23 @@ type temp_instream_parameters = null
 
 export type Available_Standard_Resources = {
     'procedures': {
-        'copy': _easync.Unguaranteed_Procedure<d_copy.Parameters, d_copy.Error, null>,
-        'execute any procedure executable': _easync.Unguaranteed_Procedure<d_execute_any_procedure_executable.Parameters, d_execute_any_procedure_executable.Error, null>,
-        'execute any smelly procedure executable': _easync.Unguaranteed_Procedure<d_execute_any_smelly_procedure_executable.Parameters, d_execute_any_smelly_procedure_executable.Error, null>,
-        'log error': _easync.Guaranteed_Procedure<d_log_error.Parameters, null>,
-        'log': _easync.Guaranteed_Procedure<d_log.Parameters, null>,
-        'make directory': _easync.Unguaranteed_Procedure<d_make_directory.Parameters, d_make_directory.Error, null>,
-        'remove': _easync.Unguaranteed_Procedure<d_remove.Parameters, d_remove.Error, null>
-        'write file': _easync.Unguaranteed_Procedure<d_write_file.Parameters, d_write_file.Error, null>,
-        'write to stderr': _easync.Guaranteed_Procedure<d_write_to_stderr.Parameters, null>,
-        'write to stdout': _easync.Guaranteed_Procedure<d_write_to_stdout.Parameters, null>,
+        'copy': _et.Unguaranteed_Procedure<d_copy.Parameters, d_copy.Error, null>,
+        'execute any procedure executable': _et.Unguaranteed_Procedure<d_execute_any_procedure_executable.Parameters, d_execute_any_procedure_executable.Error, null>,
+        'execute any smelly procedure executable': _et.Unguaranteed_Procedure<d_execute_any_smelly_procedure_executable.Parameters, d_execute_any_smelly_procedure_executable.Error, null>,
+        'log error': _et.Guaranteed_Procedure<d_log_error.Parameters, null>,
+        'log': _et.Guaranteed_Procedure<d_log.Parameters, null>,
+        'make directory': _et.Unguaranteed_Procedure<d_make_directory.Parameters, d_make_directory.Error, null>,
+        'remove': _et.Unguaranteed_Procedure<d_remove.Parameters, d_remove.Error, null>
+        'write file': _et.Unguaranteed_Procedure<d_write_file.Parameters, d_write_file.Error, null>,
+        'write to stderr': _et.Guaranteed_Procedure<d_write_to_stderr.Parameters, null>,
+        'write to stdout': _et.Guaranteed_Procedure<d_write_to_stdout.Parameters, null>,
     },
     'queries': {
-        'execute any query executable': _easync.Unguaranteed_Query<d_execute_any_query_executable.Parameters, d_execute_any_query_executable.Result, d_execute_any_query_executable.Error, null>,
-        'get instream data': _easync.Guaranteed_Query<temp_instream_parameters, d_get_instream_data.Result, null>,
-        'read directory': _easync.Unguaranteed_Query<d_read_directory.Parameters, d_read_directory.Result, d_read_directory.Error, null>,
-        'read file': _easync.Unguaranteed_Query<d_read_file.Parameters, d_read_file.Result, d_read_file.Error, null>,
-        //'stat': _easync.Unguaranteed_Query<d_stat.Parameters, d_stat.Result, d_stat.Error, null>,
+        'execute any query executable': _et.Unguaranteed_Query<d_execute_any_query_executable.Parameters, d_execute_any_query_executable.Result, d_execute_any_query_executable.Error, null>,
+        'get instream data': _et.Guaranteed_Query<temp_instream_parameters, d_get_instream_data.Result, null>,
+        'read directory': _et.Unguaranteed_Query<d_read_directory.Parameters, d_read_directory.Result, d_read_directory.Error, null>,
+        'read file': _et.Unguaranteed_Query<d_read_file.Parameters, d_read_file.Result, d_read_file.Error, null>,
+        //'stat': _et.Unguaranteed_Query<d_stat.Parameters, d_stat.Result, d_stat.Error, null>,
     }
 }
 
@@ -99,7 +99,7 @@ const create_available_resources = (): Available_Standard_Resources => {
  */
 export const run_guaranteed_main_procedure = <Main_Resources>(
     initialize_resources: ($r: Available_Standard_Resources) => Main_Resources,
-    main: _easync.Guaranteed_Procedure<Parameters, Main_Resources>
+    main: _et.Guaranteed_Procedure<Parameters, Main_Resources>
 ): void => {
     main(
         {
@@ -119,7 +119,7 @@ export const run_guaranteed_main_procedure = <Main_Resources>(
  */
 export const run_unguaranteed_main_procedure = <Main_Resources>(
     initialize_resources: ($r: Available_Standard_Resources) => Main_Resources,
-    main: _easync.Unguaranteed_Procedure<Parameters, Error, Main_Resources>
+    main: _et.Unguaranteed_Procedure<Parameters, Error, Main_Resources>
 ): void => {
     main(
         {

@@ -14,7 +14,7 @@ import { Signature } from "exupery-resources/dist/interface/algorithms/queries/g
  * The executable being executed is assumed to be side effect free
  * There is no way to give guarantees about that though
  */
-export const $$: _easync.Guaranteed_Query<d.Parameters, d.Result, null> = (
+export const $$: _et.Guaranteed_Query<d.Parameters, d.Result, null> = (
     $p
 ) => {
     const args = $p.args.__get_raw_copy()

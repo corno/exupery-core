@@ -6,7 +6,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/lo
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/guaranteed/log_error"
 
 
-export const $$: _easync.Guaranteed_Procedure<d.Parameters, null> = (
+export const $$: _et.Guaranteed_Procedure<d.Parameters, null> = (
     $p,
 ) => {
     return _easync.__create_guaranted_procedure({

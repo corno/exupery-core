@@ -13,7 +13,7 @@ import { Signature } from "exupery-resources/dist/interface/algorithms/procedure
  * The executable being executed is assumed to only cause side effects
  * and not return any meaningful data, std::out is therefor ignored
  */
-export const $$: _easync.Unguaranteed_Procedure<d.Parameters, d.Error, null> = (
+export const $$: _et.Unguaranteed_Procedure<d.Parameters, d.Error, null> = (
     $p,
 ) => {
     const args = $p.args.__get_raw_copy()

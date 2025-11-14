@@ -1,4 +1,5 @@
 import * as _easync from 'exupery-core-async'
+import * as _et from 'exupery-core-types'
 import * as _ei from 'exupery-core-internals'
 
 import { stat as fs_stat } from "fs"
@@ -7,7 +8,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/st
 import { Signature } from "exupery-resources/dist/interface/algorithms/queries/unguaranteed/stat"
 
 
-export const $$: _easync.Unguaranteed_Query<d.Parameters, d.Result, d.Error, null> = (
+export const $$: _et.Unguaranteed_Query<d.Parameters, d.Result, d.Error, null> = (
     $p
 ) => {
     const __possibly_escape_filename = (path: string, escape: boolean): string => {

@@ -10,7 +10,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/wr
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/unguaranteed/write_file"
 
 
-export const $$: _easync.Unguaranteed_Procedure<d.Parameters, d.Error, null> = (
+export const $$: _et.Unguaranteed_Procedure<d.Parameters, d.Error, null> = (
     $p,
 ) => {
     const __possibly_escape_filename = (path: string, escape: boolean): string => {

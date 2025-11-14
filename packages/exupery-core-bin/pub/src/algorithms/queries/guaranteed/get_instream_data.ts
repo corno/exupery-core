@@ -6,7 +6,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/ge
 import { Signature } from "exupery-resources/dist/interface/algorithms/queries/guaranteed/get_instream_data"
 
 
-export const $$: _easync.Guaranteed_Query<null, d.Result, null> = (
+export const $$: _et.Guaranteed_Query<null, d.Result, null> = (
 ) => {
     return _easync.__create_guaranteed_query({
         'execute': (on_value) => {

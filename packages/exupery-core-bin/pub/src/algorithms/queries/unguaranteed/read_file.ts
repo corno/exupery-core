@@ -1,5 +1,6 @@
 import * as _easync from 'exupery-core-async'
 import * as _ei from 'exupery-core-internals'
+import * as _et from 'exupery-core-types'
 
 import { readFile as fs_readFile } from "fs"
 
@@ -7,7 +8,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/re
 import { Signature } from "exupery-resources/dist/interface/algorithms/queries/unguaranteed/read_file"
 
 
-export const $$: _easync.Unguaranteed_Query<d.Parameters, d.Result, d.Error, null> = (
+export const $$: _et.Unguaranteed_Query<d.Parameters, d.Result, d.Error, null> = (
     $p
 ) => {
     const __possibly_escape_filename = (path: string, escape: boolean): string => {
