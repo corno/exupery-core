@@ -97,11 +97,10 @@ const create_available_resources = (): Available_Standard_Resources => {
  * Runs a program main function, passing command line arguments (excluding
  * `node` and the script name)
  */
-export const run_guaranteed_main_procedure = <Main_Resources>(
-    initialize_resources: ($r: Available_Standard_Resources) => Main_Resources,
-    main: _et.Guaranteed_Procedure<Parameters, Main_Resources>
+export const run_guaranteed_main_procedure = (
+    get_main: ($r: Available_Standard_Resources) => _et.Guaranteed_Procedure_Primed_With_Resources<Parameters>
 ): void => {
-    main(initialize_resources(create_available_resources()))(
+    get_main(create_available_resources())(
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },
@@ -116,15 +115,14 @@ export const run_guaranteed_main_procedure = <Main_Resources>(
  * `node` and the script name), and setting the process exit code to the
  * returned value when the async value completes.
  */
-export const run_unguaranteed_main_procedure = <Main_Resources>(
-    initialize_resources: ($r: Available_Standard_Resources) => Main_Resources,
-    main: _et.Unguaranteed_Procedure<Parameters, Error, Main_Resources>
+export const run_unguaranteed_main_procedure = (
+    get_main: ($r: Available_Standard_Resources) => _et.Unguaranteed_Procedure_Primed_With_Resources<Parameters, Error>,
 ): void => {
-    main(initialize_resources(create_available_resources()))(
+    get_main(create_available_resources())(
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },
-        
+
     ).__start(
         () => {
         },
