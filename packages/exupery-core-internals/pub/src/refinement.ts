@@ -19,12 +19,12 @@ export namespace refinement {
             'map': <NT, NE>(
                 handle_value: ($: T) => NT,
                 handle_exception: ($: E) => NE,
-            ): Refinement_Result<NT, NE> => {
+            ): _et.Refinement_Result<NT, NE> => {
                 return failed<NT, NE>(handle_exception(exception))
             },
             'map_result': <NT>(
                 handle_value: ($: T) => NT,
-            ): Refinement_Result<NT, E> => {
+            ): _et.Refinement_Result<NT, E> => {
                 return failed<NT, E>(exception)
             }
         }
@@ -32,7 +32,7 @@ export namespace refinement {
 
     export const successful = <T, E>(
         value: T
-    ): Refinement_Result<T, E> => {
+    ): _et.Refinement_Result<T, E> => {
         return {
             'process': (success, exception_handler) => {
                 success(value)
@@ -46,12 +46,12 @@ export namespace refinement {
             'map': <NT, NE>(
                 handle_value: ($: T) => NT,
                 handle_exception: ($: E) => NE,
-            ): Refinement_Result<NT, NE> => {
+            ): _et.Refinement_Result<NT, NE> => {
                 return successful<NT, NE>(handle_value(value))
             },
             'map_result': <NT>(
                 handle_value: ($: T) => NT,
-            ): Refinement_Result<NT, E> => {
+            ): _et.Refinement_Result<NT, E> => {
                 return successful<NT, E>(handle_value(value))
             }
         }
