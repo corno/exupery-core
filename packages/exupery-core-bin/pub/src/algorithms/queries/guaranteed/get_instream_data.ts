@@ -6,9 +6,9 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/ge
 import { Signature } from "exupery-resources/dist/interface/algorithms/queries/guaranteed/get_instream_data"
 
 
-export const $$: _et.Guaranteed_Query_Primed_With_Resources<null, d.Result> = (
+export const $$: _et.Query_Primed_With_Resources<null, d.Result, null> = (
 ) => {
-    return _easync.__create_guaranteed_query({
+    return _easync.__create_query({
         'execute': (on_value) => {
             
             const stdin = process.stdin;

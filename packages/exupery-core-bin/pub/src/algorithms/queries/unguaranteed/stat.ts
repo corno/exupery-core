@@ -17,7 +17,7 @@ export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, d.Error
         }
         return path
     }
-    return _easync.__create_unguaranteed_query({
+    return _easync.__create_query({
         'execute': (on_value, on_exception) => {
             fs_stat(__possibly_escape_filename($p.path, $p['escape spaces in path']), (err, stats) => {
                 if (err) {

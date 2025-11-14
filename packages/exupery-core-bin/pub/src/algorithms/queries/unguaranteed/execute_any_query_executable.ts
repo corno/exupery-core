@@ -18,7 +18,7 @@ export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, d.Error
     $p
 ) => {
     const args = $p.args.__get_raw_copy()
-    return _easync.__create_unguaranteed_query({
+    return _easync.__create_query({
         'execute': (on_value, on_exception) => {
 
             const child = spawn($p.program, args, {

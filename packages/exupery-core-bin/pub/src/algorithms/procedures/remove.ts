@@ -17,7 +17,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = (
         }
         return path
     }
-    return _easync.__create_unguaranteed_procedure({
+    return _easync.__create_procedure({
         'execute': (on_success, on_exception) => {
             fs_rm(
                 __possibly_escape_filename($p.path.path, $p.path['escape spaces in path']),

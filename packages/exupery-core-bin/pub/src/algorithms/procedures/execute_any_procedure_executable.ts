@@ -17,7 +17,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = (
     $p,
 ) => {
     const args = $p.args.__get_raw_copy()
-    return _easync.__create_unguaranteed_procedure({
+    return _easync.__create_procedure({
         'execute': (on_success, on_exception) => {
 
             const child = spawn($p.program, args, {

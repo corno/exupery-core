@@ -14,11 +14,11 @@ import { Signature } from "exupery-resources/dist/interface/algorithms/queries/g
  * The executable being executed is assumed to be side effect free
  * There is no way to give guarantees about that though
  */
-export const $$: _et.Guaranteed_Query_Primed_With_Resources<d.Parameters, d.Result> = (
+export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, null> = (
     $p
 ) => {
     const args = $p.args.__get_raw_copy()
-    return _easync.__create_guaranteed_query({
+    return _easync.__create_query({
         'execute': (on_result) => {
 
             const child = spawn($p.program, args, {

@@ -17,7 +17,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = (
     }
     return path
 }
-    return _easync.__create_unguaranteed_procedure({
+    return _easync.__create_procedure({
         'execute': (on_success, on_exception) => {
             const options: any = {}
             $p.options.recursive.map(($) => { options.recursive = $ })
