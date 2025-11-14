@@ -33,7 +33,7 @@ class Query_Result_Promise_Class<T, E> implements _et.Query_Promise<T, E> {
             }
         })
     }
-    then_unguaranteed<NT>(
+    then<NT>(
         handle_value: ($: T) => _et.Query_Promise<NT, E>
     ): _et.Query_Promise<NT, E> {
         return new Query_Result_Promise_Class<NT, E>({
