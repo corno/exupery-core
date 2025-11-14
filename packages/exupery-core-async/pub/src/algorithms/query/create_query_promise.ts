@@ -78,7 +78,7 @@ class Query_Result_Promise_Class<T, E> implements _et.Query_Promise<T, E> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function __create_query<T, E>(
+export function __create_query_promise<T, E>(
     executer: Executer<T, E>,
 ): _et.Query_Promise<T, E> {
     return new Query_Result_Promise_Class<T, E>(executer)

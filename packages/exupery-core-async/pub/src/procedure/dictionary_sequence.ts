@@ -1,6 +1,6 @@
 import * as _et from 'exupery-core-types'
 import * as _ei from 'exupery-core-internals'
-import { __create_procedure } from '../algorithms/procedure/initialize_procedure'
+import { __create_procedure_promise } from '../algorithms/procedure/create_procedure_promise'
 
 const op_dictionary_to_list_based_on_insertion_order = <T>(
     dict: _et.Dictionary<T>,
@@ -20,7 +20,7 @@ export type Sequence_Error<Err> = {
 export const dictionary_sequence = <Err>(
     steps: _et.Dictionary<_et.Procedure_Promise<Err>>,
 ): _et.Procedure_Promise<Sequence_Error<Err>> => {
-    return __create_procedure({
+    return __create_procedure_promise({
         'execute': (on_success, on_exception) => {
             const as_list = op_dictionary_to_list_based_on_insertion_order(steps)
 

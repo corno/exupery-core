@@ -2,7 +2,7 @@ import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
 import { Basic_Query_Promise } from "./types/Basic_Query"
-import { __create_procedure } from "./algorithms/procedure/initialize_procedure"
+import { __create_procedure_promise } from "./algorithms/procedure/create_procedure_promise"
 import { create_asynchronous_processes_monitor } from "./create_asynchronous_processes_monitor"
 import { Error_Handler } from "./types/Error_Handler"
 export namespace p {
@@ -17,7 +17,7 @@ export namespace p {
         query: Basic_Query_Promise<Parameters, Error>,
         resources: Resources,
     ): _et.Procedure_Promise<Error> => {
-        return __create_procedure({
+        return __create_procedure_promise({
             'execute': (
                 on_success,
                 on_error,
@@ -49,7 +49,7 @@ export namespace p {
     export const sequence = <Error>(
         steps: _et.Procedure_Promise<Error>[]
     ): _et.Procedure_Promise<Error> => {
-        return __create_procedure({
+        return __create_procedure_promise({
             'execute': (
                 on_success,
                 on_error,
@@ -82,7 +82,7 @@ export namespace p {
         aggregate_exceptions: _et.Transformer_Without_Parameters<_et.Array<Element_Error>, Error>,
 
     ): _et.Procedure_Promise<Error> => {
-        return __create_procedure({
+        return __create_procedure_promise({
             'execute': (
                 on_success,
                 on_error,
@@ -128,7 +128,7 @@ export namespace p {
         the_dictionary: _et.Dictionary<_et.Procedure_Promise<Element_Error>>,
         aggregate_exceptions: _et.Transformer_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
     ): _et.Procedure_Promise<Error> => {
-        return __create_procedure({
+        return __create_procedure_promise({
             'execute': (
                 on_success,
                 on_error,
@@ -164,39 +164,6 @@ export namespace p {
         })
     }
 
-}
-
-export namespace pi {
-
-
-    /**
-     * 
-     * @param action upi
-     */
-    export const u = <Parameters, Error, Action_Error, Resources>(
-        action: _et.Procedure<Parameters, Action_Error, Resources>,
-        error_transform: _et.Transformer_Without_Parameters<Action_Error, Error>,
-        error_handler?: Error_Handler<Action_Error>,
-    ): _et.Procedure<Parameters, Error, Resources> => ($r: Resources) => ({
-        'execute with synchrounous data': ($: Parameters) => {
-            return __create_procedure({
-                'execute': (
-                    on_succes,
-                    on_error,
-                ) => {
-                    action($r)['execute with synchrounous data']($).__start(
-                        on_succes,
-                        (error) => {
-                            if (error_handler !== undefined) {
-                                error_handler(error)
-                            }
-                            on_error(error_transform(error))
-                        }
-                    )
-                }
-            })
-        }
-    })
 }
 
 export namespace q {

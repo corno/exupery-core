@@ -1,12 +1,12 @@
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 import { Basic_Query_Promise } from '../types/Basic_Query'
-import { __create_query } from '../algorithms/query/create_query'
+import { __create_query_promise } from '../algorithms/query/create_query_promise'
 
 export const query_dictionary = <Result, Error>(
     $: _et.Dictionary<Basic_Query_Promise<Result, Error>>,
 ): _et.Query_Promise<_et.Dictionary<Result>, _et.Dictionary<Error>> => {
-    return __create_query({
+    return __create_query_promise({
         'execute': (on_success, on_exception) => {
             let count_down = $.__get_number_of_entries()
             let has_errors = false

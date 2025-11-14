@@ -1,5 +1,5 @@
 import * as _et from 'exupery-core-types'
-import { __create_procedure } from '../algorithms/procedure/initialize_procedure'
+import { __create_procedure_promise } from '../algorithms/procedure/create_procedure_promise'
 
 export type Two_Steps_Error<Step_1_Error, Step_2_Error> =
     | ['step1', Step_1_Error]
@@ -9,7 +9,7 @@ export const two_steps = <Step_1_Error, Step_2_Error>(
     step_1: _et.Procedure_Promise<Step_1_Error>,
     step_2: _et.Procedure_Promise<Step_2_Error>,
 ): _et.Procedure_Promise<Two_Steps_Error<Step_1_Error, Step_2_Error>> => {
-    return __create_procedure({
+    return __create_procedure_promise({
         'execute': (on_success, on_exception) => {
             step_1.__start(
                 () => {

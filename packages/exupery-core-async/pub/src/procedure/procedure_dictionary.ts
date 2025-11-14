@@ -1,11 +1,11 @@
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
-import { __create_procedure } from '../algorithms/procedure/initialize_procedure'
+import { __create_procedure_promise } from '../algorithms/procedure/create_procedure_promise'
 
 export const procedure_dictionary = <Error>(
     $: _et.Dictionary<_et.Procedure_Promise<Error>>,
 ): _et.Procedure_Promise<_et.Dictionary<Error>> => {
-    return __create_procedure({
+    return __create_procedure_promise({
         'execute': (on_success, on_exception) => {
             let count_down = $.__get_number_of_entries()
             let has_errors = false

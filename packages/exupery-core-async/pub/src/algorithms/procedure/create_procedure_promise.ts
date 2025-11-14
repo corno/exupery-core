@@ -49,7 +49,7 @@ class Procedure_Promise_Class<E> implements _et.Procedure_Promise<E> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function __create_procedure<E>(
+export function __create_procedure_promise<E>(
     executer: Executer<E>,
 ): _et.Procedure_Promise<E> {
     return new Procedure_Promise_Class<E>(executer)

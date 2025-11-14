@@ -7,8 +7,8 @@ export * from "./types/Basic_Query"
 
 //functions
 
-export * from "./algorithms/query/create_query"
-export * from "./algorithms/procedure/initialize_procedure"
+export * from "./algorithms/query/create_query_promise"
+export * from "./algorithms/procedure/create_procedure_promise"
 
 export * from "./shorthands"
 
@@ -29,8 +29,8 @@ export * from "./procedure/procedure_dictionary"
 export * from "./query/transform_query"
 export * from "./query/query_dictionary"
 
-import { __create_procedure } from "./algorithms/procedure/initialize_procedure"
-import { __create_query } from "./algorithms/query/create_query"
+import { __create_procedure_promise } from "./algorithms/procedure/create_procedure_promise"
+import { __create_query_promise } from "./algorithms/query/create_query_promise"
 
 
 
@@ -39,7 +39,7 @@ export const query = {
     'create result': <T, E>(
         $: T
     ): _et.Query_Promise<T, E> => {
-        return __create_query(
+        return __create_query_promise(
             {
                 'execute': (on_value) => {
                     on_value($)
@@ -50,7 +50,7 @@ export const query = {
     'raise exception': <T, E>(
         $: E
     ): _et.Query_Promise<T, E> => {
-        return __create_query(
+        return __create_query_promise(
             {
                 'execute': (on_value, on_exception) => {
                     on_exception($)
