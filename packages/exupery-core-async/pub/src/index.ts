@@ -15,6 +15,7 @@ export * from "./shorthands"
 // procedure exports
 export * from "./procedure/assert_async"
 export * from "./procedure/assert_sync"
+export * from "./procedure/execute_with_async_data"
 export * from "./procedure/conditional_async"
 export * from "./procedure/conditional_multiple"
 export * from "./procedure/conditional_sync"
