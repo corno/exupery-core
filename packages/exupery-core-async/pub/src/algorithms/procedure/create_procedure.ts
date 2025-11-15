@@ -1,6 +1,6 @@
 import * as _et from 'exupery-core-types'
 
-import { __create_procedure_primed_with_resources } from './__create_procedure_primed_with_resources'
+import { __create_procedure_primed_with_resources } from './create_procedure_primed_with_resources'
 
 export const create_procedure = <Parameters, Error, Resources>(
     handler: (
