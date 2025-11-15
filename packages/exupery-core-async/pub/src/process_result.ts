@@ -3,7 +3,7 @@ import * as _et from 'exupery-core-types'
 
 export const create_process_result = <Data, Error>(
     $: Data
-): Process_Result<Data, Error> => {
+): _et.Process_Result<Data, Error> => {
     return {
         'transform': (
             transformer
@@ -46,7 +46,7 @@ export const create_process_result = <Data, Error>(
 
 export const create_failed_process_result = <Data, Error>(
     $: Error
-): Process_Result<Data, Error> => {
+): _et.Process_Result<Data, Error> => {
     return {
         'transform': (
         ) => {
