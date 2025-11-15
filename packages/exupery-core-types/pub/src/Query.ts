@@ -1,4 +1,5 @@
 import { Processor } from "./Processor"
+import { Transformer_Without_Parameters } from "./Transformer"
 
 
 
@@ -11,14 +12,14 @@ export type Query_Primed_With_Resources<Parameters, Result, Error> = {
 export type Query_Promise<Result, Error> = {
 
     query_with_result<New_Result>(
-        handle_result: Query_Primed_With_Resources<Result, New_Result, Error>
+        query: Query_Primed_With_Resources<Result, New_Result, Error>
     ): Query_Promise<New_Result, Error>
 
     query_with_error<New_Error>(
-        handle_error: Query_Primed_With_Resources<Error, Result, New_Error>
+        query: Query_Primed_With_Resources<Error, Result, New_Error>
     ): Query_Promise<Result, New_Error>
 
-    query<New_Result, New_Error>($: {
+    query<New_Result, New_Error>(queries: {
         'result': Query_Primed_With_Resources<Result, New_Result, New_Error>,
         'error': Query_Primed_With_Resources<Error, New_Result, New_Error>,
     }): Query_Promise<New_Result, New_Error>
@@ -40,17 +41,17 @@ export type Query_Promise<Result, Error> = {
 
 
 
-    map_result<New_Result>(
-        handle_result: ($: Result) => New_Result
+    transform_result<New_Result>(
+        transformer: (Transformer_Without_Parameters<Result, New_Result>)
     ): Query_Promise<New_Result, Error>
 
-    map_error<New_Error>(
-        handle_error: ($: Error) => New_Error
+    transform_error<New_Error>(
+        transformer: Transformer_Without_Parameters<Error, New_Error>
     ): Query_Promise<Result, New_Error>
 
-    map<New_Result, New_Error>($: {
-        'result': ($: Result) => New_Result,
-        'error': ($: Error) => New_Error,
+    transform<New_Result, New_Error>($: {
+        'result': Transformer_Without_Parameters<Result, New_Result>,
+        'error': Transformer_Without_Parameters<Error, New_Error>,
     }): Query_Promise<New_Result, New_Error>
 
 

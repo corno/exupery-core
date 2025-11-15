@@ -210,7 +210,7 @@ export namespace q {
             ) => {
                 parameters.__start(
                     (qr_in) => {
-                        the_query(resources)(qr_in).__start(
+                        the_query(resources).execute(qr_in).__start(
                             (result) => {
                                 result_refinement(result).process(
                                     (x) => on_success(x),
