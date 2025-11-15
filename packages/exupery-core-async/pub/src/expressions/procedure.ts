@@ -246,6 +246,46 @@ export namespace p {
     }
 
 
+    export const dictionary_parallel_without_transforming_the_error = <Error, Entry_Error>(
+        dictionary: _et.Dictionary<_et.Procedure_Promise<Entry_Error>>,
+    ): _et.Procedure_Promise<_et.Dictionary<Entry_Error>> => {
+        return __create_procedure_promise({
+            'execute': (
+                on_success,
+                on_error,
+            ) => {
+
+                const errors: { [key: string]: Entry_Error } = {}
+
+                create_asynchronous_processes_monitor(
+                    (monitor) => {
+                        dictionary.map(($, key) => {
+                            monitor['report process started']()
+
+                            $.__start(
+                                () => {
+                                    monitor['report process finished']()
+                                },
+                                (e) => {
+                                    errors[key] = e
+                                    monitor['report process finished']()
+                                }
+                            )
+                        })
+                    },
+                    () => {
+                        if (Object.keys(errors).length === 0) {
+                            on_success()
+                        } else {
+                            on_error(_ei.dictionary_literal(errors))
+                        }
+                    }
+                )
+            }
+        })
+    }
+
+
     export const execute_with_async_data = <Parameters, Error>(
         procedure: _et.Procedure_Primed_With_Resources<Parameters, Error>,
         query: _et.Query_Promise<Parameters, Error>,
