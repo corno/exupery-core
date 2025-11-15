@@ -22,7 +22,7 @@ export const create_process_result = <Data, Error>(
         ) => {
             return refiner($).transform(
                 ($) => create_process_result($),
-                ($) => create_failed_process_result(map_error($))
+                ($) => create_process_error(map_error($))
             )
         },
         'refine with parameters': (
@@ -32,7 +32,7 @@ export const create_process_result = <Data, Error>(
         ) => {
             return refiner($, parameters).transform(
                 ($) => create_process_result($),
-                ($) => create_failed_process_result(map_error($))
+                ($) => create_process_error(map_error($))
             )
         },
         '__extract_data': (
@@ -44,25 +44,25 @@ export const create_process_result = <Data, Error>(
     }
 }
 
-export const create_failed_process_result = <Data, Error>(
+export const create_process_error = <Data, Error>(
     $: Error
 ): _et.Process_Result<Data, Error> => {
     return {
         'transform': (
         ) => {
-            return create_failed_process_result($)
+            return create_process_error($)
         },
         'transform with parameters': (
         ) => {
-            return create_failed_process_result($)
+            return create_process_error($)
         },
         'refine': (
         ) => {
-            return create_failed_process_result($)
+            return create_process_error($)
         },
         'refine with parameters': (
         ) => {
-            return create_failed_process_result($)
+            return create_process_error($)
         },
         '__extract_data': (
             success,
