@@ -31,11 +31,11 @@ import { $$ as p_write_to_stderr } from "./algorithms/procedures/write_to_stderr
 import { $$ as p_write_to_stdout } from "./algorithms/procedures/write_to_stdout"
 
 
-import { $$ as q_execute_any_query_executable } from "./algorithms/queries/unguaranteed/execute_any_query_executable"
-import { $$ as q_get_instream_data } from "./algorithms/queries/guaranteed/get_instream_data"
-import { $$ as q_read_directory } from "./algorithms/queries/unguaranteed/read_directory"
-import { $$ as q_read_file } from "./algorithms/queries/unguaranteed/read_file"
-import { $$ as q_stat } from "./algorithms/queries/unguaranteed/stat"
+import { $$ as q_execute_any_query_executable } from "./algorithms/queries/execute_any_query_executable"
+import { $$ as q_get_instream_data } from "./algorithms/queries/get_instream_data"
+import { $$ as q_read_directory } from "./algorithms/queries/read_directory"
+import { $$ as q_read_file } from "./algorithms/queries/read_file"
+import { $$ as q_stat } from "./algorithms/queries/stat"
 
 export type Parameters = {
     'arguments': _et.Array<string>,
