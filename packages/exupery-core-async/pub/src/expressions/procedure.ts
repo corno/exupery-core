@@ -2,27 +2,7 @@ import * as _et from 'exupery-core-types'
 import * as _ei from 'exupery-core-internals'
 
 import { __create_procedure_promise } from "../algorithms/procedure/create_procedure_promise"
-import { q } from "./query"
 import { create_asynchronous_processes_monitor } from '../create_asynchronous_processes_monitor'
-
-export type Assert_Async_Error<Assertion_Error, Procedure_Error> =
-    | ['assertion error', Assertion_Error]
-    | ['assertion failed', null]
-    | ['procedure error', Procedure_Error]
-
-export type Assert_Sync_Error<Procedure_Error> =
-    | ['assertion failed', null]
-    | ['procedure error', Procedure_Error]
-
-export type Conditional_Multiple_Error<Precondition_Error, Procedure_Error> =
-    | ['preconditions', _et.Dictionary<Precondition_Error>]
-    | ['procedure', Procedure_Error]
-
-
-export type Dictionary_Serie_Error<Err> = {
-    'error': Err
-    'step': string
-}
 
 export namespace p {
 
@@ -98,48 +78,40 @@ export namespace p {
     }
 
 
-    export const assert_async = <Assertion_Error, Procedure_Error>(
-        assertion: _et.Query_Promise<boolean, Assertion_Error>,
-        procedure: _et.Procedure_Promise<Procedure_Error>,
-    ): _et.Procedure_Promise<Assert_Async_Error<Assertion_Error, Procedure_Error>> => {
+    export const assert_async = <Error>(
+        assertion: _et.Query_Promise<boolean, Error>,
+        error_if_failed: Error,
+    ): _et.Procedure_Promise<Error> => {
         return __create_procedure_promise({
             'execute': (on_success, on_error) => {
                 assertion.__start(
                     ($) => {
                         if ($) {
-                            procedure.__start(
-                                on_success,
-                                ($) => {
-                                    on_error(['procedure error', $])
-                                }
-                            )
+                            on_success()
                         } else {
-                            on_error(['assertion failed', null])
+                            on_error(error_if_failed)
                         }
                     },
                     ($) => {
-                        on_error(['assertion error', $])
+                        on_error($)
                     }
                 )
             }
         })
     }
-    export const assert_sync = <Assertion_Error, Procedure_Error>(
+
+
+    export const assert_sync = <Error>(
         assertion: boolean,
-        procedure: _et.Procedure_Promise<Procedure_Error>,
-    ): _et.Procedure_Promise<Assert_Sync_Error<Procedure_Error>> => {
+        error_if_failed: Error,
+    ): _et.Procedure_Promise<Error> => {
         return __create_procedure_promise({
             'execute': (on_success, on_error) => {
                 if (!assertion) {
-                    on_error(['assertion failed', null])
+                    on_error(error_if_failed)
                     return
                 }
-                procedure.__start(
-                    on_success,
-                    ($) => {
-                        on_error(['procedure error', $])
-                    }
-                )
+                on_success()
             }
         })
     }
@@ -167,46 +139,6 @@ export namespace p {
         })
     }
 
-    export const conditional_multiple = <Precondition_Error, Procedure_Error>(
-        preconditions: _et.Dictionary<_et.Query_Promise<boolean, Precondition_Error>>,
-        procedure: _et.Procedure_Promise<Procedure_Error>,
-    ): _et.Procedure_Promise<Conditional_Multiple_Error<Precondition_Error, Procedure_Error>> => {
-        return __create_procedure_promise({
-            'execute': (on_success, on_error) => {
-                q.dictionary_parallel_without_error_aggregation(
-                    preconditions,
-                ).__start(
-                    ($) => {
-                        let has_errors = false
-                        $.map(($) => {
-                            if (!$) {
-                                has_errors = true
-                            }
-                        })
-                        if (!has_errors) {
-                            // all preconditions passed
-                            procedure.__start(
-                                on_success,
-                                (e) => {
-                                    on_error(
-                                        ['procedure', e]
-                                    )
-                                }
-                            )
-                        } else {
-                            //the preconditions failed, so we are *successfully* skipping the procedure
-                            on_success()
-                        }
-                    },
-                    ($) => {
-                        on_error(['preconditions', $])
-                    }
-                )
-            }
-        })
-    }
-
-
     export const conditional_sync = <Error>(
         precondition: boolean,
         procedure: _et.Procedure_Promise<Error>,
@@ -225,9 +157,10 @@ export namespace p {
         })
     }
 
-    export const dictionary_serie = <Err>(
-        dictionary: _et.Dictionary<_et.Procedure_Promise<Err>>,
-    ): _et.Procedure_Promise<Dictionary_Serie_Error<Err>> => {
+    export const dictionary_serie = <Error, Entry_Error>(
+        dictionary: _et.Dictionary<_et.Procedure_Promise<Entry_Error>>,
+        transform_error: _et.Transformer_Without_Parameters<_et.Key_Value_Pair<Entry_Error>, Error>,
+    ): _et.Procedure_Promise<Error> => {
         return __create_procedure_promise({
             'execute': (on_success, on_error) => {
                 const op_dictionary_to_list_based_on_insertion_order = <T>(
@@ -253,10 +186,10 @@ export namespace p {
                                     do_next()
                                 },
                                 ($) => {
-                                    on_error({
-                                        'error': $,
-                                        'step': key,
-                                    })
+                                    on_error(transform_error({
+                                        'value': $,
+                                        'key': key,
+                                    }))
                                 }
                             )
                         },
@@ -272,80 +205,45 @@ export namespace p {
 
 
 
-    export const dictionary_parallel_without_error_aggregation = <Error>(
-        dictionary: _et.Dictionary<_et.Procedure_Promise<Error>>,
-    ): _et.Procedure_Promise<_et.Dictionary<Error>> => {
+    export const dictionary_parallel = <Error, Entry_Error>(
+        dictionary: _et.Dictionary<_et.Procedure_Promise<Entry_Error>>,
+        aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Entry_Error>, Error>,
+    ): _et.Procedure_Promise<Error> => {
         return __create_procedure_promise({
-            'execute': (on_success, on_error) => {
-                let count_down = dictionary.__get_number_of_entries()
-                let has_errors = false
+            'execute': (
+                on_success,
+                on_error,
+            ) => {
 
-                const errors: { [key: string]: Error } = {}
-                const decrement_and_wrap_up_if_done = () => {
-                    count_down -= 1
-                    if (count_down === 0) {
-                        if (has_errors) {
-                            on_error(_ei.dictionary_literal(errors))
-                        } else {
+                const errors: { [key: string]: Entry_Error } = {}
+
+                create_asynchronous_processes_monitor(
+                    (monitor) => {
+                        dictionary.map(($, key) => {
+                            monitor['report process started']()
+
+                            $.__start(
+                                () => {
+                                    monitor['report process finished']()
+                                },
+                                (e) => {
+                                    errors[key] = e
+                                    monitor['report process finished']()
+                                }
+                            )
+                        })
+                    },
+                    () => {
+                        if (Object.keys(errors).length === 0) {
                             on_success()
+                        } else {
+                            on_error(aggregate_errors(_ei.dictionary_literal(errors)))
                         }
                     }
-                }
-                dictionary.map(($, key) => {
-                    $.__start(
-                        () => {
-                            decrement_and_wrap_up_if_done()
-                        },
-                        (e) => {
-                            has_errors = true
-                            errors[key] = e
-                            decrement_and_wrap_up_if_done()
-                        },
-                    )
-                })
+                )
             }
         })
-    }   
-    
-    export const dictionary_parallel = <Error, Entry_Error>(
-            dictionary: _et.Dictionary<_et.Procedure_Promise<Entry_Error>>,
-            aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Entry_Error>, Error>,
-        ): _et.Procedure_Promise<Error> => {
-            return __create_procedure_promise({
-                'execute': (
-                    on_success,
-                    on_error,
-                ) => {
-    
-                    const errors: { [key: string]: Entry_Error } = {}
-    
-                    create_asynchronous_processes_monitor(
-                        (monitor) => {
-                            dictionary.map(($, key) => {
-                                monitor['report process started']()
-    
-                                $.__start(
-                                    () => {
-                                        monitor['report process finished']()
-                                    },
-                                    (e) => {
-                                        errors[key] = e
-                                        monitor['report process finished']()
-                                    }
-                                )
-                            })
-                        },
-                        () => {
-                            if (Object.keys(errors).length === 0) {
-                                on_success()
-                            } else {
-                                on_error(aggregate_errors(_ei.dictionary_literal(errors)))
-                            }
-                        }
-                    )
-                }
-            })
-        }
+    }
 
 
     export const execute_with_async_data = <Parameters, Error>(
