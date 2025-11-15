@@ -6,12 +6,12 @@ export interface Refinement_Result<T, E> {
      */
     process(
         success: ($: T) => void,
-        exception: ($: E) => void,
+        error: ($: E) => void,
     ): void
 
     map<NT, NE>(
         handle_value: ($: T) => NT,
-        handle_exception: ($: E) => NE
+        handle_error: ($: E) => NE
     ): Refinement_Result<NT, NE>
 
     map_result<NT>(
@@ -20,7 +20,7 @@ export interface Refinement_Result<T, E> {
 
     transform<NT>(
         handle_value: ($: T) => NT,
-        handle_exception: ($: E) => NT
+        handle_error: ($: E) => NT
     ): NT
 
     with_result<NT>(

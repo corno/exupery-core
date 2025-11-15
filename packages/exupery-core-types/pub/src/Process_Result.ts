@@ -20,6 +20,6 @@ export interface Process_Result<Output, Error> {
     ) => Process_Result<NewOutput, Error>
     __extract_data: (
         success: ($: Output) => void,
-        exception: ($: Error) => void
+        error: ($: Error) => void
     ) => void
 }

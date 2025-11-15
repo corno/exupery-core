@@ -4,28 +4,28 @@ import * as _et from 'exupery-core-types'
 export namespace refinement {
 
     export const failed = <T, E>(
-        exception: E
+        error: E
     ): _et.Refinement_Result<T, E> => {
         return {
-            'process': (success, exception_handler) => {
-                exception_handler(exception)
+            'process': (success, error_handler) => {
+                error_handler(error)
             },
-            'transform': (success, exception_handler) => {
-                return exception_handler(exception)
+            'transform': (success, error_handler) => {
+                return error_handler(error)
             },
             'with_result': (success) => {
-                return failed(exception)
+                return failed(error)
             },
             'map': <NT, NE>(
                 handle_value: ($: T) => NT,
-                handle_exception: ($: E) => NE,
+                handle_error: ($: E) => NE,
             ): _et.Refinement_Result<NT, NE> => {
-                return failed<NT, NE>(handle_exception(exception))
+                return failed<NT, NE>(handle_error(error))
             },
             'map_result': <NT>(
                 handle_value: ($: T) => NT,
             ): _et.Refinement_Result<NT, E> => {
-                return failed<NT, E>(exception)
+                return failed<NT, E>(error)
             }
         }
     }
@@ -34,10 +34,10 @@ export namespace refinement {
         value: T
     ): _et.Refinement_Result<T, E> => {
         return {
-            'process': (success, exception_handler) => {
+            'process': (success, error_handler) => {
                 success(value)
             },
-            'transform': (success, exception_handler) => {
+            'transform': (success, error_handler) => {
                 return success(value)
             },
             'with_result': (success) => {
@@ -45,7 +45,7 @@ export namespace refinement {
             },
             'map': <NT, NE>(
                 handle_value: ($: T) => NT,
-                handle_exception: ($: E) => NE,
+                handle_error: ($: E) => NE,
             ): _et.Refinement_Result<NT, NE> => {
                 return successful<NT, NE>(handle_value(value))
             },

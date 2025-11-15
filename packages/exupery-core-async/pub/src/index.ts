@@ -52,7 +52,7 @@ export const query = {
             }
         )
     },
-    'raise exception': <T, E>(
+    'raise error': <T, E>(
         $: E
     ): _et.Query_Promise<T, E> => {
         return __create_query_promise(

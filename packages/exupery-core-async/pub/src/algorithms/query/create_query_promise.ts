@@ -2,7 +2,7 @@ import * as _et from "exupery-core-types"
 
 
 /**
- * this function contains the body in which the async value or exception is executed
+ * this function contains the body in which the async value or error is executed
  * after the execution, either the on_value or on_error callback will be called
  * @param on_value the callback to call when a value is produced
  * @param on_error the callback to call when an error is produced
@@ -37,15 +37,15 @@ class Query_Result_Promise_Class<T, E> implements _et.Query_Promise<T, E> {
             }
         })
     }
-    map_exception<NE>(
-        handle_exception: ($: E) => NE
+    map_error<NE>(
+        handle_error: ($: E) => NE
     ): _et.Query_Promise<T, NE> {
         return new Query_Result_Promise_Class<T, NE>({
             'execute': (on_value, on_error) => {
                 this.executer.execute(
                     on_value,
                     ($) => {
-                        on_error(handle_exception($))
+                        on_error(handle_error($))
                     },
                 )
             }

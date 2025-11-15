@@ -3,7 +3,7 @@ import * as _ei from "exupery-core-internals"
 
 
 /**
- * this function contains the body in which the async value or exception is executed
+ * this function contains the body in which the async value or error is executed
  * after the execution, either the on_value or on_error callback will be called
  * @param on_value the callback to call when a value is produced
  * @param on_error the callback to call when an error is produced

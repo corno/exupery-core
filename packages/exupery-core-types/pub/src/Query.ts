@@ -9,17 +9,26 @@ export type Query_Primed_With_Resources<Parameters, Result, Error> = ($: Paramet
 export type Query_Promise<Result, Error> = {
 
 
-    map_exception<NE>(
-        handle_exception: ($: Error) => NE
+    map_error<NE>(
+        handle_error: ($: Error) => NE
     ): Query_Promise<Result, NE>
 
     then<NT>(
         handle_value: ($: Result) => Query_Promise<NT, Error>
     ): Query_Promise<NT, Error>
 
-    process<New_Result>(
+    process_result<New_Result>(
         processor: Processor<Result, New_Result, Error>
     ): Query_Promise<New_Result, Error>
+
+    process_error<New_Error>(
+        processor: Processor<Error, Result, New_Error>
+    ): Query_Promise<Result, New_Error>
+
+    process<New_Result, New_Error>($: {
+        'result': Processor<Result, New_Result, New_Error>,
+        'error': Processor<Error, New_Result, New_Error>,
+    }): Query_Promise<New_Result, New_Error>
 
     __start(
         on_success: ($: Result) => void,

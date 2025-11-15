@@ -37,7 +37,7 @@ export const create_process_result = <Data, Error>(
         },
         '__extract_data': (
             success,
-            exception
+            error
         ) => {
             success($)
         }
@@ -66,9 +66,9 @@ export const create_failed_process_result = <Data, Error>(
         },
         '__extract_data': (
             success,
-            exception
+            error
         ) => {
-            exception($)
+            error($)
         }
     }
 }

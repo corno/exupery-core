@@ -74,12 +74,12 @@ export namespace p {
     /**
      * 
      * @param the_array up[]
-     * @param aggregate_exceptions gt
+     * @param aggregate_errors gt
      * @returns 
      */
     export const array = <Error, Element_Error>(
         the_array: _et.Array<_et.Procedure_Promise<Element_Error>>,
-        aggregate_exceptions: _et.Transformer_Without_Parameters<_et.Array<Element_Error>, Error>,
+        aggregate_errors: _et.Transformer_Without_Parameters<_et.Array<Element_Error>, Error>,
 
     ): _et.Procedure_Promise<Error> => {
         return __create_procedure_promise({
@@ -88,7 +88,7 @@ export namespace p {
                 on_error,
             ) => {
 
-                const exceptions: Element_Error[] = []
+                const errors: Element_Error[] = []
 
                 create_asynchronous_processes_monitor(
                     (monitor) => {
@@ -100,17 +100,17 @@ export namespace p {
                                     monitor['report process finished']()
                                 },
                                 (e) => {
-                                    exceptions.push(e)
+                                    errors.push(e)
                                     monitor['report process finished']()
                                 }
                             )
                         })
                     },
                     () => {
-                        if (exceptions.length === 0) {
+                        if (errors.length === 0) {
                             on_success()
                         } else {
-                            on_error(aggregate_exceptions(_ei.array_literal(exceptions)))
+                            on_error(aggregate_errors(_ei.array_literal(errors)))
                         }
                     }
                 )
@@ -121,12 +121,12 @@ export namespace p {
     /**
      * 
      * @param the_dictionary dict<up>
-     * @param aggregate_exceptions gt
+     * @param aggregate_errors gt
      * @returns 
      */
     export const dictionary = <Error, Element_Error>(
         the_dictionary: _et.Dictionary<_et.Procedure_Promise<Element_Error>>,
-        aggregate_exceptions: _et.Transformer_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
+        aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
     ): _et.Procedure_Promise<Error> => {
         return __create_procedure_promise({
             'execute': (
@@ -134,7 +134,7 @@ export namespace p {
                 on_error,
             ) => {
 
-                const exceptions: { [key: string]: Element_Error } = {}
+                const errors: { [key: string]: Element_Error } = {}
 
                 create_asynchronous_processes_monitor(
                     (monitor) => {
@@ -146,17 +146,17 @@ export namespace p {
                                     monitor['report process finished']()
                                 },
                                 (e) => {
-                                    exceptions[key] = e
+                                    errors[key] = e
                                     monitor['report process finished']()
                                 }
                             )
                         })
                     },
                     () => {
-                        if (Object.keys(exceptions).length === 0) {
+                        if (Object.keys(errors).length === 0) {
                             on_success()
                         } else {
-                            on_error(aggregate_exceptions(_ei.dictionary_literal(exceptions)))
+                            on_error(aggregate_errors(_ei.dictionary_literal(errors)))
                         }
                     }
                 )
