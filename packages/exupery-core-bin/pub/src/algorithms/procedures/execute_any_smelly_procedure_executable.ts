@@ -6,7 +6,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/ex
 
 import { spawn } from "node:child_process"
 
-// import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/unguaranteed/execute_smelly_procedure_executable"
+// import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/execute_smelly_procedure_executable"
 
 
 /**

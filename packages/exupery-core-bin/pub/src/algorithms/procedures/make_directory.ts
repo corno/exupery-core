@@ -5,7 +5,7 @@ import * as _et from 'exupery-core-types'
 import { mkdir as fs_mkdir } from "fs"
 
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/make_directory/data_types/target"
-import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/unguaranteed/make_directory"
+import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/make_directory"
 
 
 export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _easync.__create_procedure_primed_with_resources((

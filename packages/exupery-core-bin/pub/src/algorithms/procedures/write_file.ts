@@ -7,7 +7,7 @@ import { mkdir as fs_mkdir, writeFile as fs_writeFile } from "fs"
 import { dirname as path_dirname } from "path"
 
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/write_file/data_types/target"
-import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/unguaranteed/write_file"
+import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/write_file"
 
 
 export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _easync.__create_procedure_primed_with_resources((

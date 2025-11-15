@@ -5,7 +5,7 @@ import * as _et from 'exupery-core-types'
 import { readdir as fs_readdir } from "fs"
 
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/read_directory/data_types/target"
-import { Signature } from "exupery-resources/dist/interface/algorithms/queries/unguaranteed/read_directory"
+import { Signature } from "exupery-resources/dist/interface/algorithms/queries/read_directory"
 
 
 export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, d.Error> = _easync.__create_query_primed_with_resources((

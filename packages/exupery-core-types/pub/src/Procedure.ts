@@ -3,22 +3,22 @@ import { Query_Promise } from "./Query"
 export type Procedure<Parameters, Error, Resources> = ($r: Resources) => Procedure_Primed_With_Resources<Parameters, Error>
 
 export type Procedure_Primed_With_Resources<Parameters, Error> = {
-    'execute with synchronous data': (
+    'execute with synchronous data without error transformation': (
         parameters: Parameters
     ) => Procedure_Promise<Error>
 
-    'execute with synchronous data and map error': <New_Error>(
+    'execute with synchronous data': <New_Error>(
         parameters: Parameters,
-        map_error: (error: Error) => New_Error,
+        transform_error: (error: Error) => New_Error,
     ) => Procedure_Promise<New_Error>
     
-    'execute with asynchronous data': (
+    'execute with asynchronous data without error transformation': (
         query: Query_Promise<Parameters, Error>
     ) => Procedure_Promise<Error>
     
-    'execute with asynchronous data and map error': <New_Error>(
+    'execute with asynchronous data': <New_Error>(
         query: Query_Promise<Parameters, Error>,
-        map_error: (error: Error) => New_Error,
+        transform_error: (error: Error) => New_Error,
     ) => Procedure_Promise<New_Error>
 }
 

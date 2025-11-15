@@ -5,7 +5,7 @@ import * as _ei from 'exupery-core-internals'
 import { stat as fs_stat } from "fs"
 
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/stat/data_types/target"
-import { Signature } from "exupery-resources/dist/interface/algorithms/queries/unguaranteed/stat"
+import { Signature } from "exupery-resources/dist/interface/algorithms/queries/stat"
 
 
 export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, d.Error> = _easync.__create_query_primed_with_resources((

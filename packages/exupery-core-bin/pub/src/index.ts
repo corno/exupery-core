@@ -19,6 +19,8 @@ import * as d_write_file from "exupery-resources/dist/interface/generated/pareto
 import * as d_write_to_stderr from "exupery-resources/dist/interface/generated/pareto/schemas/write_to_stderr/data_types/target"
 import * as d_write_to_stdout from "exupery-resources/dist/interface/generated/pareto/schemas/write_to_stdout/data_types/target"
 
+import * as d_main from "exupery-resources/dist/interface/temp_main"
+
 import { $$ as p_copy_signature } from "./algorithms/procedures/copy"
 import { $$ as p_execute_any_procedure_executable } from "./algorithms/procedures/execute_any_procedure_executable"
 import { $$ as p_execute_any_smelly_procedure_executable } from "./algorithms/procedures/execute_any_smelly_procedure_executable"
@@ -36,14 +38,6 @@ import { $$ as q_get_instream_data } from "./algorithms/queries/get_instream_dat
 import { $$ as q_read_directory } from "./algorithms/queries/read_directory"
 import { $$ as q_read_file } from "./algorithms/queries/read_file"
 import { $$ as q_stat } from "./algorithms/queries/stat"
-
-export type Parameters = {
-    'arguments': _et.Array<string>,
-}
-
-export type Error = {
-    'exit code': number
-}
 
 type temp_instream_parameters = null
 
@@ -100,7 +94,7 @@ const create_available_resources = (): Available_Standard_Resources => {
  * returned value when the async value completes.
  */
 export const run_main_procedure = (
-    get_main: ($r: Available_Standard_Resources) => _et.Procedure_Primed_With_Resources<Parameters, Error>,
+    get_main: ($r: Available_Standard_Resources) => _et.Procedure_Primed_With_Resources<d_main.Parameters, d_main.Error>,
 ): void => {
     get_main(create_available_resources())['execute with synchronous data'](
         {

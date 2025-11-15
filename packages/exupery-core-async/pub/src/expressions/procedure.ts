@@ -23,25 +23,14 @@ export type Conditional_Multiple_Error<Precondition_Error, Procedure_Error> =
     | ['procedure', Procedure_Error]
 
 
-export type Three_Steps_Error<Step_1_Error, Step_2_Error, Step_3_Error> =
-    | ['step1', Step_1_Error]
-    | ['step2', Step_2_Error]
-    | ['step3', Step_3_Error]
-
-export type Two_Steps_Error<Step_1_Error, Step_2_Error> =
-    | ['step1', Step_1_Error]
-    | ['step2', Step_2_Error]
-
-
-
-export type Sequence_Error<Err> = {
+export type Dictionary_Serie_Error<Err> = {
     'error': Err
     'step': string
 }
 
 export namespace p {
 
-    export const array = <Error, Element_Error>(
+    export const array_parallel = <Error, Element_Error>(
         the_array: _et.Array<_et.Procedure_Promise<Element_Error>>,
         aggregate_errors: _et.Transformer_Without_Parameters<_et.Array<Element_Error>, Error>,
 
@@ -81,6 +70,37 @@ export namespace p {
             }
         })
     }
+
+
+    export const array_serie = <Error>(
+        array: _et.Array<_et.Procedure_Promise<Error>>,
+    ): _et.Procedure_Promise<Error> => {
+        return __create_procedure_promise({
+            'execute': (on_success, on_error) => {
+
+                let current = 0
+
+                const do_next = () => {
+                    array.__get_element_at(current).transform(
+                        ($) => {
+                            current += 1
+                            $.__start(
+                                () => {
+                                    do_next()
+                                },
+                                on_error
+                            )
+                        },
+                        () => {
+                            on_success()
+                        }
+                    )
+                }
+                do_next()
+            }
+        })
+    }
+
 
     export const assert_async = <Assertion_Error, Procedure_Error>(
         assertion: _et.Query_Promise<boolean, Assertion_Error>,
@@ -215,9 +235,9 @@ export namespace p {
         })
     }
 
-    export const dictionary_sequence = <Err>(
-        steps: _et.Dictionary<_et.Procedure_Promise<Err>>,
-    ): _et.Procedure_Promise<Sequence_Error<Err>> => {
+    export const dictionary_serie = <Err>(
+        dictionary: _et.Dictionary<_et.Procedure_Promise<Err>>,
+    ): _et.Procedure_Promise<Dictionary_Serie_Error<Err>> => {
         return __create_procedure_promise({
             'execute': (on_success, on_error) => {
                 const op_dictionary_to_list_based_on_insertion_order = <T>(
@@ -229,7 +249,7 @@ export namespace p {
                     })
                     return _ei.array_literal(temp)
                 }
-                const as_list = op_dictionary_to_list_based_on_insertion_order(steps)
+                const as_list = op_dictionary_to_list_based_on_insertion_order(dictionary)
 
                 let current = 0
 
@@ -262,12 +282,12 @@ export namespace p {
 
 
 
-    export const dictionary = <Error>(
-        $: _et.Dictionary<_et.Procedure_Promise<Error>>,
+    export const dictionary_parallel_without_error_aggregation = <Error>(
+        dictionary: _et.Dictionary<_et.Procedure_Promise<Error>>,
     ): _et.Procedure_Promise<_et.Dictionary<Error>> => {
         return __create_procedure_promise({
             'execute': (on_success, on_error) => {
-                let count_down = $.__get_number_of_entries()
+                let count_down = dictionary.__get_number_of_entries()
                 let has_errors = false
 
                 const errors: { [key: string]: Error } = {}
@@ -281,7 +301,7 @@ export namespace p {
                         }
                     }
                 }
-                $.map(($, key) => {
+                dictionary.map(($, key) => {
                     $.__start(
                         () => {
                             decrement_and_wrap_up_if_done()
@@ -297,9 +317,9 @@ export namespace p {
         })
     }   
     
-    export const dictionary_2 = <Error, Element_Error>(
-            the_dictionary: _et.Dictionary<_et.Procedure_Promise<Element_Error>>,
-            aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Element_Error>, Error>,
+    export const dictionary_parallel = <Error, Entry_Error>(
+            dictionary: _et.Dictionary<_et.Procedure_Promise<Entry_Error>>,
+            aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Entry_Error>, Error>,
         ): _et.Procedure_Promise<Error> => {
             return __create_procedure_promise({
                 'execute': (
@@ -307,11 +327,11 @@ export namespace p {
                     on_error,
                 ) => {
     
-                    const errors: { [key: string]: Element_Error } = {}
+                    const errors: { [key: string]: Entry_Error } = {}
     
                     create_asynchronous_processes_monitor(
                         (monitor) => {
-                            the_dictionary.map(($, key) => {
+                            dictionary.map(($, key) => {
                                 monitor['report process started']()
     
                                 $.__start(
@@ -357,36 +377,8 @@ export namespace p {
         })
     }
 
+
     export const sequence = <Error>(
-        steps: _et.Array<_et.Procedure_Promise<Error>>,
-    ): _et.Procedure_Promise<Error> => {
-        return __create_procedure_promise({
-            'execute': (on_success, on_error) => {
-
-                let current = 0
-
-                const do_next = () => {
-                    steps.__get_element_at(current).transform(
-                        ($) => {
-                            current += 1
-                            $.__start(
-                                () => {
-                                    do_next()
-                                },
-                                on_error
-                            )
-                        },
-                        () => {
-                            on_success()
-                        }
-                    )
-                }
-                do_next()
-            }
-        })
-    }
-
-    export const sequence_2 = <Error>(
         steps: _et.Procedure_Promise<Error>[]
     ): _et.Procedure_Promise<Error> => {
         return __create_procedure_promise({
@@ -411,58 +403,4 @@ export namespace p {
         })
     }
 
-    export const three_steps = <Step_1_Error, Step_2_Error, Step_3_Error>(
-        step_1: _et.Procedure_Promise<Step_1_Error>,
-        step_2: _et.Procedure_Promise<Step_2_Error>,
-        step_3: _et.Procedure_Promise<Step_3_Error>,
-    ): _et.Procedure_Promise<Three_Steps_Error<Step_1_Error, Step_2_Error, Step_3_Error>> => {
-        return __create_procedure_promise({
-            'execute': (on_success, on_error) => {
-                step_1.__start(
-                    () => {
-                        step_2.__start(
-                            () => {
-                                step_3.__start(
-                                    on_success,
-                                    (error) => {
-                                        on_error(['step3', error])
-                                    }
-                                )
-                            },
-                            (error) => {
-                                on_error(['step2', error])
-                            }
-                        )
-                    },
-                    (error) => {
-                        on_error(['step1', error])
-                    }
-                )
-            }
-        })
-    }
-
-
-    export const two_steps = <Step_1_Error, Step_2_Error>(
-        step_1: _et.Procedure_Promise<Step_1_Error>,
-        step_2: _et.Procedure_Promise<Step_2_Error>,
-    ): _et.Procedure_Promise<Two_Steps_Error<Step_1_Error, Step_2_Error>> => {
-        return __create_procedure_promise({
-            'execute': (on_success, on_error) => {
-                step_1.__start(
-                    () => {
-                        step_2.__start(
-                            on_success,
-                            (error) => {
-                                on_error(['step2', error])
-                            }
-                        )
-                    },
-                    (error) => {
-                        on_error(['step1', error])
-                    }
-                )
-            }
-        })
-    }
 }
