@@ -3,6 +3,7 @@ import * as _ei from 'exupery-core-internals'
 
 import { __create_procedure_promise } from "../algorithms/procedure/create_procedure_promise"
 import { create_asynchronous_processes_monitor } from '../create_asynchronous_processes_monitor'
+import { Basic_Procedure_Primed_With_Resources } from '../algorithms/procedure/create_procedure_primed_with_resources'
 
 export namespace p {
 
@@ -159,13 +160,13 @@ export namespace p {
 
     export const conditional_on_processor = <Procedure_Input, Error>(
         precondition: _et.Process_Result<Procedure_Input, Error>,
-        procedure: _et.Procedure_Primed_With_Resources<Procedure_Input, Error>,
+        procedure: Basic_Procedure_Primed_With_Resources<Procedure_Input, Error>, // ($: Procedure_Input) => _et.Procedure_Promise<Error> (maybe it is better to have the non-basic one here?)
     ): _et.Procedure_Promise<Error> => {
         return __create_procedure_promise({
             'execute': (on_success, on_error) => {
                 precondition.__extract_data(
                     ($) => {
-                        procedure['execute with synchronous data without error transformation']($).__start(
+                        procedure($).__start(
                             on_success,
                             on_error
                         )

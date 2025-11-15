@@ -1,8 +1,10 @@
 import * as _et from 'exupery-core-types'
 import { __create_procedure_promise } from './create_procedure_promise'
 
+export type Basic_Procedure_Primed_With_Resources<Parameters, Error> = ($: Parameters) => _et.Procedure_Promise<Error>
+
 export const __create_procedure_primed_with_resources = <Parameters, Error, Resources>(
-    handler: ($: Parameters) => _et.Procedure_Promise<Error>,
+    handler: Basic_Procedure_Primed_With_Resources<Parameters, Error>,
 ): _et.Procedure_Primed_With_Resources<Parameters, Error> => {
     return {
         'execute with synchronous data without error transformation': handler,
