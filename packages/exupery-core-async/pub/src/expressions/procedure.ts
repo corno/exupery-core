@@ -14,10 +14,6 @@ export type Assert_Sync_Error<Procedure_Error> =
     | ['assertion failed', null]
     | ['procedure error', Procedure_Error]
 
-export type Conditional_Async_Error<Precondition_Error, Procedure_Error> =
-    | ['precondition', Precondition_Error]
-    | ['procedure', Procedure_Error]
-
 export type Conditional_Multiple_Error<Precondition_Error, Procedure_Error> =
     | ['preconditions', _et.Dictionary<Precondition_Error>]
     | ['procedure', Procedure_Error]
@@ -148,10 +144,10 @@ export namespace p {
         })
     }
 
-    export const conditional_async = <Precondition_Error, Procedure_Error>(
-        precondition: _et.Query_Promise<boolean, Precondition_Error>,
-        procedure: _et.Procedure_Promise<Procedure_Error>,
-    ): _et.Procedure_Promise<Conditional_Async_Error<Precondition_Error, Procedure_Error>> => {
+    export const conditional_async = <Error>(
+        precondition: _et.Query_Promise<boolean, Error>,
+        procedure: _et.Procedure_Promise<Error>,
+    ): _et.Procedure_Promise<Error> => {
         return __create_procedure_promise({
             'execute': (on_success, on_error) => {
                 precondition.__start(
@@ -159,19 +155,13 @@ export namespace p {
                         if ($) {
                             procedure.__start(
                                 on_success,
-                                (e) => {
-                                    on_error(
-                                        ['procedure', e]
-                                    )
-                                }
+                                on_error
                             )
                         } else {
                             on_success()
                         }
                     },
-                    ($) => {
-                        on_error(['precondition', $])
-                    }
+                    on_error
                 )
             }
         })
@@ -217,10 +207,10 @@ export namespace p {
     }
 
 
-    export const conditional_sync = <Procedure_Error>(
+    export const conditional_sync = <Error>(
         precondition: boolean,
-        procedure: _et.Procedure_Promise<Procedure_Error>,
-    ): _et.Procedure_Promise<Procedure_Error> => {
+        procedure: _et.Procedure_Promise<Error>,
+    ): _et.Procedure_Promise<Error> => {
         return __create_procedure_promise({
             'execute': (on_success, on_error) => {
                 if (precondition) {
