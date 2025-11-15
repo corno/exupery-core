@@ -27,7 +27,7 @@ export namespace p {
                 query.__start(
                     (query_result) => {
                         //run the action
-                        action(resources)['execute with synchrounous data'](query_result).__start(
+                        action(resources)['execute with synchronous data'](query_result).__start(
                             on_success,
                             (error) => {
                                 //transform the error
