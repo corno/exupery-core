@@ -7,7 +7,6 @@ export interface Process_Result<Output, Error> {
         transformer: Transformer_Without_Parameters<Output, New_Output>
     ) => Process_Result<New_Output, Error>
 
-
     'transform error': <New_Error>(
         transformer: Transformer_Without_Parameters<Error, New_Error>
     ) => Process_Result<Output, New_Error>
