@@ -14,16 +14,16 @@ type Executer<T, E> = {
     ) => void
 }
 
-class Query_Result_Promise_Class<T, E> implements _et.Query_Promise<T, E> {
-    private executer: Executer<T, E>
-    constructor(executer: Executer<T, E>) {
+class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Result, Error> {
+    private executer: Executer<Result, Error>
+    constructor(executer: Executer<Result, Error>) {
         this.executer = executer
     }
 
     then<NT>(
-        handle_value: ($: T) => _et.Query_Promise<NT, E>
-    ): _et.Query_Promise<NT, E> {
-        return new Query_Result_Promise_Class<NT, E>({
+        handle_value: ($: Result) => _et.Query_Promise<NT, Error>
+    ): _et.Query_Promise<NT, Error> {
+        return new Query_Result_Promise_Class<NT, Error>({
             'execute': (on_value, on_error) => {
                 this.executer.execute(
                     ($) => {
@@ -38,9 +38,9 @@ class Query_Result_Promise_Class<T, E> implements _et.Query_Promise<T, E> {
         })
     }
     map_error<NE>(
-        handle_error: ($: E) => NE
-    ): _et.Query_Promise<T, NE> {
-        return new Query_Result_Promise_Class<T, NE>({
+        handle_error: ($: Error) => NE
+    ): _et.Query_Promise<Result, NE> {
+        return new Query_Result_Promise_Class<Result, NE>({
             'execute': (on_value, on_error) => {
                 this.executer.execute(
                     on_value,
@@ -52,16 +52,16 @@ class Query_Result_Promise_Class<T, E> implements _et.Query_Promise<T, E> {
         })
     }
 
-    process<New_Result>(
-        processor: _et.Processor<T, New_Result, E>
-    ): _et.Query_Promise<New_Result, E> {
-        return new Query_Result_Promise_Class<New_Result, E>({
+    process_result<New_Result>(
+        processor: _et.Processor<Result, New_Result, Error>
+    ): _et.Query_Promise<New_Result, Error> {
+        return new Query_Result_Promise_Class<New_Result, Error>({
             'execute': (on_value, on_error) => {
                 this.executer.execute(
                     ($) => {
                         processor(
                             $,
-                            
+
                         ).__extract_data(
                             on_value,
                             on_error,
@@ -73,9 +73,60 @@ class Query_Result_Promise_Class<T, E> implements _et.Query_Promise<T, E> {
         })
     }
 
+    process_error<New_Error>(
+        processor: _et.Processor<Error, Result, New_Error>
+    ): _et.Query_Promise<Result, New_Error> {
+        return new Query_Result_Promise_Class<Result, New_Error>({
+            'execute': (on_value, on_error) => {
+                this.executer.execute(
+                    on_value,
+                    ($) => {
+                        processor(
+                            $,
+
+                        ).__extract_data(
+                            on_value,
+                            on_error,
+                        )
+                    },
+                )
+            }
+        })
+    }
+
+    process<New_Result, New_Error>(processors: {
+        'result': _et.Processor<Result, New_Result, New_Error>,
+        'error': _et.Processor<Error, New_Result, New_Error>,
+    }): _et.Query_Promise<New_Result, New_Error> {
+        return new Query_Result_Promise_Class<New_Result, New_Error>({
+            'execute': (on_value, on_error) => {
+                this.executer.execute(
+                    ($) => {
+                        processors.result(
+                            $,
+
+                        ).__extract_data(
+                            on_value,
+                            on_error,
+                        )
+                    },
+                    ($) => {
+                        processors.error(
+                            $,
+                            
+                        ).__extract_data(
+                            on_value,
+                            on_error,
+                        )
+                    }
+                )
+            }
+        })
+    }
+
     __start(
-        on_value: ($: T) => void,
-        on_error: ($: E) => void,
+        on_value: ($: Result) => void,
+        on_error: ($: Error) => void,
     ): void {
         this.executer.execute(on_value, on_error)
     }
