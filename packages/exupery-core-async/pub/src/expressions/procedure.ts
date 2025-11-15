@@ -183,7 +183,7 @@ export namespace p {
     ): _et.Procedure_Promise<Conditional_Multiple_Error<Precondition_Error, Procedure_Error>> => {
         return __create_procedure_promise({
             'execute': (on_success, on_error) => {
-                q.dictionary(
+                q.dictionary_parallel_without_error_aggregation(
                     preconditions,
                 ).__start(
                     ($) => {
@@ -366,7 +366,7 @@ export namespace p {
             'execute': (on_success, on_error) => {
                 query.__start(
                     (query_result) => {
-                        procedure["execute with synchronous data"](query_result).__start(
+                        procedure['execute with synchronous data without error transformation'](query_result).__start(
                             on_success,
                             on_error,
                         )

@@ -5,16 +5,16 @@ export const __create_procedure_primed_with_resources = <Parameters, Error, Reso
     handler: ($: Parameters) => _et.Procedure_Promise<Error>,
 ): _et.Procedure_Primed_With_Resources<Parameters, Error> => {
     return {
-        'execute with synchronous data': handler,
+        'execute with synchronous data without error transformation': handler,
 
-        'execute with synchronous data and map error': (parameters, map_error) => {
+        'execute with synchronous data': (parameters, transform_error) => {
             return __create_procedure_promise({
                 'execute': (on_success, on_error) => {
                     handler(parameters).__start(
                         on_success,
                         (error) => {
                             on_error(
-                                map_error(error)
+                                transform_error(error)
                             )
                         }
                     )
@@ -22,7 +22,7 @@ export const __create_procedure_primed_with_resources = <Parameters, Error, Reso
             })
         },
 
-        'execute with asynchronous data': (query) => {
+        'execute with asynchronous data without error transformation': (query) => {
             return __create_procedure_promise({
                 'execute': (on_success, on_error) => {
                     query.__start(
@@ -38,7 +38,7 @@ export const __create_procedure_primed_with_resources = <Parameters, Error, Reso
             })
         },
 
-        'execute with asynchronous data and map error': (query, map_error) => {
+        'execute with asynchronous data': (query, transform_error) => {
             return __create_procedure_promise({
                 'execute': (on_success, on_error) => {
                     query.__start(
@@ -47,14 +47,14 @@ export const __create_procedure_primed_with_resources = <Parameters, Error, Reso
                                 on_success,
                                 (error) => {
                                     on_error(
-                                        map_error(error)
+                                        transform_error(error)
                                     )
                                 }
                             )
                         },
                         (error) => {
                             on_error(
-                                map_error(error)
+                                transform_error(error)
                             )
                         },
                     )
