@@ -12,8 +12,6 @@ export * from "./algorithms/procedure/create_procedure"
 export * from "./algorithms/procedure/create_procedure_promise"
 export * from "./algorithms/procedure/create_procedure_primed_with_resources"
 
-export * from "./process_result"
-
 export * from "./shorthands"
 
 // procedure exports

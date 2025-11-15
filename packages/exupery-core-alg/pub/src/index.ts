@@ -33,3 +33,5 @@ export * from "./text_to_character_list"
 export * from "./integer"
 
 export * from "./temp_julian"
+
+export * from "./process_result"
