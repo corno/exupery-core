@@ -8,6 +8,7 @@ export * from "./types/Basic_Query"
 //functions
 
 export * from "./algorithms/query/create_query_promise"
+export * from "./algorithms/procedure/create_procedure"
 export * from "./algorithms/procedure/create_procedure_promise"
 export * from "./algorithms/procedure/create_procedure_primed_with_resources"
 

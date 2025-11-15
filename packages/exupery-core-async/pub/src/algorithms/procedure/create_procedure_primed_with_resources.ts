@@ -1,7 +1,7 @@
 import * as _et from 'exupery-core-types'
 import { __create_procedure_promise } from './create_procedure_promise'
 
-export const create_procedure_primed_with_resources = <Parameters, Error, Resources>(
+export const __create_procedure_primed_with_resources = <Parameters, Error, Resources>(
     handler: ($: Parameters) => _et.Procedure_Promise<Error>,
 ): _et.Procedure_Primed_With_Resources<Parameters, Error> => {
     return {
