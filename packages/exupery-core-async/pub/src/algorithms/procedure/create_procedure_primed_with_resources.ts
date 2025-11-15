@@ -6,6 +6,22 @@ export const __create_procedure_primed_with_resources = <Parameters, Error, Reso
 ): _et.Procedure_Primed_With_Resources<Parameters, Error> => {
     return {
         'execute with synchronous data': handler,
+
+        'execute with synchronous data and map error': (parameters, map_error) => {
+            return __create_procedure_promise({
+                'execute': (on_success, on_error) => {
+                    handler(parameters).__start(
+                        on_success,
+                        (error) => {
+                            on_error(
+                                map_error(error)
+                            )
+                        }
+                    )
+                }
+            })
+        },
+
         'execute with asynchronous data': (query) => {
             return __create_procedure_promise({
                 'execute': (on_success, on_error) => {
@@ -17,6 +33,30 @@ export const __create_procedure_primed_with_resources = <Parameters, Error, Reso
                             )
                         },
                         on_error,
+                    )
+                }
+            })
+        },
+
+        'execute with asynchronous data and map error': (query, map_error) => {
+            return __create_procedure_promise({
+                'execute': (on_success, on_error) => {
+                    query.__start(
+                        ($) => {
+                            handler($).__start(
+                                on_success,
+                                (error) => {
+                                    on_error(
+                                        map_error(error)
+                                    )
+                                }
+                            )
+                        },
+                        (error) => {
+                            on_error(
+                                map_error(error)
+                            )
+                        },
                     )
                 }
             })
