@@ -177,8 +177,9 @@ export namespace p {
         })
     }
 
-    export const conditional_on_refiner = <Procedure_Input, Error>(
-        precondition: _et.Refinement_Result<Procedure_Input, Error>,
+    export const conditional_on_refiner = <Procedure_Input, Refinement_Error, Error>(
+        precondition: _et.Refinement_Result<Procedure_Input, Refinement_Error>,
+        error_transformer: _et.Transformer_Without_Parameters<Refinement_Error, Error>,
         procedure: Basic_Procedure_Primed_With_Resources<Procedure_Input, Error>, // ($: Procedure_Input) => _et.Procedure_Promise<Error> (maybe it is better to have the non-basic one here?)
     ): _et.Procedure_Promise<Error> => {
         return __create_procedure_promise({
@@ -190,7 +191,9 @@ export namespace p {
                             on_error
                         )
                     },
-                    on_error
+                    (e) => {
+                        on_error(error_transformer(e))
+                    }
                 )
             }
         })
