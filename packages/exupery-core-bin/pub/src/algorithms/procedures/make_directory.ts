@@ -18,7 +18,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
         return path
     }
     return _easync.__create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             fs_mkdir(
                 __possibly_escape_filename($p.path, $p['escape spaces in path']),
                 {
@@ -26,7 +26,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
                 },
                 (err, path) => {
                     if (err) {
-                        on_exception(_ei.block((): d.Error => {
+                        on_error(_ei.block((): d.Error => {
                             if (err.code === 'EEXIST') {
                                 return ['directory already exists', null]
                             }

@@ -7,13 +7,13 @@ export const transform_query = <In, Out, Error>(
     transform: ($: In) => Out,
 ): _et.Query_Promise<Out, Error> => {
     return __create_query_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             query.__start(
                 ($) => {
                     on_success(transform($))
                 },
                 (e) => {
-                    on_exception(e)
+                    on_error(e)
                 }
             )
         }

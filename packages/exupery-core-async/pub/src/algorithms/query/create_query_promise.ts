@@ -3,14 +3,14 @@ import * as _et from "exupery-core-types"
 
 /**
  * this function contains the body in which the async value or exception is executed
- * after the execution, either the on_value or on_exception callback will be called
+ * after the execution, either the on_value or on_error callback will be called
  * @param on_value the callback to call when a value is produced
- * @param on_exception the callback to call when an error is produced
+ * @param on_error the callback to call when an error is produced
  */
 type Executer<T, E> = {
     'execute': (
         on_value: ($: T) => void,
-        on_exception: ($: E) => void,
+        on_error: ($: E) => void,
     ) => void
 }
 
@@ -19,47 +19,55 @@ class Query_Result_Promise_Class<T, E> implements _et.Query_Promise<T, E> {
     constructor(executer: Executer<T, E>) {
         this.executer = executer
     }
-    map_<NT>(
-        handle_value: ($: T) => NT
-    ): _et.Query_Promise<NT, E> {
-        return new Query_Result_Promise_Class<NT, E>({
-            'execute': (on_value, on_exception) => {
-                this.executer.execute(
-                    ($) => {
-                        on_value(handle_value($))
-                    },
-                    on_exception
-                )
-            }
-        })
-    }
+
     then<NT>(
         handle_value: ($: T) => _et.Query_Promise<NT, E>
     ): _et.Query_Promise<NT, E> {
         return new Query_Result_Promise_Class<NT, E>({
-            'execute': (new_on_value, new_on_exception) => {
+            'execute': (on_value, on_error) => {
                 this.executer.execute(
                     ($) => {
                         handle_value($).__start(
-                            new_on_value,
-                            new_on_exception,
+                            on_value,
+                            on_error,
                         )
                     },
-                    new_on_exception,
+                    on_error,
                 )
             }
         })
     }
-    map_exception_<NE>(
+    map_exception<NE>(
         handle_exception: ($: E) => NE
     ): _et.Query_Promise<T, NE> {
         return new Query_Result_Promise_Class<T, NE>({
-            'execute': (on_value, on_exception) => {
+            'execute': (on_value, on_error) => {
                 this.executer.execute(
                     on_value,
                     ($) => {
-                        on_exception(handle_exception($))
+                        on_error(handle_exception($))
                     },
+                )
+            }
+        })
+    }
+
+    process<New_Result>(
+        processor: _et.Processor<T, New_Result, E>
+    ): _et.Query_Promise<New_Result, E> {
+        return new Query_Result_Promise_Class<New_Result, E>({
+            'execute': (on_value, on_error) => {
+                this.executer.execute(
+                    ($) => {
+                        processor(
+                            $,
+                            
+                        ).__extract_data(
+                            on_value,
+                            on_error,
+                        )
+                    },
+                    on_error,
                 )
             }
         })
@@ -67,9 +75,9 @@ class Query_Result_Promise_Class<T, E> implements _et.Query_Promise<T, E> {
 
     __start(
         on_value: ($: T) => void,
-        on_exception: ($: E) => void,
+        on_error: ($: E) => void,
     ): void {
-        this.executer.execute(on_value, on_exception)
+        this.executer.execute(on_value, on_error)
     }
 }
 

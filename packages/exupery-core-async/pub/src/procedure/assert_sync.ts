@@ -11,15 +11,15 @@ export const assert_sync = <Assertion_Error, Procedure_Error>(
     procedure: _et.Procedure_Promise<Procedure_Error>,
 ): _et.Procedure_Promise<Assert_Sync_Error<Procedure_Error>> => {
     return __create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             if (!assertion) {
-                on_exception(['assertion failed', null])
+                on_error(['assertion failed', null])
                 return
             }
             procedure.__start(
                 on_success,
                 ($) => {
-                    on_exception(['procedure error', $])
+                    on_error(['procedure error', $])
                 }
             )
         }

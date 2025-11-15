@@ -19,7 +19,7 @@ export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, d.Error
 ) => {
     const args = $p.args.__get_raw_copy()
     return _easync.__create_query_promise({
-        'execute': (on_value, on_exception) => {
+        'execute': (on_value, on_error) => {
 
             const child = spawn($p.program, args, {
                 shell: false, // ✅ no implicit parsing
@@ -37,7 +37,7 @@ export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, d.Error
             })
 
             child.on("error", err => {
-                on_exception(_ei.block((): d.Error => {
+                on_error(_ei.block((): d.Error => {
                     return ['failed to spawn', {
                         message: err instanceof Error ? err.message : `${err}`
                     }]
@@ -50,7 +50,7 @@ export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, d.Error
                         stdout: stdoutData,
                     })
                 } else {
-                    on_exception(_ei.block((): d.Error => {
+                    on_error(_ei.block((): d.Error => {
                         return ['non zero exit code', {
                             'exit code': exitCode === null ? _ei.not_set() : _ei.set(exitCode),
                             'stderr': stderrData,

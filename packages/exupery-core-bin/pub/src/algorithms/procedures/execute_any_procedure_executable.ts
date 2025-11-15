@@ -18,7 +18,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
 ) => {
     const args = $p.args.__get_raw_copy()
     return _easync.__create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
 
             const child = spawn($p.program, args, {
                 shell: false, // ✅ direct execution, no shell
@@ -31,7 +31,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
             })
 
             child.on("error", err => {
-                on_exception(_ei.block((): d.Error => {
+                on_error(_ei.block((): d.Error => {
                     return ['failed to spawn', { message: err instanceof Error ? err.message : `${err}` }]
                 }))
             })
@@ -40,7 +40,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
                 if (exitCode === 0) {
                     on_success()
                 } else {
-                    on_exception(_ei.block((): d.Error => {
+                    on_error(_ei.block((): d.Error => {
                         return ['non zero exit code', {
                             'exit code': exitCode === null ? _ei.not_set() : _ei.set(exitCode),
                             'stderr': stderrData

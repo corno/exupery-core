@@ -18,10 +18,10 @@ export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, d.Error
         return path
     }
     return _easync.__create_query_promise({
-        'execute': (on_value, on_exception) => {
+        'execute': (on_value, on_error) => {
             fs_stat(__possibly_escape_filename($p.path, $p['escape spaces in path']), (err, stats) => {
                 if (err) {
-                    on_exception(_ei.block((): d.Error => {
+                    on_error(_ei.block((): d.Error => {
                         if (err.code === 'ENOENT') {
                             return ['node does not exist', null]
                         }

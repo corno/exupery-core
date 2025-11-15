@@ -6,7 +6,7 @@ export const procedure_dictionary = <Error>(
     $: _et.Dictionary<_et.Procedure_Promise<Error>>,
 ): _et.Procedure_Promise<_et.Dictionary<Error>> => {
     return __create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             let count_down = $.__get_number_of_entries()
             let has_errors = false
 
@@ -15,7 +15,7 @@ export const procedure_dictionary = <Error>(
                 count_down -= 1
                 if (count_down === 0) {
                     if (has_errors) {
-                        on_exception(_ei.dictionary_literal(errors))
+                        on_error(_ei.dictionary_literal(errors))
                     } else {
                         on_success()
                     }

@@ -54,8 +54,8 @@ export const query = {
     ): _et.Query_Promise<T, E> => {
         return __create_query_promise(
             {
-                'execute': (on_value, on_exception) => {
-                    on_exception($)
+                'execute': (on_value, on_error) => {
+                    on_error($)
                 }
             }
         )

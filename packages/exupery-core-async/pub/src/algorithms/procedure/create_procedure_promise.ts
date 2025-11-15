@@ -4,14 +4,14 @@ import * as _ei from "exupery-core-internals"
 
 /**
  * this function contains the body in which the async value or exception is executed
- * after the execution, either the on_value or on_exception callback will be called
+ * after the execution, either the on_value or on_error callback will be called
  * @param on_value the callback to call when a value is produced
- * @param on_exception the callback to call when an error is produced
+ * @param on_error the callback to call when an error is produced
  */
 type Executer<E> = {
     'execute': (
         on_success: () => void,
-        on_exception: ($: E) => void,
+        on_error: ($: E) => void,
     ) => void
 }
 
@@ -23,20 +23,20 @@ class Procedure_Promise_Class<E> implements _et.Procedure_Promise<E> {
 
     __start(
         on_success: () => void,
-        on_exception: ($: E) => void,
+        on_error: ($: E) => void,
     ): void {
-        this.executer.execute(on_success, on_exception)
+        this.executer.execute(on_success, on_error)
     }
 
     map_error<NE>(
         handle_error: (error: E) => NE
     ): _et.Procedure_Promise<NE> {
         return new Procedure_Promise_Class<NE>({
-            'execute': (on_success, on_exception) => {
+            'execute': (on_success, on_error) => {
                 this.executer.execute(
                     on_success,
                     (error) => {
-                        on_exception(handle_error(error))
+                        on_error(handle_error(error))
                     }
                 )
             }

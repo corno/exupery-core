@@ -18,7 +18,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
         return path
     }
     return _easync.__create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             fs_rm(
                 __possibly_escape_filename($p.path.path, $p.path['escape spaces in path']),
                 {
@@ -30,7 +30,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
                         if (err.code === 'ENOENT' && !$p['error if not exists']) {
                             on_success()
                         } else {
-                            on_exception(_ei.block((): d.Error => {
+                            on_error(_ei.block((): d.Error => {
                                 if (err.code === 'ENOENT') {
                                     return ['node does not exist', null]
                                 }

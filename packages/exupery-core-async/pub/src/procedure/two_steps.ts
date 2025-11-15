@@ -10,18 +10,18 @@ export const two_steps = <Step_1_Error, Step_2_Error>(
     step_2: _et.Procedure_Promise<Step_2_Error>,
 ): _et.Procedure_Promise<Two_Steps_Error<Step_1_Error, Step_2_Error>> => {
     return __create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             step_1.__start(
                 () => {
                     step_2.__start(
                         on_success,
                         (error) => {
-                            on_exception(['step2', error])
+                            on_error(['step2', error])
                         }
                     )
                 },
                 (error) => {
-                    on_exception(['step1', error])
+                    on_error(['step1', error])
                 }
             )
         }

@@ -12,14 +12,14 @@ export const conditional_async = <Precondition_Error, Procedure_Error>(
     procedure: _et.Procedure_Promise<Procedure_Error>,
 ): _et.Procedure_Promise<Conditional_Async_Error<Precondition_Error, Procedure_Error>> => {
     return __create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             precondition.__start(
                 ($) => {
                     if ($) {
                         procedure.__start(
                             on_success,
                             (e) => {
-                                on_exception(
+                                on_error(
                                     ['procedure', e]
                                 )
                             }
@@ -29,7 +29,7 @@ export const conditional_async = <Precondition_Error, Procedure_Error>(
                     }
                 },
                 ($) => {
-                    on_exception(['precondition', $])
+                    on_error(['precondition', $])
                 }
             )
         }

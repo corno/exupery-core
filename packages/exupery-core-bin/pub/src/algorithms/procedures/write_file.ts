@@ -14,7 +14,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
     $p,
 ) => {
     return _easync.__create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
 
             const __possibly_escape_filename = (path: string, escape: boolean): string => {
                 if (escape) {
@@ -30,7 +30,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
                 },
                 (err, path) => {
                     if (err) {
-                        on_exception(_ei.block((): d.Error => {
+                        on_error(_ei.block((): d.Error => {
                             if (err.code === 'EACCES' || err.code === 'EPERM') {
                                 return ['permission denied', null]
                             }
@@ -40,7 +40,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
                     }
                     fs_writeFile(fname, $p.data, (err) => {
                         if (err) {
-                            on_exception(_ei.block((): d.Error => {
+                            on_error(_ei.block((): d.Error => {
                                 if (err.code === 'EACCES' || err.code === 'EPERM') {
                                     return ['permission denied', null]
                                 }

@@ -21,7 +21,7 @@ export const dictionary_sequence = <Err>(
     steps: _et.Dictionary<_et.Procedure_Promise<Err>>,
 ): _et.Procedure_Promise<Sequence_Error<Err>> => {
     return __create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             const as_list = op_dictionary_to_list_based_on_insertion_order(steps)
 
             let current = 0
@@ -36,7 +36,7 @@ export const dictionary_sequence = <Err>(
                                 do_next()
                             },
                             ($) => {
-                                on_exception({
+                                on_error({
                                     'error': $,
                                     'step': key,
                                 })

@@ -15,7 +15,7 @@ export const conditional_multiple = <Precondition_Error, Procedure_Error>(
     procedure: _et.Procedure_Promise<Procedure_Error>,
 ): _et.Procedure_Promise<Conditional_Multiple_Error<Precondition_Error, Procedure_Error>> => {
     return __create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             query_dictionary(
                 preconditions,
             ).__start(
@@ -31,7 +31,7 @@ export const conditional_multiple = <Precondition_Error, Procedure_Error>(
                         procedure.__start(
                             on_success,
                             (e) => {
-                                on_exception(
+                                on_error(
                                     ['procedure', e]
                                 )
                             }
@@ -42,7 +42,7 @@ export const conditional_multiple = <Precondition_Error, Procedure_Error>(
                     }
                 },
                 ($) => {
-                    on_exception(['preconditions', $])
+                    on_error(['preconditions', $])
                 }
             )
         }

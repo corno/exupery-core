@@ -12,7 +12,7 @@ export const three_steps = <Step_1_Error, Step_2_Error, Step_3_Error>(
     step_3: _et.Procedure_Promise<Step_3_Error>,
 ): _et.Procedure_Promise<Three_Steps_Error<Step_1_Error, Step_2_Error, Step_3_Error>> => {
     return __create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             step_1.__start(
                 () => {
                     step_2.__start(
@@ -20,17 +20,17 @@ export const three_steps = <Step_1_Error, Step_2_Error, Step_3_Error>(
                             step_3.__start(
                                 on_success,
                                 (error) => {
-                                    on_exception(['step3', error])
+                                    on_error(['step3', error])
                                 }
                             )
                         },
                         (error) => {
-                            on_exception(['step2', error])
+                            on_error(['step2', error])
                         }
                     )
                 },
                 (error) => {
-                    on_exception(['step1', error])
+                    on_error(['step1', error])
                 }
             )
         }

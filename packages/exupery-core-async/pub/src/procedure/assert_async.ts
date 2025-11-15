@@ -12,22 +12,22 @@ export const assert_async = <Assertion_Error, Procedure_Error>(
     procedure: _et.Procedure_Promise<Procedure_Error>,
 ): _et.Procedure_Promise<Assert_Async_Error<Assertion_Error, Procedure_Error>> => {
     return __create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             assertion.__start(
                 ($) => {
                     if ($) {
                         procedure.__start(
                             on_success,
                             ($) => {
-                                on_exception(['procedure error', $])
+                                on_error(['procedure error', $])
                             }
                         )
                     } else {
-                        on_exception(['assertion failed', null])
+                        on_error(['assertion failed', null])
                     }
                 },
                 ($) => {
-                    on_exception(['assertion error', $])
+                    on_error(['assertion error', $])
                 }
             )
         }

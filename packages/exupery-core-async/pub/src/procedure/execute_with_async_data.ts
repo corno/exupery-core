@@ -6,15 +6,15 @@ export const execute_with_async_data = <Parameters, Error>(
     query: _et.Query_Promise<Parameters, Error>,
 ): _et.Procedure_Promise<Error> => {
     return __create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             query.__start(
                 (query_result) => {
                     procedure["execute with synchronous data"](query_result).__start(
                         on_success,
-                        on_exception,
+                        on_error,
                     )
                 },
-                on_exception,
+                on_error,
             )
         }
     })

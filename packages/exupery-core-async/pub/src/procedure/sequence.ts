@@ -7,7 +7,7 @@ export const sequence = <Error>(
     steps: _et.Array<_et.Procedure_Promise<Error>>,
 ): _et.Procedure_Promise<Error> => {
     return __create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
 
             let current = 0
 
@@ -19,7 +19,7 @@ export const sequence = <Error>(
                             () => {
                                 do_next()
                             },
-                            on_exception
+                            on_error
                         )
                     },
                     () => {

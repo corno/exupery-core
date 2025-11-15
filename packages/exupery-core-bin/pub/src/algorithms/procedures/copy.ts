@@ -18,7 +18,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
     return path
 }
     return _easync.__create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             const options: any = {}
             $p.options.recursive.map(($) => { options.recursive = $ })
             $p.options.force.map(($) => { options.force = $ })
@@ -26,7 +26,7 @@ export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _e
             
             fs_cp(__possibly_escape_filename($p.source.path, $p.source['escape spaces in path']), __possibly_escape_filename($p.target.path, $p.target['escape spaces in path']), options, (err) => {
                 if (err) {
-                    on_exception(_ei.block((): d.Error => {
+                    on_error(_ei.block((): d.Error => {
                         if (err.code === 'ENOENT') {
                             return ['source does not exist', null]
                         }

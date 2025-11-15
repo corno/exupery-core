@@ -8,15 +8,15 @@ export const __create_procedure_primed_with_resources = <Parameters, Error, Reso
         'execute with synchronous data': handler,
         'execute with asynchronous data': (query) => {
             return __create_procedure_promise({
-                'execute': (on_success, on_exception) => {
+                'execute': (on_success, on_error) => {
                     query.__start(
                         ($) => {
                             handler($).__start(
                                 on_success,
-                                on_exception,
+                                on_error,
                             )
                         },
-                        on_exception,
+                        on_error,
                     )
                 }
             })

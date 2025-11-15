@@ -6,11 +6,11 @@ export const conditional_sync = <Procedure_Error>(
     procedure: _et.Procedure_Promise<Procedure_Error>,
 ): _et.Procedure_Promise<Procedure_Error> => {
     return __create_procedure_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             if (precondition) {
                 procedure.__start(
                     on_success,
-                    on_exception
+                    on_error
                 )
             } else {
                 on_success()

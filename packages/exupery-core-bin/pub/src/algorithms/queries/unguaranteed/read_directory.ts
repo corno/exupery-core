@@ -18,13 +18,13 @@ export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, d.Error
         return path
     }
     return _easync.__create_query_promise({
-        'execute': (on_value, on_exception) => {
+        'execute': (on_value, on_error) => {
             fs_readdir(__possibly_escape_filename($p.path.path, $p.path['escape spaces in path']), {
                 'encoding': 'utf-8',
                 'withFileTypes': true,
             }, (err, files) => {
                 if (err) {
-                    on_exception(_ei.block((): d.Error => {
+                    on_error(_ei.block((): d.Error => {
                         if (err.code === 'ENOENT') {
                             return ['directory does not exist', null]
                         }

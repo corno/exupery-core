@@ -7,7 +7,7 @@ export const query_dictionary = <Result, Error>(
     $: _et.Dictionary<Basic_Query_Promise<Result, Error>>,
 ): _et.Query_Promise<_et.Dictionary<Result>, _et.Dictionary<Error>> => {
     return __create_query_promise({
-        'execute': (on_success, on_exception) => {
+        'execute': (on_success, on_error) => {
             let count_down = $.__get_number_of_entries()
             let has_errors = false
 
@@ -17,7 +17,7 @@ export const query_dictionary = <Result, Error>(
                 count_down -= 1
                 if (count_down === 0) {
                     if (has_errors) {
-                        on_exception(_ei.dictionary_literal(errors))
+                        on_error(_ei.dictionary_literal(errors))
                     } else {
                         on_success(_ei.dictionary_literal(results))
                     }
