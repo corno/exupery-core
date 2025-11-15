@@ -157,6 +157,25 @@ export namespace p {
         })
     }
 
+    export const conditional_on_processor = <Procedure_Input, Error>(
+        precondition: _et.Process_Result<Procedure_Input, Error>,
+        procedure: _et.Procedure_Primed_With_Resources<Procedure_Input, Error>,
+    ): _et.Procedure_Promise<Error> => {
+        return __create_procedure_promise({
+            'execute': (on_success, on_error) => {
+                precondition.__extract_data(
+                    ($) => {
+                        procedure['execute with synchronous data without error transformation']($).__start(
+                            on_success,
+                            on_error
+                        )
+                    },
+                    on_error
+                )
+            }
+        })
+    }
+
     export const dictionary_serie = <Error, Entry_Error>(
         dictionary: _et.Dictionary<_et.Procedure_Promise<Entry_Error>>,
         transform_error: _et.Transformer_Without_Parameters<_et.Key_Value_Pair<Entry_Error>, Error>,
