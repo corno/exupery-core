@@ -14,7 +14,7 @@ import { Signature } from "exupery-resources/dist/interface/algorithms/queries/g
  * The executable being executed is assumed to be side effect free
  * There is no way to give guarantees about that though
  */
-export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, null> = (
+export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, null> = _easync.__create_query_primed_with_resources((
     $p
 ) => {
     const args = $p.args.__get_raw_copy()
@@ -56,4 +56,4 @@ export const $$: _et.Query_Primed_With_Resources<d.Parameters, d.Result, null> =
             })
         }
     })
-}
+})
