@@ -5,7 +5,7 @@ import * as _et from 'exupery-core-types'
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/log/data_types/target"
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/guaranteed/log"
 
-export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, null> = _easync.create_procedure_primed_with_resources( (
+export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, null> = _easync.__create_procedure_primed_with_resources( (
     $p,
 ) => {
     return _easync.__create_procedure_promise({
