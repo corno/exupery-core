@@ -23,6 +23,7 @@ export const create_procedural_dictionary_builder = <Entry>(): Procedural_Dictio
 
 export type Procedural_List_Builder<Item> = {
     'add item': (item: Item) => void,
+    'add list': (list: _et.Array<Item>) => void,
     'get list': () => _et.Array<Item>,
 }
 
@@ -32,6 +33,11 @@ export const create_procedural_list_builder = <Item>(): Procedural_List_Builder<
     return {
         'add item': (item: Item) => {
             items.push(item)
+        },
+        'add list': (list: _et.Array<Item>) => {
+            list.__for_each(($) => {
+                items.push($)
+            })
         },
 
         'get list': () => {

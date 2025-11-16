@@ -16,13 +16,13 @@ export type Dictionary_Builder<T> = {
 }
 
 export const build_list = <T>($: ($c: List_Builder<T>) => void): _et.Array<T> => {
-    const temp: T[] = []
+    const temp = _ei.create_procedural_list_builder<T>()
     $({
         'add element': ($) => {
-            temp.push($)
+            temp['add item']($)
         },
         'add list': ($) => {
-            temp.push(...$.__get_raw_copy())
+            temp['add list']($)
         }
     })
     return _ei.array_literal(temp)
