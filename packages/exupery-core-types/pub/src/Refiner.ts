@@ -23,6 +23,10 @@ export interface Refinement_Result<T, E> {
         handle_error: ($: E) => NT
     ): NT
 
+    transform_error<NE>(
+        handle_error: ($: E) => NE
+    ): Refinement_Result<T, NE>
+
     with_result<NT>(
         handle_value: ($: T) => Refinement_Result<NT, E>,
     ): Refinement_Result<NT, E>
