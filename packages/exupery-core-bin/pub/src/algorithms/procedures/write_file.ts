@@ -10,7 +10,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/wr
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/write_file"
 
 
-export const $$: _et.Procedure_Primed_With_Resources<d.Parameters, d.Error> = _easync.__create_procedure_primed_with_resources((
+export const $$: _et.Command<d.Parameters, d.Error> = _easync.__create_procedure_primed_with_resources((
     $p,
 ) => {
     return _easync.__create_procedure_promise({

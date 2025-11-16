@@ -1,51 +1,12 @@
-import * as _et from "exupery-core-types"
-import * as _ei from "exupery-core-internals"
-
-//types
-
-//functions
 
 export * from "./algorithms/query/create_query_promise"
 export * from "./algorithms/query/create_query_primed_with_resources"
-export * from "./algorithms/query/create_query"
+export * from "./algorithms/query/create_query_procedure"
 
-export * from "./algorithms/procedure/create_procedure"
-export * from "./algorithms/procedure/create_procedure_promise"
-export * from "./algorithms/procedure/create_procedure_primed_with_resources"
+export * from "./algorithms/command/create_command_procedure"
+export * from "./algorithms/command/create_command_promise"
+export * from "./algorithms/command/create_command"
 
-// procedure exports
 export * from "./procedures/command"
 
-// query exports
 export * from "./procedures/query"
-
-import { __create_procedure_promise } from "./algorithms/procedure/create_procedure_promise"
-import { __create_query_promise } from "./algorithms/query/create_query_promise"
-
-
-
-
-export const query = {
-    'create result': <T, E>(
-        $: T
-    ): _et.Query_Promise<T, E> => {
-        return __create_query_promise(
-            {
-                'execute': (on_value) => {
-                    on_value($)
-                }
-            }
-        )
-    },
-    'raise error': <T, E>(
-        $: E
-    ): _et.Query_Promise<T, E> => {
-        return __create_query_promise(
-            {
-                'execute': (on_value, on_error) => {
-                    on_error($)
-                }
-            }
-        )
-    }
-}

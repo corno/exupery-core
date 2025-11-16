@@ -49,7 +49,7 @@ class Command_Promise_Class<E> implements _et.Command_Promise<E> {
  * @param executer the function that produces the eventual value
  * @returns 
  */
-export function __create_procedure_promise<E>(
+export function __create_command_promise<E>(
     executer: Executer<E>,
 ): _et.Command_Promise<E> {
     return new Command_Promise_Class<E>(executer)

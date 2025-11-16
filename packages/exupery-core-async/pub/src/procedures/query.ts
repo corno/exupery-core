@@ -22,7 +22,7 @@ export namespace q {
                     count_down -= 1
                     if (count_down === 0) {
                         if (has_errors) {
-                            on_error(aggregate_errors(_ei.dictionary_literal(errors)    ))
+                            on_error(aggregate_errors(_ei.dictionary_literal(errors)))
                         } else {
                             on_success(_ei.dictionary_literal(results))
                         }
@@ -82,14 +82,26 @@ export namespace q {
         })
     }
 
-    export const fixed = <Query_Result, Error>(
-        query_result: Query_Result,
-    ): _et.Query_Promise<Query_Result, Error> => {
+    export const fixed = <Result, Error>(
+        result: Result,
+    ): _et.Query_Promise<Result, Error> => {
         return __create_query_promise({
             'execute': (on_success, on_error) => {
-                on_success(query_result)
+                on_success(result)
             }
         })
+    }
+
+    export const raise_error = <T, E>(
+        $: E
+    ): _et.Query_Promise<T, E> => {
+        return __create_query_promise(
+            {
+                'execute': (on_value, on_error) => {
+                    on_error($)
+                }
+            }
+        )
     }
 
     export const transform = <In, Out, Error>( //probably better to use the method on the query itself
