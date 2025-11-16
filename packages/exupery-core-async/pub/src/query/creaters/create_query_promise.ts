@@ -38,11 +38,11 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
         })
     }
 
-    rework_error_with_new_query<New_Error, Rework_Query_Error>(
-        query: _et.Query<Error, New_Error, Rework_Query_Error>,
-        transform_rework_error: (error: Rework_Query_Error) => New_Error,
-    ): _et.Query_Promise<Result, New_Error> {
-        return new Query_Result_Promise_Class<Result, New_Error>({
+    rework_error_with_new_query<Target_Error, Rework_Query_Error>(
+        query: _et.Query<Error, Target_Error, Rework_Query_Error>,
+        transform_rework_error: (error: Rework_Query_Error) => Target_Error,
+    ): _et.Query_Promise<Result, Target_Error> {
+        return new Query_Result_Promise_Class<Result, Target_Error>({
             'execute': (on_result, on_error) => {
                 this.executer.execute(
                     on_result,
@@ -61,11 +61,11 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
         })
     }
 
-    query<New_Result, New_Error>(queries: {
-        'result': _et.Query<Result, New_Result, New_Error>,
-        'error': _et.Query<Error, New_Result, New_Error>,
-    }): _et.Query_Promise<New_Result, New_Error> {
-        return new Query_Result_Promise_Class<New_Result, New_Error>({
+    query<New_Result, Target_Error>(queries: {
+        'result': _et.Query<Result, New_Result, Target_Error>,
+        'error': _et.Query<Error, New_Result, Target_Error>,
+    }): _et.Query_Promise<New_Result, Target_Error> {
+        return new Query_Result_Promise_Class<New_Result, Target_Error>({
             'execute': (on_result, on_error) => {
                 this.executer.execute(
                     ($) => {
@@ -109,10 +109,10 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
         })
     }
 
-    process_error<New_Error>(
-        processor: _et.Processor<Error, Result, New_Error>
-    ): _et.Query_Promise<Result, New_Error> {
-        return new Query_Result_Promise_Class<Result, New_Error>({
+    process_error<Target_Error>(
+        processor: _et.Processor<Error, Result, Target_Error>
+    ): _et.Query_Promise<Result, Target_Error> {
+        return new Query_Result_Promise_Class<Result, Target_Error>({
             'execute': (on_result, on_error) => {
                 this.executer.execute(
                     on_result,
@@ -130,11 +130,11 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
         })
     }
 
-    process<New_Result, New_Error>(processors: {
-        'result': _et.Processor<Result, New_Result, New_Error>,
-        'error': _et.Processor<Error, New_Result, New_Error>,
-    }): _et.Query_Promise<New_Result, New_Error> {
-        return new Query_Result_Promise_Class<New_Result, New_Error>({
+    process<New_Result, Target_Error>(processors: {
+        'result': _et.Processor<Result, New_Result, Target_Error>,
+        'error': _et.Processor<Error, New_Result, Target_Error>,
+    }): _et.Query_Promise<New_Result, Target_Error> {
+        return new Query_Result_Promise_Class<New_Result, Target_Error>({
             'execute': (on_result, on_error) => {
                 this.executer.execute(
                     ($) => {
@@ -176,10 +176,10 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
         })
     }
 
-    transform_error<New_Error>(
-        transformer: _et.Transformer_Without_Parameters<Error, New_Error>
-    ): _et.Query_Promise<Result, New_Error> {
-        return new Query_Result_Promise_Class<Result, New_Error>({
+    transform_error<Target_Error>(
+        transformer: _et.Transformer_Without_Parameters<Error, Target_Error>
+    ): _et.Query_Promise<Result, Target_Error> {
+        return new Query_Result_Promise_Class<Result, Target_Error>({
             'execute': (on_result, on_error) => {
                 this.executer.execute(
                     on_result,
@@ -191,11 +191,11 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
         })
     }
 
-    transform<New_Result, New_Error>(transformers: {
+    transform<New_Result, Target_Error>(transformers: {
         'result': _et.Transformer_Without_Parameters<Result, New_Result>,
-        'error': _et.Transformer_Without_Parameters<Error, New_Error>,
-    }): _et.Query_Promise<New_Result, New_Error> {
-        return new Query_Result_Promise_Class<New_Result, New_Error>({
+        'error': _et.Transformer_Without_Parameters<Error, Target_Error>,
+    }): _et.Query_Promise<New_Result, Target_Error> {
+        return new Query_Result_Promise_Class<New_Result, Target_Error>({
             'execute': (on_result, on_error) => {
                 this.executer.execute(
                     ($) => {

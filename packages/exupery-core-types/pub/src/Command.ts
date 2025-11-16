@@ -1,5 +1,4 @@
-import { Query_Promise } from "./Query"
-import { Refinement_Result } from "./Refiner"
+import { Data_Preparation_Result } from "./Data_Preparation_Result"
 
 export type Command_Procedure<Parameters, Error, Resources> = ($r: Resources) => Command<Parameters, Error>
 
@@ -8,21 +7,16 @@ export type Command<Parameters, Error> = {
     // but TypeScript does a way better job inferring types this way, so it will be Command.execute.direct(transform_error, parameters)
     'execute': {
 
-        'direct': <New_Error>(
-            transform_error: (error: Error) => New_Error,
+        'direct': <Target_Error>(
+            transform_error: (error: Error) => Target_Error,
             parameters: Parameters,
 
-        ) => Command_Promise<New_Error>,
+        ) => Command_Promise<Target_Error>,
 
-        'query': <New_Error>(
-            transform_error: (error: Error) => New_Error,
-            query: Query_Promise<Parameters, New_Error>,
-        ) => Command_Promise<New_Error>,
-
-        'refiner': <New_Error>(
-            transform_error: (error: Error) => New_Error,
-            refiner: Refinement_Result<Parameters, New_Error>
-        ) => Command_Promise<New_Error>,
+        'prepare': <Target_Error>(
+            transform_error: (error: Error) => Target_Error,
+            query: Data_Preparation_Result<Parameters, Target_Error>,
+        ) => Command_Promise<Target_Error>,
 
     }
 }
