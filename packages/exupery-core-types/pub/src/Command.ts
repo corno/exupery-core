@@ -11,12 +11,12 @@ export type Command<Parameters, Error> = {
             transform_error: (error: Error) => New_Error,
             parameters: Parameters,
 
-        ) => Command_Promise<Error>,
+        ) => Command_Promise<New_Error>,
 
         'query': <New_Error>(
             transform_error: (error: Error) => New_Error,
             query: Query_Promise<Parameters, Error>,
-        ) => Command_Promise<Error>,
+        ) => Command_Promise<New_Error>,
 
     }
 }
