@@ -107,46 +107,30 @@ export namespace p {
             })
         }
 
-        export const transformer = <Procedure_Input, Refinement_Error, Error>(
-            precondition: _et.Refinement_Result<Procedure_Input, Refinement_Error>,
-            error_transformer: _et.Transformer_Without_Parameters<Refinement_Error, Error>,
-            procedure: Basic_Command<Procedure_Input, Error>, // ($: Procedure_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
-        ): _et.Command_Promise<Error> => {
-            return __create_command_promise({
-                'execute': (on_success, on_error) => {
-                    precondition.process(
-                        ($) => {
-                            procedure($).__start(
-                                on_success,
-                                on_error
-                            )
-                        },
-                        (e) => {
-                            on_error(error_transformer(e))
-                        }
-                    )
-                }
-            })
-        }
     }
 
     export namespace execute {
-        export const direct = <Parameters, Error>(
-            procedure: _et.Command<Parameters, Error>,
+        export const direct = <Parameters, Error, Procedure_Error>(
+            procedure: _et.Command<Parameters, Procedure_Error>,
+            error_transformer: _et.Transformer_Without_Parameters<Procedure_Error, Error>,
             parameters: Parameters,
         ): _et.Command_Promise<Error> => {
-            return procedure['execute with synchronous data without error transformation'](parameters)
+            return procedure['execute with synchronous data'](
+                parameters,
+                error_transformer,
+            )
         }
 
-        export const query = <Parameters, Error>(
-            procedure: _et.Command<Parameters, Error>,
+        export const query = <Parameters, Error, Procedure_Error>(
+            procedure: _et.Command<Parameters, Procedure_Error>,
+            error_transformer: _et.Transformer_Without_Parameters<Procedure_Error, Error>,
             query: _et.Query_Promise<Parameters, Error>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
                     query.__start(
                         (query_result) => {
-                            procedure['execute with synchronous data without error transformation'](query_result).__start(
+                            procedure['execute with synchronous data'](query_result, error_transformer).__start(
                                 on_success,
                                 on_error,
                             )
@@ -156,6 +140,8 @@ export namespace p {
                 }
             })
         }
+
+        
     }
 
     export namespace list {
@@ -356,7 +342,7 @@ export namespace p {
         }
     }
 
-    
+
     // Sequencing function:
     export const sequence = <Error>(
         steps: _et.Command_Promise<Error>[]
@@ -383,4 +369,25 @@ export namespace p {
         })
     }
 
+    export const if_refiner_succeeds_deprecated = <Procedure_Input, Refinement_Error, Error>(
+        precondition: _et.Refinement_Result<Procedure_Input, Refinement_Error>,
+        error_transformer: _et.Transformer_Without_Parameters<Refinement_Error, Error>,
+        procedure: Basic_Command<Procedure_Input, Error>, // ($: Procedure_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
+    ): _et.Command_Promise<Error> => {
+        return __create_command_promise({
+            'execute': (on_success, on_error) => {
+                precondition.process(
+                    ($) => {
+                        procedure($).__start(
+                            on_success,
+                            on_error
+                        )
+                    },
+                    (e) => {
+                        on_error(error_transformer(e))
+                    }
+                )
+            }
+        })
+    }
 }
