@@ -16,12 +16,12 @@ export type Command<Parameters, Error> = {
 
         'query': <New_Error>(
             transform_error: (error: Error) => New_Error,
-            query: Query_Promise<Parameters, Error>,
+            query: Query_Promise<Parameters, New_Error>,
         ) => Command_Promise<New_Error>,
 
         'refiner': <New_Error>(
             transform_error: (error: Error) => New_Error,
-            refiner: Refinement_Result<Parameters, Error>
+            refiner: Refinement_Result<Parameters, New_Error>
         ) => Command_Promise<New_Error>,
 
     }
