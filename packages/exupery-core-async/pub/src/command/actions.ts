@@ -239,10 +239,12 @@ export namespace p {
 
                         const errors: { [key: string]: Entry_Error } = {}
 
-                        create_asynchronous_processes_monitor(
-                            (monitor) => {
-                                query.__start(
-                                    (dictionary) => {
+
+
+                        query.__start(
+                            (dictionary) => {
+                                create_asynchronous_processes_monitor(
+                                    (monitor) => {
                                         dictionary.map(($, key) => {
                                             monitor['report process started']()
 
@@ -257,16 +259,16 @@ export namespace p {
                                             )
                                         })
                                     },
-                                    on_error
+                                    () => {
+                                        if (Object.keys(errors).length === 0) {
+                                            on_success()
+                                        } else {
+                                            on_error(aggregate_errors(_ei.dictionary_literal(errors)))
+                                        }
+                                    }
                                 )
                             },
-                            () => {
-                                if (Object.keys(errors).length === 0) {
-                                    on_success()
-                                } else {
-                                    on_error(aggregate_errors(_ei.dictionary_literal(errors)))
-                                }
-                            }
+                            on_error
                         )
                     }
                 })
