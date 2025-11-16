@@ -8,7 +8,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/st
 import { Signature } from "exupery-resources/dist/interface/algorithms/queries/stat"
 
 
-export const $$: _et.Query<d.Parameters, d.Result, d.Error> = _easync.__create_query((
+export const $$: _et.Data_Preparer<d.Parameters, d.Result, d.Error> = _easync.__create_query((
     $p
 ) => {
     const __possibly_escape_filename = (path: string, escape: boolean): string => {
@@ -17,22 +17,20 @@ export const $$: _et.Query<d.Parameters, d.Result, d.Error> = _easync.__create_q
         }
         return path
     }
-    return _easync.__create_query_promise({
-        'execute': (on_value, on_error) => {
-            fs_stat(__possibly_escape_filename($p.path, $p['escape spaces in path']), (err, stats) => {
-                if (err) {
-                    on_error(_ei.block((): d.Error => {
-                        if (err.code === 'ENOENT') {
-                            return ['node does not exist', null]
-                        }
-                        return _ei.panic(`unhandled fs.stat error code: ${err.code}`)
-                    }))
-                }
-                on_value(stats.isFile()
-                    ? ['file', null]
-                    : ['directory', null]
-                )
-            })
-        }
+    return _ei.__create_data_preparation_result((on_value, on_error) => {
+        fs_stat(__possibly_escape_filename($p.path, $p['escape spaces in path']), (err, stats) => {
+            if (err) {
+                on_error(_ei.block((): d.Error => {
+                    if (err.code === 'ENOENT') {
+                        return ['node does not exist', null]
+                    }
+                    return _ei.panic(`unhandled fs.stat error code: ${err.code}`)
+                }))
+            }
+            on_value(stats.isFile()
+                ? ['file', null]
+                : ['directory', null]
+            )
+        })
     })
 })

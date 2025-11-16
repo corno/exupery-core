@@ -6,24 +6,22 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/ge
 import { Signature } from "exupery-resources/dist/interface/algorithms/queries/get_instream_data"
 
 
-export const $$: _et.Query<null, d.Result, null> = _easync.__create_query((
+export const $$: _et.Data_Preparer<null, d.Result, null> = _easync.__create_query((
 ) => {
-    return _easync.__create_query_promise({
-        'execute': (on_value) => {
-            
-            const stdin = process.stdin;
-            let data = '';
-            stdin.setEncoding('utf8');
+    return _ei.__create_data_preparation_result((on_value) => {
 
-            stdin.on('data', (chunk: string) => {
-                data += chunk;
-            });
+        const stdin = process.stdin;
+        let data = '';
+        stdin.setEncoding('utf8');
 
-            stdin.on('end', () => {
-                on_value(data);
-            });
+        stdin.on('data', (chunk: string) => {
+            data += chunk;
+        });
 
-            stdin.resume();
-        }
+        stdin.on('end', () => {
+            on_value(data);
+        });
+
+        stdin.resume();
     })
 })

@@ -14,50 +14,48 @@ import { Signature } from "exupery-resources/dist/interface/algorithms/queries/e
  * The executable being executed is assumed to be side effect free
  * There is no way to give guarantees about that though
  */
-export const $$: _et.Query<d.Parameters, d.Result, d.Error> = _easync.__create_query((
+export const $$: _et.Data_Preparer<d.Parameters, d.Result, d.Error> = _easync.__create_query((
     $p
 ) => {
     const args = $p.args.__get_raw_copy()
-    return _easync.__create_query_promise({
-        'execute': (on_value, on_error) => {
+    return _ei.__create_data_preparation_result((on_value, on_error) => {
 
-            const child = spawn($p.program, args, {
-                shell: false, // ✅ no implicit parsing
-            })
+        const child = spawn($p.program, args, {
+            shell: false, // ✅ no implicit parsing
+        })
 
-            let stdoutData = ""
-            let stderrData = ""
+        let stdoutData = ""
+        let stderrData = ""
 
-            child.stdout.on("data", chunk => {
-                stdoutData += chunk.toString("utf8")
-            })
+        child.stdout.on("data", chunk => {
+            stdoutData += chunk.toString("utf8")
+        })
 
-            child.stderr.on("data", chunk => {
-                stderrData += chunk.toString("utf8")
-            })
+        child.stderr.on("data", chunk => {
+            stderrData += chunk.toString("utf8")
+        })
 
-            child.on("error", err => {
+        child.on("error", err => {
+            on_error(_ei.block((): d.Error => {
+                return ['failed to spawn', {
+                    message: err instanceof Error ? err.message : `${err}`
+                }]
+            }))
+        })
+
+        child.on("close", exitCode => {
+            if (exitCode === 0) {
+                on_value({
+                    stdout: stdoutData,
+                })
+            } else {
                 on_error(_ei.block((): d.Error => {
-                    return ['failed to spawn', {
-                        message: err instanceof Error ? err.message : `${err}`
+                    return ['non zero exit code', {
+                        'exit code': exitCode === null ? _ei.not_set() : _ei.set(exitCode),
+                        'stderr': stderrData,
                     }]
                 }))
-            })
-
-            child.on("close", exitCode => {
-                if (exitCode === 0) {
-                    on_value({
-                        stdout: stdoutData,
-                    })
-                } else {
-                    on_error(_ei.block((): d.Error => {
-                        return ['non zero exit code', {
-                            'exit code': exitCode === null ? _ei.not_set() : _ei.set(exitCode),
-                            'stderr': stderrData,
-                        }]
-                    }))
-                }
-            })
-        }
+            }
+        })
     })
 })

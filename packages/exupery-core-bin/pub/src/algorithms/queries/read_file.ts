@@ -8,7 +8,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/re
 import { Signature } from "exupery-resources/dist/interface/algorithms/queries/read_file"
 
 
-export const $$: _et.Query<d.Parameters, d.Result, d.Error> = _easync.__create_query((
+export const $$: _et.Data_Preparer<d.Parameters, d.Result, d.Error> = _easync.__create_query((
     $p
 ) => {
     const __possibly_escape_filename = (path: string, escape: boolean): string => {
@@ -17,32 +17,30 @@ export const $$: _et.Query<d.Parameters, d.Result, d.Error> = _easync.__create_q
         }
         return path
     }
-    return _easync.__create_query_promise({
-        'execute': (on_value, on_error) => {
-            fs_readFile(__possibly_escape_filename($p.path, $p['escape spaces in path']), { 'encoding': 'utf-8' }, (err, data) => {
-                if (err) {
-                    on_error(_ei.block((): d.Error => {
-                        if (err.code === 'ENOENT') {
-                            return ['file does not exist', null]
-                        }
-                        if (err.code === 'EACCES' || err.code === 'EPERM') {
-                            return ['permission denied', null]
-                        }
-                        if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
-                            return ['node is not a file', null]
-                        }
-                        if (err.code === 'EFBIG') {
-                            return ['file too large', null]
-                        }
-                        if (err.code === 'EIO' || err.code === 'ENXIO') {
-                            return ['device not ready', null]
-                        }
-                        return _ei.panic(`unhandled fs.readFile error code: ${err.code}`)
-                    }))
-                } else {
-                    on_value(data)
-                }
-            })
-        }
+    return _ei.__create_data_preparation_result((on_value, on_error) => {
+        fs_readFile(__possibly_escape_filename($p.path, $p['escape spaces in path']), { 'encoding': 'utf-8' }, (err, data) => {
+            if (err) {
+                on_error(_ei.block((): d.Error => {
+                    if (err.code === 'ENOENT') {
+                        return ['file does not exist', null]
+                    }
+                    if (err.code === 'EACCES' || err.code === 'EPERM') {
+                        return ['permission denied', null]
+                    }
+                    if (err.code === 'EISDIR' || err.code === 'ENOTDIR') {
+                        return ['node is not a file', null]
+                    }
+                    if (err.code === 'EFBIG') {
+                        return ['file too large', null]
+                    }
+                    if (err.code === 'EIO' || err.code === 'ENXIO') {
+                        return ['device not ready', null]
+                    }
+                    return _ei.panic(`unhandled fs.readFile error code: ${err.code}`)
+                }))
+            } else {
+                on_value(data)
+            }
+        })
     })
 })

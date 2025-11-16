@@ -8,7 +8,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/re
 import { Signature } from "exupery-resources/dist/interface/algorithms/queries/read_directory"
 
 
-export const $$: _et.Query<d.Parameters, d.Result, d.Error> = _easync.__create_query((
+export const $$: _et.Data_Preparer<d.Parameters, d.Result, d.Error> = _easync.__create_query((
     $p
 ) => {
     const __possibly_escape_filename = (path: string, escape: boolean): string => {
@@ -17,30 +17,28 @@ export const $$: _et.Query<d.Parameters, d.Result, d.Error> = _easync.__create_q
         }
         return path
     }
-    return _easync.__create_query_promise({
-        'execute': (on_value, on_error) => {
-            fs_readdir(__possibly_escape_filename($p.path.path, $p.path['escape spaces in path']), {
-                'encoding': 'utf-8',
-                'withFileTypes': true,
-            }, (err, files) => {
-                if (err) {
-                    on_error(_ei.block((): d.Error => {
-                        if (err.code === 'ENOENT') {
-                            return ['directory does not exist', null]
-                        }
-                        if (err.code === 'ENOTDIR' || err.code === 'EISDIR') {
-                            return ['node is not a directory', null]
-                        }
-                        return _ei.panic(`unhandled fs.readdir error code: ${err.code}`)
-                    }))
-                } else {
-                    const out: { [key: string]: d.Node_Type } = {}
-                    files.forEach((file) => {
-                        out[($p['prepend results with path'] ? ($p.path.path + "/" ) : "") + file.name] = file.isFile() ? ['file', null] : ['directory', null]
-                    })
-                    on_value(_ei.dictionary_literal(out))
-                }
-            })
-        }
+    return _ei.__create_data_preparation_result((on_value, on_error) => {
+        fs_readdir(__possibly_escape_filename($p.path.path, $p.path['escape spaces in path']), {
+            'encoding': 'utf-8',
+            'withFileTypes': true,
+        }, (err, files) => {
+            if (err) {
+                on_error(_ei.block((): d.Error => {
+                    if (err.code === 'ENOENT') {
+                        return ['directory does not exist', null]
+                    }
+                    if (err.code === 'ENOTDIR' || err.code === 'EISDIR') {
+                        return ['node is not a directory', null]
+                    }
+                    return _ei.panic(`unhandled fs.readdir error code: ${err.code}`)
+                }))
+            } else {
+                const out: { [key: string]: d.Node_Type } = {}
+                files.forEach((file) => {
+                    out[($p['prepend results with path'] ? ($p.path.path + "/") : "") + file.name] = file.isFile() ? ['file', null] : ['directory', null]
+                })
+                on_value(_ei.dictionary_literal(out))
+            }
+        })
     })
 })
