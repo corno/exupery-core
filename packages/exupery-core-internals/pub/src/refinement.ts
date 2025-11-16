@@ -26,7 +26,13 @@ export namespace refinement {
                 handle_value: ($: T) => NT,
             ): _et.Refinement_Result<NT, E> => {
                 return failed<NT, E>(error)
-            }
+            },
+
+            'transform_error': <NE>(
+                handle_error: ($: E) => NE
+            ): _et.Refinement_Result<T, NE> => {
+                return failed<T, NE>(handle_error(error))
+            },
         }
     }
 
@@ -53,7 +59,13 @@ export namespace refinement {
                 handle_value: ($: T) => NT,
             ): _et.Refinement_Result<NT, E> => {
                 return successful<NT, E>(handle_value(value))
-            }
+            },
+
+            'transform_error': <NE>(
+                handle_error: ($: E) => NE
+            ): _et.Refinement_Result<T, NE> => {
+                return successful<T, NE>(value)
+            },
         }
     }
 }
