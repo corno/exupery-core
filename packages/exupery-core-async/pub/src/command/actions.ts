@@ -50,6 +50,7 @@ export namespace p {
         export const direct = <Error>(
             precondition: boolean,
             procedure: _et.Command_Promise<Error>,
+            else_procedure?: _et.Command_Promise<Error>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
@@ -59,7 +60,14 @@ export namespace p {
                             on_error
                         )
                     } else {
-                        on_success()
+                        if (else_procedure !== undefined) {
+                            else_procedure.__start(
+                                on_success,
+                                on_error
+                            )
+                        } else {
+                            on_success()
+                        }
                     }
                 }
             })
@@ -68,6 +76,7 @@ export namespace p {
         export const query = <Error>(
             precondition: _et.Query_Promise<boolean, Error>,
             procedure: _et.Command_Promise<Error>,
+            else_procedure?: _et.Command_Promise<Error>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
@@ -79,7 +88,14 @@ export namespace p {
                                     on_error
                                 )
                             } else {
-                                on_success()
+                                if (else_procedure !== undefined) {
+                                    else_procedure.__start(
+                                        on_success,
+                                        on_error
+                                    )
+                                } else {
+                                    on_success()
+                                }
                             }
                         },
                         on_error
