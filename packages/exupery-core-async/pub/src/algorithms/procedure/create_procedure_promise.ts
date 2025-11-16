@@ -15,7 +15,7 @@ type Executer<E> = {
     ) => void
 }
 
-class Procedure_Promise_Class<E> implements _et.Procedure_Promise<E> {
+class Command_Promise_Class<E> implements _et.Command_Promise<E> {
     private executer: Executer<E>
     constructor(executer: Executer<E>) {
         this.executer = executer
@@ -30,8 +30,8 @@ class Procedure_Promise_Class<E> implements _et.Procedure_Promise<E> {
 
     map_error<NE>(
         handle_error: (error: E) => NE
-    ): _et.Procedure_Promise<NE> {
-        return new Procedure_Promise_Class<NE>({
+    ): _et.Command_Promise<NE> {
+        return new Command_Promise_Class<NE>({
             'execute': (on_success, on_error) => {
                 this.executer.execute(
                     on_success,
@@ -51,7 +51,7 @@ class Procedure_Promise_Class<E> implements _et.Procedure_Promise<E> {
  */
 export function __create_procedure_promise<E>(
     executer: Executer<E>,
-): _et.Procedure_Promise<E> {
-    return new Procedure_Promise_Class<E>(executer)
+): _et.Command_Promise<E> {
+    return new Command_Promise_Class<E>(executer)
 
 }

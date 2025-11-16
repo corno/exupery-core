@@ -14,10 +14,10 @@ export * from "./algorithms/procedure/create_procedure_promise"
 export * from "./algorithms/procedure/create_procedure_primed_with_resources"
 
 // procedure exports
-export * from "./expressions/procedure"
+export * from "./procedures/command"
 
 // query exports
-export * from "./expressions/query"
+export * from "./procedures/query"
 
 import { __create_procedure_promise } from "./algorithms/procedure/create_procedure_promise"
 import { __create_query_promise } from "./algorithms/query/create_query_promise"
