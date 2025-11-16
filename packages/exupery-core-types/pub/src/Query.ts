@@ -5,9 +5,7 @@ import { Transformer_Without_Parameters } from "./Transformer"
 
 export type Query_Procedure<Parameters, Result, Error, Resources> = ($r: Resources) => Query<Parameters, Result, Error>
 
-export type Query<Parameters, Result, Error> = {
-    'execute': ($: Parameters) => Query_Promise<Result, Error>
-}
+export type Query<Parameters, Result, Error> = ($: Parameters) => Query_Promise<Result, Error>
 
 export type Query_Promise<Result, Error> = {
 
@@ -16,7 +14,7 @@ export type Query_Promise<Result, Error> = {
     ): Query_Promise<New_Result, Error>
 
     rework_error_with_new_query<New_Error, Rework_Query_Error>(
-        query: Query_Promise<New_Error, Rework_Query_Error>,
+        query: Query<Error, New_Error, Rework_Query_Error>,
         transform_rework_error: (error: Rework_Query_Error) => New_Error,
     ): Query_Promise<Result, New_Error>
 

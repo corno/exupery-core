@@ -104,22 +104,4 @@ export namespace q {
         )
     }
 
-    export const transform = <In, Out, Error>( //probably better to use the method on the query itself
-        query: _et.Query_Promise<In, Error>,
-        transform: ($: In) => Out,
-    ): _et.Query_Promise<Out, Error> => {
-        return __create_query_promise({
-            'execute': (on_success, on_error) => {
-                query.__start(
-                    ($) => {
-                        on_success(transform($))
-                    },
-                    (e) => {
-                        on_error(e)
-                    }
-                )
-            }
-        })
-    }
-
 }
