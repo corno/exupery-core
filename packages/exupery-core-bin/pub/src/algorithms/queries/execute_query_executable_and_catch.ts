@@ -15,7 +15,7 @@ export const x = 42
 //  * The executable being executed is assumed to be side effect free
 //  * There is no way to give guarantees about that though
 //  */
-// export const $$: _et.Query<d.Parameters, d.Result, null> = _easync.__create_query_primed_with_resources((
+// export const $$: _et.Query<d.Parameters, d.Result, null> = _easync.__create_query((
 //     $p
 // ) => {
 //     const args = $p.args.__get_raw_copy()

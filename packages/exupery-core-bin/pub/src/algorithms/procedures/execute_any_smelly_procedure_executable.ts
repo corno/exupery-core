@@ -14,7 +14,7 @@ import { spawn } from "node:child_process"
  * The executable being executed is assumed to only cause side effects
  * and not return any meaningful data, std::out is therefor ignored
  */
-export const $$: _et.Command<d.Parameters, d.Error> = _easync.__create_procedure_primed_with_resources( (
+export const $$: _et.Command<d.Parameters, d.Error> = _easync.__create_command( (
     $p,
 ) => {
     const args = $p.args.__get_raw_copy()

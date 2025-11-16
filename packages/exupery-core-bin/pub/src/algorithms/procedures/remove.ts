@@ -8,7 +8,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/re
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/remove"
 
 
-export const $$: _et.Command<d.Parameters, d.Error> = _easync.__create_procedure_primed_with_resources( (
+export const $$: _et.Command<d.Parameters, d.Error> = _easync.__create_command( (
     $p,
 ) => {
     const __possibly_escape_filename = (path: string, escape: boolean): string => {
