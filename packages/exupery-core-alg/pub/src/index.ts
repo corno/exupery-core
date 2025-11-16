@@ -20,7 +20,7 @@ export {
     array_literal,
     dictionary_literal,
     block,
-    refinement,
+    data_processing,
 } from "exupery-core-internals"
 
 export * from "./build"
@@ -33,5 +33,3 @@ export * from "./text_to_character_list"
 export * from "./integer"
 
 export * from "./temp_julian"
-
-export * from "./process_result"

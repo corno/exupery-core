@@ -15,12 +15,12 @@ export const create_refinement_context = <Result, Internal_Error, External_Error
     callback: (abort: Abort<Internal_Error>) => Result,
 ): _et.Data_Preparation_Result<Result, External_Error> => {
     try {
-        return _ei.da.successful(callback((error) => {
+        return _ei.data_processing.successful(callback((error) => {
             throw new Refine_Guard_Abort_Error(error);
         }))
     } catch (e) {
         if (e instanceof Refine_Guard_Abort_Error) {
-            return _ei.refinement.failed<Result, External_Error>(error_transform(e.error))
+            return _ei.data_processing.failed<Result, External_Error>(error_transform(e.error))
         }
         throw e
     }
