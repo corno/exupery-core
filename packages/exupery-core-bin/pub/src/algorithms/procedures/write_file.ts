@@ -13,7 +13,7 @@ import { Signature } from "exupery-resources/dist/interface/algorithms/procedure
 export const $$: _et.Command<d.Parameters, d.Error> = _easync.__create_procedure_primed_with_resources((
     $p,
 ) => {
-    return _easync.__create_procedure_promise({
+    return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
 
             const __possibly_escape_filename = (path: string, escape: boolean): string => {

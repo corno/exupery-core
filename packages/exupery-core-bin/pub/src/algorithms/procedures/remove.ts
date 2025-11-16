@@ -17,7 +17,7 @@ export const $$: _et.Command<d.Parameters, d.Error> = _easync.__create_procedure
         }
         return path
     }
-    return _easync.__create_procedure_promise({
+    return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
             fs_rm(
                 __possibly_escape_filename($p.path.path, $p.path['escape spaces in path']),

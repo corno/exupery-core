@@ -17,7 +17,7 @@ export const $$: _et.Command<d.Parameters, d.Error> = _easync.__create_procedure
     }
     return path
 }
-    return _easync.__create_procedure_promise({
+    return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
             const options: any = {}
             $p.options.recursive.map(($) => { options.recursive = $ })

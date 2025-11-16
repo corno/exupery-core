@@ -18,7 +18,7 @@ export const $$: _et.Command<d.Parameters, d.Error> = _easync.__create_procedure
     $p,
 ) => {
     const args = $p.args.__get_raw_copy()
-    return _easync.__create_procedure_promise({
+    return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
 
             const child = spawn($p.program, args, {

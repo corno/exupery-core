@@ -9,7 +9,7 @@ import { Signature } from "exupery-resources/dist/interface/algorithms/procedure
 export const $$: _et.Command<d.Parameters, null> = _easync.__create_procedure_primed_with_resources((
     $p,
 ) => {
-    return _easync.__create_procedure_promise({
+    return _easync.__create_command_promise({
         'execute': (on_success) => {
             $p.lines.__for_each(($) => {
                 process.stderr.write($ + `\n`)
