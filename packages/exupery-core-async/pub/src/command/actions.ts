@@ -24,12 +24,12 @@ export namespace p {
         }
 
         export const query = <Error>(
-            assertion: _et.Query_Promise<boolean, Error>,
+            assertion: _et.Data_Preparation_Result<boolean, Error>,
             error_if_failed: Error,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
-                    assertion.__start(
+                    assertion.__extract_data(
                         ($) => {
                             if ($) {
                                 on_success()
@@ -74,13 +74,13 @@ export namespace p {
         }
 
         export const query = <Error>(
-            precondition: _et.Query_Promise<boolean, Error>,
+            precondition: _et.Data_Preparation_Result<boolean, Error>,
             procedure: _et.Command_Promise<Error>,
             else_procedure?: _et.Command_Promise<Error>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
-                    precondition.__start(
+                    precondition.__extract_data(
                         ($) => {
                             if ($) {
                                 procedure.__start(
@@ -105,7 +105,7 @@ export namespace p {
         }
 
         export const procedure = <Procedure_Input, Error>(
-            precondition: _et.Process_Result<Procedure_Input, Error>,
+            precondition: _et.Data_Preparation_Result<Procedure_Input, Error>,
             procedure: Basic_Command<Procedure_Input, Error>, // ($: Procedure_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
@@ -245,7 +245,7 @@ export namespace p {
 
 
             export const query = <T, Error, Entry_Error>(
-                query: _et.Query_Promise<_et.Dictionary<T>, Error>,
+                query: _et.Data_Preparation_Result<_et.Dictionary<T>, Error>,
                 callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>,
                 aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Entry_Error>, Error>,
             ): _et.Command_Promise<Error> => {
@@ -259,7 +259,7 @@ export namespace p {
 
 
 
-                        query.__start(
+                        query.__extract_data(
                             (dictionary) => {
                                 create_asynchronous_processes_monitor(
                                     (monitor) => {

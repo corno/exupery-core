@@ -24,10 +24,10 @@ export const __create_command = <Parameters, Error, Resources>(
                 })
             },
 
-            'query': (transform_error, query) => {
+            'prepare': (transform_error, query) => {
                 return __create_command_promise({
                     'execute': (on_success, on_error) => {
-                        query.__start(
+                        query.__extract_data(
                             ($) => {
                                 handler($).__start(
                                     on_success,
@@ -43,28 +43,6 @@ export const __create_command = <Parameters, Error, Resources>(
                     }
                 })
             },
-
-
-
-            'refiner': (transform_error, refiner) => {
-                return __create_command_promise({
-                    'execute': (on_success, on_error) => {
-                        refiner.process(
-                            ($) => {
-                                handler($).__start(
-                                    on_success,
-                                    (error) => {
-                                        on_error(
-                                            transform_error(error)
-                                        )
-                                    }
-                                )
-                            },
-                            on_error,
-                        )
-                    }
-                })
-            }
 
         },
     }
