@@ -181,44 +181,96 @@ export namespace p {
     }
 
     export namespace dictionary {
-        export const parallel = <Error, Entry_Error>(
-            dictionary: _et.Dictionary<_et.Command_Promise<Entry_Error>>,
-            aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Entry_Error>, Error>,
-        ): _et.Command_Promise<Error> => {
-            return __create_command_promise({
-                'execute': (
-                    on_success,
-                    on_error,
-                ) => {
 
-                    const errors: { [key: string]: Entry_Error } = {}
+        export namespace parallel {
 
-                    create_asynchronous_processes_monitor(
-                        (monitor) => {
-                            dictionary.map(($, key) => {
-                                monitor['report process started']()
+            export const direct = <T, Error, Entry_Error>(
+                dictionary: _et.Dictionary<T>,
+                callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>,
+                aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Entry_Error>, Error>,
+            ): _et.Command_Promise<Error> => {
+                return __create_command_promise({
+                    'execute': (
+                        on_success,
+                        on_error,
+                    ) => {
 
-                                $.__start(
-                                    () => {
-                                        monitor['report process finished']()
-                                    },
-                                    (e) => {
-                                        errors[key] = e
-                                        monitor['report process finished']()
-                                    }
-                                )
-                            })
-                        },
-                        () => {
-                            if (Object.keys(errors).length === 0) {
-                                on_success()
-                            } else {
-                                on_error(aggregate_errors(_ei.dictionary_literal(errors)))
+                        const errors: { [key: string]: Entry_Error } = {}
+
+                        create_asynchronous_processes_monitor(
+                            (monitor) => {
+                                dictionary.map(($, key) => {
+                                    monitor['report process started']()
+
+                                    callback($, key).__start(
+                                        () => {
+                                            monitor['report process finished']()
+                                        },
+                                        (e) => {
+                                            errors[key] = e
+                                            monitor['report process finished']()
+                                        }
+                                    )
+                                })
+                            },
+                            () => {
+                                if (Object.keys(errors).length === 0) {
+                                    on_success()
+                                } else {
+                                    on_error(aggregate_errors(_ei.dictionary_literal(errors)))
+                                }
                             }
-                        }
-                    )
-                }
-            })
+                        )
+                    }
+                })
+            }
+
+
+            export const query = <T, Error, Entry_Error>(
+                query: _et.Query_Promise<_et.Dictionary<T>, Error>,
+                callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>,
+                aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Entry_Error>, Error>,
+            ): _et.Command_Promise<Error> => {
+                return __create_command_promise({
+                    'execute': (
+                        on_success,
+                        on_error,
+                    ) => {
+
+                        const errors: { [key: string]: Entry_Error } = {}
+
+                        create_asynchronous_processes_monitor(
+                            (monitor) => {
+                                query.__start(
+                                    (dictionary) => {
+                                        dictionary.map(($, key) => {
+                                            monitor['report process started']()
+
+                                            callback($, key).__start(
+                                                () => {
+                                                    monitor['report process finished']()
+                                                },
+                                                (e) => {
+                                                    errors[key] = e
+                                                    monitor['report process finished']()
+                                                }
+                                            )
+                                        })
+                                    },
+                                    on_error
+                                )
+                            },
+                            () => {
+                                if (Object.keys(errors).length === 0) {
+                                    on_success()
+                                } else {
+                                    on_error(aggregate_errors(_ei.dictionary_literal(errors)))
+                                }
+                            }
+                        )
+                    }
+                })
+            }
         }
 
         export const serie = <Error, Entry_Error>(
@@ -333,5 +385,5 @@ export namespace p {
             }
         })
     }
-    
+
 }
