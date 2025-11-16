@@ -27,8 +27,4 @@ export type Command_Promise<Error> = {
         on_success: () => void,
         on_error: (error: Error) => void,
     ) => void
-
-    map_error<NE>(
-        handle_error: (error: Error) => NE
-    ): Command_Promise<NE>
 }
