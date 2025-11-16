@@ -49,23 +49,5 @@ export const __create_command = <Parameters, Error, Resources>(
             }
 
         },
-
-        'execute with synchronous data without error transformation': handler,
-
-        'execute with asynchronous data without error transformation': (query) => {
-            return __create_command_promise({
-                'execute': (on_success, on_error) => {
-                    query.__start(
-                        ($) => {
-                            handler($).__start(
-                                on_success,
-                                on_error,
-                            )
-                        },
-                        on_error,
-                    )
-                }
-            })
-        },
     }
 }
