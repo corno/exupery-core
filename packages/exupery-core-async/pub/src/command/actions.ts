@@ -333,26 +333,5 @@ export namespace p {
             }
         })
     }
-
-    export const if_refiner_succeeds_deprecated = <Procedure_Input, Refinement_Error, Error>(
-        precondition: _et.Refinement_Result<Procedure_Input, Refinement_Error>,
-        error_transformer: _et.Transformer_Without_Parameters<Refinement_Error, Error>,
-        procedure: Basic_Command<Procedure_Input, Error>, // ($: Procedure_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
-    ): _et.Command_Promise<Error> => {
-        return __create_command_promise({
-            'execute': (on_success, on_error) => {
-                precondition.process(
-                    ($) => {
-                        procedure($).__start(
-                            on_success,
-                            on_error
-                        )
-                    },
-                    (e) => {
-                        on_error(error_transformer(e))
-                    }
-                )
-            }
-        })
-    }
+    
 }
