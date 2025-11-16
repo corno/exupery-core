@@ -96,7 +96,8 @@ const create_available_resources = (): Available_Standard_Resources => {
 export const run_main_procedure = (
     get_main: ($r: Available_Standard_Resources) => _et.Command<d_main.Parameters, d_main.Error>,
 ): void => {
-    get_main(create_available_resources())['execute with synchronous data without error transformation'](
+    get_main(create_available_resources()).execute.direct(
+        ($) => $,
         {
             'arguments': _ei.array_literal(process.argv.slice(2))
         },
