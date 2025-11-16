@@ -27,7 +27,7 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
             'execute': (on_result, on_error) => {
                 this.executer.execute(
                     ($) => {
-                        query.execute($).__start(
+                        query($).__start(
                             on_result,
                             on_error,
                         )
@@ -39,7 +39,7 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
     }
 
     rework_error_with_new_query<New_Error, Rework_Query_Error>(
-        query: _et.Query_Promise<New_Error, Rework_Query_Error>,
+        query: _et.Query<Error, New_Error, Rework_Query_Error>,
         transform_rework_error: (error: Rework_Query_Error) => New_Error,
     ): _et.Query_Promise<Result, New_Error> {
         return new Query_Result_Promise_Class<Result, New_Error>({
@@ -47,7 +47,7 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
                 this.executer.execute(
                     on_result,
                     ($) => {
-                        query.__start(
+                        query($).__start(
                             ($) => {
                                 on_error($)
                             },
@@ -69,13 +69,13 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
             'execute': (on_result, on_error) => {
                 this.executer.execute(
                     ($) => {
-                        queries.result.execute($).__start(
+                        queries.result($).__start(
                             on_result,
                             on_error,
                         )
                     },
                     ($) => {
-                        queries.error.execute($).__start(
+                        queries.error($).__start(
                             on_result,
                             on_error,
                         )
