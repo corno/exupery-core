@@ -37,17 +37,23 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
             }
         })
     }
-    query_with_error<New_Error>(
-        query: _et.Query<Error, Result, New_Error>
+
+    rework_error_with_new_query<New_Error, Rework_Query_Error>(
+        query: _et.Query_Promise<New_Error, Rework_Query_Error>,
+        transform_rework_error: (error: Rework_Query_Error) => New_Error,
     ): _et.Query_Promise<Result, New_Error> {
         return new Query_Result_Promise_Class<Result, New_Error>({
             'execute': (on_result, on_error) => {
                 this.executer.execute(
                     on_result,
                     ($) => {
-                        query.execute($).__start(
-                            on_result,
-                            on_error,
+                        query.__start(
+                            ($) => {
+                                on_error($)
+                            },
+                            ($) => {
+                                on_error(transform_rework_error($))
+                            },
                         )
                     },
                 )
