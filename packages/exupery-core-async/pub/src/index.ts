@@ -1,5 +1,5 @@
 
-export * from "./query/creaters/create_query_promise"
+export * from "./query/creaters/create_data_preparation_result"
 export * from "./query/creaters/create_query"
 export * from "./query/creaters/create_query_procedure"
 

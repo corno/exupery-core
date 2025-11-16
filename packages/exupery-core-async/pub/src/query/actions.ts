@@ -1,17 +1,17 @@
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
-import { __create_query_promise } from "./creaters/create_query_promise"
+import { __create_data_preparation_result } from "./creaters/create_data_preparation_result"
 
 
 export namespace q {
 
     export const dictionary_parallel = <Result, Error, Entry_Error>(
-        dictionary: _et.Dictionary<_et.Query_Promise<Result, Entry_Error>>,
+        dictionary: _et.Dictionary<_et.Data_Preparation_Result<Result, Entry_Error>>,
         aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Entry_Error>, Error>,
 
-    ): _et.Query_Promise<_et.Dictionary<Result>, Error> => {
-        return __create_query_promise({
+    ): _et.Data_Preparation_Result<_et.Dictionary<Result>, Error> => {
+        return __create_data_preparation_result({
             'execute': (on_success, on_error) => {
                 let count_down = dictionary.__get_number_of_entries()
                 let has_errors = false
@@ -46,9 +46,9 @@ export namespace q {
     }
 
     export const dictionary_parallel_without_error_aggregation = <Result, Error>(
-        $: _et.Dictionary<_et.Query_Promise<Result, Error>>,
-    ): _et.Query_Promise<_et.Dictionary<Result>, _et.Dictionary<Error>> => {
-        return __create_query_promise({
+        $: _et.Dictionary<_et.Data_Preparation_Result<Result, Error>>,
+    ): _et.Data_Preparation_Result<_et.Dictionary<Result>, _et.Dictionary<Error>> => {
+        return __create_data_preparation_result({
             'execute': (on_success, on_error) => {
                 let count_down = $.__get_number_of_entries()
                 let has_errors = false
@@ -84,8 +84,8 @@ export namespace q {
 
     export const fixed = <Result, Error>(
         result: Result,
-    ): _et.Query_Promise<Result, Error> => {
-        return __create_query_promise({
+    ): _et.Data_Preparation_Result<Result, Error> => {
+        return __create_data_preparation_result({
             'execute': (on_success, on_error) => {
                 on_success(result)
             }
@@ -94,8 +94,8 @@ export namespace q {
 
     export const raise_error = <T, E>(
         $: E
-    ): _et.Query_Promise<T, E> => {
-        return __create_query_promise(
+    ): _et.Data_Preparation_Result<T, E> => {
+        return __create_data_preparation_result(
             {
                 'execute': (on_value, on_error) => {
                     on_error($)
