@@ -120,8 +120,7 @@ export namespace p {
                     on_error,
                 ) => {
 
-                    _ei.p
-                    const errors: Element_Error[] = []
+                    const errors_builder = _ei.create_procedural_list_builder<Element_Error>()
 
                     create_asynchronous_processes_monitor(
                         (monitor) => {
@@ -133,17 +132,18 @@ export namespace p {
                                         monitor['report process finished']()
                                     },
                                     (e) => {
-                                        errors.push(e)
+                                        errors_builder['add item'](e)
                                         monitor['report process finished']()
                                     }
                                 )
                             })
                         },
                         () => {
-                            if (errors.length === 0) {
+                            const errors = errors_builder['get list']()
+                            if (errors.__get_number_of_elements() === 0) {
                                 on_success()
                             } else {
-                                on_error(aggregate_errors(_ei.array_literal(errors)))
+                                on_error(aggregate_errors(errors))
                             }
                         }
                     )
@@ -196,7 +196,7 @@ export namespace p {
                         on_error,
                     ) => {
 
-                        const errors: { [key: string]: Entry_Error } = {}
+                        const errors_builder = _ei.create_procedural_dictionary_builder<Entry_Error>()
 
                         create_asynchronous_processes_monitor(
                             (monitor) => {
@@ -208,17 +208,18 @@ export namespace p {
                                             monitor['report process finished']()
                                         },
                                         (e) => {
-                                            errors[key] = e
+                                            errors_builder['add entry'](key, e)
                                             monitor['report process finished']()
                                         }
                                     )
                                 })
                             },
                             () => {
-                                if (Object.keys(errors).length === 0) {
+                                const errors = errors_builder['get dictionary']()
+                                if (errors.__get_number_of_entries() === 0) {
                                     on_success()
                                 } else {
-                                    on_error(aggregate_errors(_ei.dictionary_literal(errors)))
+                                    on_error(aggregate_errors(errors))
                                 }
                             }
                         )
@@ -238,7 +239,7 @@ export namespace p {
                         on_error,
                     ) => {
 
-                        const errors: { [key: string]: Entry_Error } = {}
+                        const errors_builder = _ei.create_procedural_dictionary_builder<Entry_Error>()
 
 
 
@@ -254,17 +255,18 @@ export namespace p {
                                                     monitor['report process finished']()
                                                 },
                                                 (e) => {
-                                                    errors[key] = e
+                                                    errors_builder['add entry'](key, e)
                                                     monitor['report process finished']()
                                                 }
                                             )
                                         })
                                     },
                                     () => {
-                                        if (Object.keys(errors).length === 0) {
+                                        const errors = errors_builder['get dictionary']()
+                                        if (errors.__get_number_of_entries() === 0) {
                                             on_success()
                                         } else {
-                                            on_error(aggregate_errors(_ei.dictionary_literal(errors)))
+                                            on_error(aggregate_errors(errors))
                                         }
                                     }
                                 )
@@ -322,7 +324,7 @@ export namespace p {
                     on_error,
                 ) => {
 
-                    const errors: { [key: string]: Entry_Error } = {}
+                    const errors_builder = _ei.create_procedural_dictionary_builder<Entry_Error>()
 
                     create_asynchronous_processes_monitor(
                         (monitor) => {
@@ -334,17 +336,18 @@ export namespace p {
                                         monitor['report process finished']()
                                     },
                                     (e) => {
-                                        errors[key] = e
+                                        errors_builder['add entry'](key, e)
                                         monitor['report process finished']()
                                     }
                                 )
                             })
                         },
                         () => {
-                            if (Object.keys(errors).length === 0) {
+                            const errors = errors_builder['get dictionary']()
+                            if (errors.__get_number_of_entries() === 0) {
                                 on_success()
                             } else {
-                                on_error(_ei.dictionary_literal(errors))
+                                on_error(errors)
                             }
                         }
                     )
