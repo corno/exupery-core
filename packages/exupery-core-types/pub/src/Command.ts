@@ -1,4 +1,5 @@
 import { Query_Promise } from "./Query"
+import { Refinement_Result } from "./Refiner"
 
 export type Command_Procedure<Parameters, Error, Resources> = ($r: Resources) => Command<Parameters, Error>
 
@@ -16,6 +17,11 @@ export type Command<Parameters, Error> = {
         'query': <New_Error>(
             transform_error: (error: Error) => New_Error,
             query: Query_Promise<Parameters, Error>,
+        ) => Command_Promise<New_Error>,
+
+        'refiner': <New_Error>(
+            transform_error: (error: Error) => New_Error,
+            refiner: Refinement_Result<Parameters, Error>
         ) => Command_Promise<New_Error>,
 
     }
