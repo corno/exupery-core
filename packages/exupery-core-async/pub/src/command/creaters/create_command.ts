@@ -38,11 +38,7 @@ export const __create_command = <Parameters, Error, Resources>(
                                     }
                                 )
                             },
-                            (error) => {
-                                on_error(
-                                    transform_error(error)
-                                )
-                            },
+                            on_error,
                         )
                     }
                 })
@@ -64,11 +60,7 @@ export const __create_command = <Parameters, Error, Resources>(
                                     }
                                 )
                             },
-                            (error) => {
-                                on_error(
-                                    transform_error(error)
-                                )
-                            },
+                            on_error,
                         )
                     }
                 })
