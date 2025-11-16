@@ -109,41 +109,6 @@ export namespace p {
 
     }
 
-    export namespace execute {
-        export const direct = <Parameters, Error, Procedure_Error>(
-            procedure: _et.Command<Parameters, Procedure_Error>,
-            error_transformer: _et.Transformer_Without_Parameters<Procedure_Error, Error>,
-            parameters: Parameters,
-        ): _et.Command_Promise<Error> => {
-            return procedure['execute with synchronous data'](
-                parameters,
-                error_transformer,
-            )
-        }
-
-        export const query = <Parameters, Error, Procedure_Error>(
-            procedure: _et.Command<Parameters, Procedure_Error>,
-            error_transformer: _et.Transformer_Without_Parameters<Procedure_Error, Error>,
-            query: _et.Query_Promise<Parameters, Error>,
-        ): _et.Command_Promise<Error> => {
-            return __create_command_promise({
-                'execute': (on_success, on_error) => {
-                    query.__start(
-                        (query_result) => {
-                            procedure['execute with synchronous data'](query_result, error_transformer).__start(
-                                on_success,
-                                on_error,
-                            )
-                        },
-                        on_error,
-                    )
-                }
-            })
-        }
-
-        
-    }
-
     export namespace list {
         export const parallel = <Error, Element_Error>(
             the_array: _et.Array<_et.Command_Promise<Element_Error>>,

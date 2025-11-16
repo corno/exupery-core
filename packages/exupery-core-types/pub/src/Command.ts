@@ -3,23 +3,22 @@ import { Query_Promise } from "./Query"
 export type Command_Procedure<Parameters, Error, Resources> = ($r: Resources) => Command<Parameters, Error>
 
 export type Command<Parameters, Error> = {
-    'execute with synchronous data without error transformation': (
-        parameters: Parameters
-    ) => Command_Promise<Error>
+    //these are actions, and should ideally be written like execute.direct(Command, transform_error, parameters)
+    // but TypeScript does a way better job inferring types this way, so it will be Command.execute.direct(transform_error, parameters)
+    'execute': {
 
-    'execute with synchronous data': <New_Error>(
-        parameters: Parameters,
-        transform_error: (error: Error) => New_Error,
-    ) => Command_Promise<New_Error>
-    
-    'execute with asynchronous data without error transformation': (
-        query: Query_Promise<Parameters, Error>
-    ) => Command_Promise<Error>
-    
-    'execute with asynchronous data': <New_Error>(
-        query: Query_Promise<Parameters, Error>,
-        transform_error: (error: Error) => New_Error,
-    ) => Command_Promise<New_Error>
+        'direct': <New_Error>(
+            transform_error: (error: Error) => New_Error,
+            parameters: Parameters,
+
+        ) => Command_Promise<Error>,
+
+        'query': <New_Error>(
+            transform_error: (error: Error) => New_Error,
+            query: Query_Promise<Parameters, Error>,
+        ) => Command_Promise<Error>,
+
+    }
 }
 
 export type Command_Promise<Error> = {
