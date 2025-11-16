@@ -15,8 +15,9 @@ export type Query_Promise<Result, Error> = {
         query: Query<Result, New_Result, Error>
     ): Query_Promise<New_Result, Error>
 
-    query_with_error<New_Error>(
-        query: Query<Error, Result, New_Error>
+    rework_error_with_new_query<New_Error, Rework_Query_Error>(
+        query: Query_Promise<New_Error, Rework_Query_Error>,
+        transform_rework_error: (error: Rework_Query_Error) => Error,
     ): Query_Promise<Result, New_Error>
 
     query<New_Result, New_Error>(queries: {
