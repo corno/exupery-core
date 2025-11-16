@@ -1,7 +1,7 @@
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
-import { __create_query_promise } from "../algorithms/query/create_query_promise"
+import { __create_query_promise } from "./creaters/create_query_promise"
 
 
 export namespace q {

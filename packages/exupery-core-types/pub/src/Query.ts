@@ -3,25 +3,25 @@ import { Transformer_Without_Parameters } from "./Transformer"
 
 
 
-export type Query_Procedure<Parameters, Result, Error, Resources> = ($r: Resources) => Query_Primed_With_Resources<Parameters, Result, Error>
+export type Query_Procedure<Parameters, Result, Error, Resources> = ($r: Resources) => Query<Parameters, Result, Error>
 
-export type Query_Primed_With_Resources<Parameters, Result, Error> = {
+export type Query<Parameters, Result, Error> = {
     'execute': ($: Parameters) => Query_Promise<Result, Error>
 }
 
 export type Query_Promise<Result, Error> = {
 
     query_with_result<New_Result>(
-        query: Query_Primed_With_Resources<Result, New_Result, Error>
+        query: Query<Result, New_Result, Error>
     ): Query_Promise<New_Result, Error>
 
     query_with_error<New_Error>(
-        query: Query_Primed_With_Resources<Error, Result, New_Error>
+        query: Query<Error, Result, New_Error>
     ): Query_Promise<Result, New_Error>
 
     query<New_Result, New_Error>(queries: {
-        'result': Query_Primed_With_Resources<Result, New_Result, New_Error>,
-        'error': Query_Primed_With_Resources<Error, New_Result, New_Error>,
+        'result': Query<Result, New_Result, New_Error>,
+        'error': Query<Error, New_Result, New_Error>,
     }): Query_Promise<New_Result, New_Error>
 
 

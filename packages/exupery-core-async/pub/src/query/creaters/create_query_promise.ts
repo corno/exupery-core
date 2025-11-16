@@ -21,7 +21,7 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
     }
 
     query_with_result<New_Result>(
-        query: _et.Query_Primed_With_Resources<Result, New_Result, Error>
+        query: _et.Query<Result, New_Result, Error>
     ): _et.Query_Promise<New_Result, Error> {
         return new Query_Result_Promise_Class<New_Result, Error>({
             'execute': (on_result, on_error) => {
@@ -38,7 +38,7 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
         })
     }
     query_with_error<New_Error>(
-        query: _et.Query_Primed_With_Resources<Error, Result, New_Error>
+        query: _et.Query<Error, Result, New_Error>
     ): _et.Query_Promise<Result, New_Error> {
         return new Query_Result_Promise_Class<Result, New_Error>({
             'execute': (on_result, on_error) => {
@@ -56,8 +56,8 @@ class Query_Result_Promise_Class<Result, Error> implements _et.Query_Promise<Res
     }
 
     query<New_Result, New_Error>(queries: {
-        'result': _et.Query_Primed_With_Resources<Result, New_Result, New_Error>,
-        'error': _et.Query_Primed_With_Resources<Error, New_Result, New_Error>,
+        'result': _et.Query<Result, New_Result, New_Error>,
+        'error': _et.Query<Error, New_Result, New_Error>,
     }): _et.Query_Promise<New_Result, New_Error> {
         return new Query_Result_Promise_Class<New_Result, New_Error>({
             'execute': (on_result, on_error) => {

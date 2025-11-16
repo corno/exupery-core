@@ -1,9 +1,9 @@
 import * as _et from 'exupery-core-types'
 import * as _ei from 'exupery-core-internals'
 
-import { __create_command_promise } from "../algorithms/command/create_command_promise"
+import { __create_command_promise } from "./creaters/create_command_promise"
 import { create_asynchronous_processes_monitor } from '../create_asynchronous_processes_monitor'
-import { Basic_Procedure_Primed_With_Resources } from '../algorithms/command/create_command'
+import { Basic_Command } from './creaters/create_command'
 
 export namespace p {
 
@@ -160,7 +160,7 @@ export namespace p {
 
     export const conditional_on_processor = <Procedure_Input, Error>(
         precondition: _et.Process_Result<Procedure_Input, Error>,
-        procedure: Basic_Procedure_Primed_With_Resources<Procedure_Input, Error>, // ($: Procedure_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
+        procedure: Basic_Command<Procedure_Input, Error>, // ($: Procedure_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
     ): _et.Command_Promise<Error> => {
         return __create_command_promise({
             'execute': (on_success, on_error) => {
@@ -180,7 +180,7 @@ export namespace p {
     export const conditional_on_refiner = <Procedure_Input, Refinement_Error, Error>(
         precondition: _et.Refinement_Result<Procedure_Input, Refinement_Error>,
         error_transformer: _et.Transformer_Without_Parameters<Refinement_Error, Error>,
-        procedure: Basic_Procedure_Primed_With_Resources<Procedure_Input, Error>, // ($: Procedure_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
+        procedure: Basic_Command<Procedure_Input, Error>, // ($: Procedure_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
     ): _et.Command_Promise<Error> => {
         return __create_command_promise({
             'execute': (on_success, on_error) => {
