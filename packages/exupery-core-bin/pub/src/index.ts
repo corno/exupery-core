@@ -42,7 +42,7 @@ import { $$ as q_stat } from "./algorithms/queries/stat"
 type temp_instream_parameters = null
 
 export type Available_Standard_Resources = {
-    'procedures': {
+    'commands': {
         'copy': _et.Command<d_copy.Parameters, d_copy.Error>
         'execute any procedure executable': _et.Command<d_execute_any_procedure_executable.Parameters, d_execute_any_procedure_executable.Error>
         'execute any smelly procedure executable': _et.Command<d_execute_any_smelly_procedure_executable.Parameters, d_execute_any_smelly_procedure_executable.Error>
@@ -65,7 +65,7 @@ export type Available_Standard_Resources = {
 
 const create_available_resources = (): Available_Standard_Resources => {
     return {
-        'procedures': {
+        'commands': {
             'copy': p_copy_signature,
             'execute any procedure executable': p_execute_any_procedure_executable,
             'execute any smelly procedure executable': p_execute_any_smelly_procedure_executable,
