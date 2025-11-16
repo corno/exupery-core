@@ -1,3 +1,5 @@
+import * as _ei from 'exupery-core-internals'
+
 export type I_Async_Monitor = {
     readonly 'report process started': () => void
     readonly 'report process finished': () => void
@@ -34,7 +36,7 @@ export function create_asynchronous_processes_monitor(
 
             if (counter === 0) {
                 if (on_all_finished_has_been_called === true) {
-                    throw new Error("CORE: already ended")
+                    _ei.panic("CORE: already ended")
                 }
                 on_all_finished_has_been_called = true
                 on_all_finished()
@@ -44,14 +46,14 @@ export function create_asynchronous_processes_monitor(
     monitoring_phase({
         'report process started': () => {
             if (on_all_finished_has_been_called) {
-                throw new Error("CORE: async call done after context is ready")
+                _ei.panic("CORE: async call done after context is ready")
             }
             counter += 1
 
         },
         'report process finished': () => {
             if (counter === 0) {
-                throw new Error("CORE: decrement while counter is 0")
+                _ei.panic("CORE: decrement while counter is 0")
             }
             counter -= 1
             checkStatus()

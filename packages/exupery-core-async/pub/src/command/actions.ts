@@ -281,16 +281,7 @@ export namespace p {
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
-                    const op_dictionary_to_list_based_on_insertion_order = <T>(
-                        dict: _et.Dictionary<T>,
-                    ): _et.Array<{ key: string, value: T }> => {
-                        const temp: { key: string, value: T }[] = []
-                        dict.map(($, key) => {
-                            temp.push({ key, value: $ })
-                        })
-                        return _ei.array_literal(temp)
-                    }
-                    const as_list = op_dictionary_to_list_based_on_insertion_order(dictionary)
+                    const as_list = dictionary.deprecated_to_array(() => 1)
 
                     let current = 0
 
