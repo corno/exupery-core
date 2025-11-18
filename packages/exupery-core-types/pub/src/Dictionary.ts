@@ -1,4 +1,4 @@
-import { Array } from "./Array"
+import { List } from "./List"
 import { Optional_Value } from "./Optional_Value"
 
 export type Key_Value_Pair<T> = {
@@ -27,7 +27,7 @@ export interface Dictionary<T> {
      */
     deprecated_to_array(
         compare: Compare_Function<T>,
-    ): Array<Key_Value_Pair<T>>
+    ): List<Key_Value_Pair<T>>
 
     /**
      * This method is only to be used by resources

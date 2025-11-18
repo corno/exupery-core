@@ -4,14 +4,14 @@ import { Optional_Value } from "./Optional_Value"
  * A Exupery array.
  * unmutable and minimal by design
  */
-export interface Array<T> {
+export interface List<T> {
     /**
      * 
      * @param handle_value callback to transform an individual entry.
      */
     map<NT>(
         handle_value: ($: T) => NT
-    ): Array<NT>
+    ): List<NT>
 
     /**
      * This method is only to be used by resources
