@@ -399,4 +399,64 @@ export namespace p {
         })
     }
 
+
+    export const prepare_data = <Error, Query_Result>(
+        data_preparation_result: _et.Data_Preparation_Result<Query_Result, Error>,
+        command: ($v: Query_Result) => _et.Command_Promise<Error>,
+    ): _et.Command_Promise<Error> => {
+        return __create_command_promise({
+            'execute': (
+                on_success,
+                on_error,
+            ) => {
+                data_preparation_result.__extract_data(
+                    (query_result) => {
+                        command(query_result).__start(
+                            () => {
+                                on_success()
+                            },
+                            (e) => {
+                                on_error(e)
+                            }
+                        )
+                    },
+                    (e) => {
+                        on_error(e)
+                    }
+                )
+            }
+        })
+    }
+
+
+    export const prepare_stacked_data = <Error, Query_Result, Parent_Data>(
+        data_preparation_result: _et.Data_Preparation_Result<Query_Result, Error>,
+        parent_data: Parent_Data,
+        command: ($v: Query_Result, $parent: Parent_Data) => _et.Command_Promise<Error>,
+    ): _et.Command_Promise<Error> => {
+        return __create_command_promise({
+            'execute': (
+                on_success,
+                on_error,
+            ) => {
+                data_preparation_result.__extract_data(
+                    (query_result) => {
+                        command(query_result, parent_data).__start(
+                            () => {
+                                on_success()
+                            },
+                            (e) => {
+                                on_error(e)
+                            }
+                        )
+                    },
+                    (e) => {
+                        on_error(e)
+                    }
+                )
+            }
+        })
+    }
+
+
 }
