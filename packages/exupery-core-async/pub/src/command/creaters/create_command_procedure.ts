@@ -10,7 +10,7 @@ export const create_command_procedure = <Error, Parameters, Command_Resources, Q
         $qr: Query_Resources,
     ) => _et.Command_Promise<Error>,
 ): _et.Command_Procedure<Error, Parameters, Command_Resources, Query_Resources> => {
-    return ($qr, $cr) => {
+    return ($cr, $qr) => {
         return {
             'execute': (parameters, transform_error) => {
                 return __create_command_promise({
