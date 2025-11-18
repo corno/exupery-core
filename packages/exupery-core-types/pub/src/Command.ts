@@ -1,6 +1,6 @@
 import { Data_Preparation_Result } from "./Data_Preparation_Result"
 
-export type Command_Procedure<Error, Parameters, Command_Resources, Query_Resources> = ($q: Query_Resources, $c: Command_Resources) => Command<Error, Parameters>
+export type Command_Procedure<Error, Parameters, Command_Resources, Query_Resources> = ($c: Command_Resources, $q: Query_Resources) => Command<Error, Parameters>
 
 export type Command<Error, Parameters> = {
     //these are actions, and should ideally be written like execute.direct(Command, transform_error, parameters)
