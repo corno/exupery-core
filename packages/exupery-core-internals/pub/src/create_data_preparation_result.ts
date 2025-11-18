@@ -12,16 +12,16 @@ type Executer<Output, Error> = (
     on_error: ($: Error) => void,
 ) => void
 
-class Data_Preparation_Result_Class<Output, Target_Error> implements _et.Data_Preparation_Result<Output, Target_Error> {
-    private executer: Executer<Output, Target_Error>
-    constructor(executer: Executer<Output, Target_Error>) {
+class Data_Preparation_Result_Class<Output, Error> implements _et.Data_Preparation_Result<Output, Error> {
+    private executer: Executer<Output, Error>
+    constructor(executer: Executer<Output, Error>) {
         this.executer = executer
     }
 
     transform<New_Output>(
         transformer: _et.Transformer_Without_Parameters<New_Output, Output>
-    ): _et.Data_Preparation_Result<New_Output, Target_Error> {
-        return new Data_Preparation_Result_Class<New_Output, Target_Error>((on_result, on_error) => {
+    ): _et.Data_Preparation_Result<New_Output, Error> {
+        return new Data_Preparation_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
                     on_result(transformer($))
@@ -31,23 +31,23 @@ class Data_Preparation_Result_Class<Output, Target_Error> implements _et.Data_Pr
         })
     }
 
-    transform_error_temp<New_Target_Error>(
-        transform_error: _et.Transformer_Without_Parameters<New_Target_Error, Target_Error>,
-    ): _et.Data_Preparation_Result<Output, New_Target_Error> {
-        return new Data_Preparation_Result_Class<Output, New_Target_Error>((on_result, on_error) => {
+    transform_error_temp<New_Error>(
+        error_transformer: _et.Transformer_Without_Parameters<New_Error, Error>,
+    ): _et.Data_Preparation_Result<Output, New_Error> {
+        return new Data_Preparation_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
                 on_result,
                 ($) => {
-                    on_error(transform_error($))
+                    on_error(error_transformer($))
                 },
             )
         })
     }
 
     process_without_error_transformation<New_Output>(
-        processor: _et.Data_Preparer<New_Output, Target_Error, Output>
-    ): _et.Data_Preparation_Result<New_Output, Target_Error> {
-        return new Data_Preparation_Result_Class<New_Output, Target_Error>((on_result, on_error) => {
+        processor: _et.Data_Preparer<New_Output, Error, Output>
+    ): _et.Data_Preparation_Result<New_Output, Error> {
+        return new Data_Preparation_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
                     processor($).__extract_data(
@@ -62,9 +62,9 @@ class Data_Preparation_Result_Class<Output, Target_Error> implements _et.Data_Pr
 
     process<New_Output, Processor_Error>(
         processor: _et.Data_Preparer<New_Output, Output, Processor_Error>,
-        transform_error: (error: Processor_Error) => Target_Error,
-    ): _et.Data_Preparation_Result<New_Output, Target_Error> {
-        return new Data_Preparation_Result_Class<New_Output, Target_Error>((on_result, on_error) => {
+        transform_error: (error: Processor_Error) => Error,
+    ): _et.Data_Preparation_Result<New_Output, Error> {
+        return new Data_Preparation_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
                     processor($).__extract_data(
@@ -80,7 +80,7 @@ class Data_Preparation_Result_Class<Output, Target_Error> implements _et.Data_Pr
     }
 
     rework_error_temp<New_Target_Error, Rework_Error>(
-        rework_error: _et.Data_Preparer<New_Target_Error, Target_Error, Rework_Error>,
+        rework_error: _et.Data_Preparer<New_Target_Error, Error, Rework_Error>,
         transform_rework_error: _et.Transformer_Without_Parameters<New_Target_Error, Rework_Error>,
     ): _et.Data_Preparation_Result<Output, New_Target_Error> {
         return new Data_Preparation_Result_Class<Output, New_Target_Error>((on_result, on_error) => {
@@ -104,7 +104,7 @@ class Data_Preparation_Result_Class<Output, Target_Error> implements _et.Data_Pr
 
     __extract_data(
         on_result: ($: Output) => void,
-        on_error: ($: Target_Error) => void,
+        on_error: ($: Error) => void,
     ): void {
         this.executer(on_result, on_error)
     }

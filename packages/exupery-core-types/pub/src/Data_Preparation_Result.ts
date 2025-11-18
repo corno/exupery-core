@@ -7,9 +7,9 @@ export interface Data_Preparation_Result<Output, Error> {
         transformer: Transformer_Without_Parameters<New_Output, Output>
     ): Data_Preparation_Result<New_Output, Error>
 
-    transform_error_temp<Transform_Error>(
-        error_transformer: Transformer_Without_Parameters<Error, Transform_Error>,
-    ): Data_Preparation_Result<Output, Transform_Error>
+    transform_error_temp<New_Error>(
+        error_transformer: Transformer_Without_Parameters<New_Error, Error>,
+    ): Data_Preparation_Result<Output, New_Error>
 
     process_without_error_transformation<New_Output>(
         processor: Data_Preparer<New_Output, Error, Output>
