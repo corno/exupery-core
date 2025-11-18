@@ -6,7 +6,7 @@ import { Source_Location, get_location_info } from "../get_location_info"
 const depth = 1
 
 export type Raw_Or_Normal_Dictionary<T> = { [key: string]: T } | _et.Dictionary<T>
-export type Raw_Or_Normal_Array<T> = T[] | _et.List<T>
+export type Raw_Or_Normal_List<T> = T[] | _et.List<T>
 export type Raw_Dictionary<T> = { [key: string]: T }
 
 export type Reference_To_Normal_Dictionary_Entry<G_Source, T_Dictionary_Entry> = {
@@ -66,7 +66,7 @@ export const wrap_dictionary = <T>(
 }
 
 export const wrap_list = <T>(
-    $: Raw_Or_Normal_Array<T>,
+    $: Raw_Or_Normal_List<T>,
 ): List<Source_Location, T> => {
     const location = get_location_info(depth + 1)
     const decorated: _et.List<T> = $ instanceof Array
