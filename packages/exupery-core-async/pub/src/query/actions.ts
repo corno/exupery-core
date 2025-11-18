@@ -9,7 +9,7 @@ export namespace q {
         aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Dictionary<Entry_Error>>,
 
     ): _et.Staging_Result<_et.Dictionary<Result>, Error> => {
-        return _ei.__create_data_preparation_result((on_success, on_error) => {
+        return _ei.__create_staging_result((on_success, on_error) => {
             let count_down = dictionary.__get_number_of_entries()
             let has_errors = false
 
@@ -44,7 +44,7 @@ export namespace q {
     export const dictionary_parallel_without_error_aggregation = <Result, Error>(
         $: _et.Dictionary<_et.Staging_Result<Result, Error>>,
     ): _et.Staging_Result<_et.Dictionary<Result>, _et.Dictionary<Error>> => {
-        return _ei.__create_data_preparation_result((on_success, on_error) => {
+        return _ei.__create_staging_result((on_success, on_error) => {
             let count_down = $.__get_number_of_entries()
             let has_errors = false
 
@@ -79,7 +79,7 @@ export namespace q {
     export const fixed = <Result, Error>(
         result: Result,
     ): _et.Staging_Result<Result, Error> => {
-        return _ei.__create_data_preparation_result((on_success, on_error) => {
+        return _ei.__create_staging_result((on_success, on_error) => {
             on_success(result)
         })
     }
@@ -87,7 +87,7 @@ export namespace q {
     export const raise_error = <T, E>(
         $: E
     ): _et.Staging_Result<T, E> => {
-        return _ei.__create_data_preparation_result((on_value, on_error) => {
+        return _ei.__create_staging_result((on_value, on_error) => {
             on_error($)
         })
     }
