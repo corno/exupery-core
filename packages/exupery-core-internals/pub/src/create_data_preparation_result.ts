@@ -45,7 +45,7 @@ class Data_Preparation_Result_Class<Output, Target_Error> implements _et.Data_Pr
     }
 
     process_without_error_transformation<New_Output>(
-        processor: _et.Data_Preparer<New_Output, Output, Target_Error>
+        processor: _et.Data_Preparer<New_Output, Target_Error, Output>
     ): _et.Data_Preparation_Result<New_Output, Target_Error> {
         return new Data_Preparation_Result_Class<New_Output, Target_Error>((on_result, on_error) => {
             this.executer(
