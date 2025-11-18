@@ -6,7 +6,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/lo
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/log_error"
 
 
-export const $$: _et.Command<d.Parameters, null> = _easync.__create_command((
+export const $$: _et.Command<d.Parameters, null> = _easync.__create_resource_command((
     $p,
 ) => {
     return _easync.__create_command_promise({
