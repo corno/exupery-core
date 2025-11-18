@@ -45,7 +45,7 @@ class Data_Preparation_Result_Class<Output, Target_Error> implements _et.Data_Pr
     }
 
     process_without_error_transformation<New_Output>(
-        processor: _et.Data_Preparer<Output, New_Output, Target_Error>
+        processor: _et.Data_Preparer<New_Output, Output, Target_Error>
     ): _et.Data_Preparation_Result<New_Output, Target_Error> {
         return new Data_Preparation_Result_Class<New_Output, Target_Error>((on_result, on_error) => {
             this.executer(
@@ -61,7 +61,7 @@ class Data_Preparation_Result_Class<Output, Target_Error> implements _et.Data_Pr
     }
 
     process<New_Output, Processor_Error>(
-        processor: _et.Data_Preparer<Output, New_Output, Processor_Error>,
+        processor: _et.Data_Preparer<New_Output, Output, Processor_Error>,
         transform_error: (error: Processor_Error) => Target_Error,
     ): _et.Data_Preparation_Result<New_Output, Target_Error> {
         return new Data_Preparation_Result_Class<New_Output, Target_Error>((on_result, on_error) => {
@@ -80,7 +80,7 @@ class Data_Preparation_Result_Class<Output, Target_Error> implements _et.Data_Pr
     }
 
     rework_error_temp<New_Target_Error, Rework_Error>(
-        rework_error: _et.Data_Preparer<Target_Error, New_Target_Error, Rework_Error>,
+        rework_error: _et.Data_Preparer<New_Target_Error, Target_Error, Rework_Error>,
         transform_rework_error: _et.Transformer_Without_Parameters<Rework_Error, New_Target_Error>,
     ): _et.Data_Preparation_Result<Output, New_Target_Error> {
         return new Data_Preparation_Result_Class<Output, New_Target_Error>((on_result, on_error) => {

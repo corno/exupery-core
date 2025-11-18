@@ -1,8 +1,8 @@
 import { Data_Preparation_Result } from "./Data_Preparation_Result"
 
-export type Command_Procedure<Parameters, Error, Query_Resources, Command_Resources> = ($q: Query_Resources, $c: Command_Resources) => Command<Parameters, Error>
+export type Command_Procedure<Error, Parameters, Command_Resources, Query_Resources> = ($q: Query_Resources, $c: Command_Resources) => Command<Error, Parameters>
 
-export type Command<Parameters, Error> = {
+export type Command<Error, Parameters> = {
     //these are actions, and should ideally be written like execute.direct(Command, transform_error, parameters)
     // but TypeScript does a way better job inferring types this way, so it will be Command.execute.direct(transform_error, parameters)
     'execute': <Target_Error>(
