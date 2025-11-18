@@ -106,7 +106,7 @@ export namespace p {
 
         export const procedure = <Procedure_Input, Error>(
             precondition: _et.Data_Preparation_Result<Procedure_Input, Error>,
-            procedure: Basic_Command<Procedure_Input, Error>, // ($: Procedure_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
+            procedure: Basic_Command<Error, Procedure_Input>, // ($: Procedure_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
@@ -128,7 +128,7 @@ export namespace p {
     export namespace list {
         export const parallel = <Error, Element_Error>(
             the_array: _et.Array<_et.Command_Promise<Element_Error>>,
-            aggregate_errors: _et.Transformer_Without_Parameters<_et.Array<Element_Error>, Error>,
+            aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Array<Element_Error>>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (
@@ -204,7 +204,7 @@ export namespace p {
             export const direct = <T, Error, Entry_Error>(
                 dictionary: _et.Dictionary<T>,
                 callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>,
-                aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Entry_Error>, Error>,
+                aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Dictionary<Entry_Error>>,
             ): _et.Command_Promise<Error> => {
                 return __create_command_promise({
                     'execute': (
@@ -247,7 +247,7 @@ export namespace p {
             export const query = <T, Error, Entry_Error>(
                 query: _et.Data_Preparation_Result<_et.Dictionary<T>, Error>,
                 callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>,
-                aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Entry_Error>, Error>,
+                aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Dictionary<Entry_Error>>,
             ): _et.Command_Promise<Error> => {
                 return __create_command_promise({
                     'execute': (
@@ -296,7 +296,7 @@ export namespace p {
 
         export const serie = <Error, Entry_Error>(
             dictionary: _et.Dictionary<_et.Command_Promise<Entry_Error>>,
-            transform_error: _et.Transformer_Without_Parameters<_et.Key_Value_Pair<Entry_Error>, Error>,
+            transform_error: _et.Transformer_Without_Parameters<Error, _et.Key_Value_Pair<Entry_Error>>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {

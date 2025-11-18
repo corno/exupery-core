@@ -6,7 +6,7 @@ export namespace q {
 
     export const dictionary_parallel = <Result, Error, Entry_Error>(
         dictionary: _et.Dictionary<_et.Data_Preparation_Result<Result, Entry_Error>>,
-        aggregate_errors: _et.Transformer_Without_Parameters<_et.Dictionary<Entry_Error>, Error>,
+        aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Dictionary<Entry_Error>>,
 
     ): _et.Data_Preparation_Result<_et.Dictionary<Result>, Error> => {
         return _ei.__create_data_preparation_result((on_success, on_error) => {

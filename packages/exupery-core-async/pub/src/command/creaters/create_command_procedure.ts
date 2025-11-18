@@ -3,7 +3,7 @@ import * as _et from 'exupery-core-types'
 import { __create_resource_command } from './create_resource_command'
 import { __create_command_promise } from './create_command_promise'
 
-export const create_command_procedure = <Parameters, Error, Variables, Query_Resources, Command_Resources>(
+export const create_command_procedure = <Error, Parameters, Variables, Command_Resources, Query_Resources>(
     variables_handler: (
         $q: Query_Resources,
         $p: Parameters,
@@ -13,7 +13,7 @@ export const create_command_procedure = <Parameters, Error, Variables, Query_Res
         $p: Parameters,
         $v: Variables,
     ) => _et.Command_Promise<Error>,
-): _et.Command_Procedure<Parameters, Error, Query_Resources, Command_Resources> => {
+): _et.Command_Procedure<Error, Parameters, Command_Resources, Query_Resources> => {
     return ($q, $c) => {
         return {
 
