@@ -8,7 +8,7 @@ import { Signature } from "exupery-resources/dist/interface/algorithms/queries/g
 
 export const $$: _et.Stager<d.Result, null, null> = _easync.__create_query((
 ) => {
-    return _ei.__create_data_preparation_result((on_value) => {
+    return _ei.__create_staging_result((on_value) => {
 
         const stdin = process.stdin;
         let data = '';

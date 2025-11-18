@@ -18,7 +18,7 @@ export const $$: _et.Stager<d.Result, d.Error, d.Parameters> = _easync.__create_
     $p
 ) => {
     const args = $p.args.__get_raw_copy()
-    return _ei.__create_data_preparation_result((on_value, on_error) => {
+    return _ei.__create_staging_result((on_value, on_error) => {
 
         const child = spawn($p.program, args, {
             shell: false, // ✅ no implicit parsing

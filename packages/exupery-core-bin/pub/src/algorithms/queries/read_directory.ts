@@ -17,7 +17,7 @@ export const $$: _et.Stager<d.Result, d.Error, d.Parameters> = _easync.__create_
         }
         return path
     }
-    return _ei.__create_data_preparation_result((on_value, on_error) => {
+    return _ei.__create_staging_result((on_value, on_error) => {
         fs_readdir(__possibly_escape_filename($p.path.path, $p.path['escape spaces in path']), {
             'encoding': 'utf-8',
             'withFileTypes': true,
