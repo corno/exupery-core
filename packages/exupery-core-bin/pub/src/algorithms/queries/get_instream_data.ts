@@ -6,7 +6,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/ge
 import { Signature } from "exupery-resources/dist/interface/algorithms/queries/get_instream_data"
 
 
-export const $$: _et.Data_Preparer<d.Result, null, null> = _easync.__create_query((
+export const $$: _et.Stager<d.Result, null, null> = _easync.__create_query((
 ) => {
     return _ei.__create_data_preparation_result((on_value) => {
 

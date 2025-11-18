@@ -8,7 +8,7 @@ export type Typed_Value =
     | ['number', number]
     | ['boolean', boolean]
     | ['null', null]
-    | ['array', _et.Array<Value>]
+    | ['array', _et.List<Value>]
     | ['object', _et.Dictionary<Value>]
 
 export const determine_type = ($: Value): Typed_Value => {
@@ -21,7 +21,7 @@ export const determine_type = ($: Value): Typed_Value => {
     } else if ($ === null) {
         return ['null', null]
     } else if (Array.isArray($)) {
-        return ['array', _ei.array_literal($)]
+        return ['array', _ei.list_literal($)]
     } else if (typeof $ === 'object') {
         return ['object', _ei.dictionary_literal($)]
     } else {
@@ -94,11 +94,11 @@ export const expect_optional_property = ($: _et.Dictionary<Value>, key: string):
     return $.__get_entry(key)
 }
 
-export const expect_array = ($: Value): _et.Array<Value> => {
+export const expect_array = ($: Value): _et.List<Value> => {
     if (!Array.isArray($)) {
         _ei.panic("Expected array")
     }
-    return _ei.array_literal($)
+    return _ei.list_literal($)
 }
 
 export type State = [string, Value]

@@ -55,10 +55,10 @@ export type Available_Standard_Resources = {
         'write to stdout': _et.Command<null, d_write_to_stdout.Parameters>
     },
     'queries': {
-        'execute any query executable': _et.Data_Preparer<d_execute_any_query_executable.Result, d_execute_any_query_executable.Error, d_execute_any_query_executable.Parameters>
-        'get instream data': _et.Data_Preparer<d_get_instream_data.Result, null, temp_instream_parameters>
-        'read directory': _et.Data_Preparer<d_read_directory.Result, d_read_directory.Error, d_read_directory.Parameters>
-        'read file': _et.Data_Preparer<d_read_file.Result, d_read_file.Error, d_read_file.Parameters>
+        'execute any query executable': _et.Stager<d_execute_any_query_executable.Result, d_execute_any_query_executable.Error, d_execute_any_query_executable.Parameters>
+        'get instream data': _et.Stager<d_get_instream_data.Result, null, temp_instream_parameters>
+        'read directory': _et.Stager<d_read_directory.Result, d_read_directory.Error, d_read_directory.Parameters>
+        'read file': _et.Stager<d_read_file.Result, d_read_file.Error, d_read_file.Parameters>
         //'stat': _et.Query<d_stat.Parameters, d_stat.Result, d_stat.Error>
     }
 }
@@ -98,7 +98,7 @@ export const run_main_procedure = (
 ): void => {
     get_main(create_available_resources()).execute(
         {
-            'arguments': _ei.array_literal(process.argv.slice(2))
+            'arguments': _ei.list_literal(process.argv.slice(2))
         },
         ($) => $,
     ).__start(

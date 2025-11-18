@@ -8,7 +8,7 @@ import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/re
 import { Signature } from "exupery-resources/dist/interface/algorithms/queries/read_directory"
 
 
-export const $$: _et.Data_Preparer<d.Result, d.Error, d.Parameters> = _easync.__create_query((
+export const $$: _et.Stager<d.Result, d.Error, d.Parameters> = _easync.__create_query((
     $p
 ) => {
     const __possibly_escape_filename = (path: string, escape: boolean): string => {

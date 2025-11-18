@@ -7,7 +7,7 @@ import { set } from "./set"
  * If you feel the need to rename this class, don't rename it to 'Array',
  * it will break the 'instanceOf Array' test
  */
-class Array_Class<T> implements _et.Array<T> {
+class List_Class<T> implements _et.List<T> {
     private data: readonly T[]
     constructor(data: readonly T[]) {
         this.data = data
@@ -15,7 +15,7 @@ class Array_Class<T> implements _et.Array<T> {
     map<NT>(
         $v: (entry: T) => NT
     ) {
-        return array_literal(this.data.map((entry) => {
+        return list_literal(this.data.map((entry) => {
             return $v(entry)
         }))
     }
@@ -49,10 +49,10 @@ class Array_Class<T> implements _et.Array<T> {
  * @param source An array literal
  * @returns 
  */
-export function array_literal<T>(source: readonly T[]): _et.Array<T> {
+export function list_literal<T>(source: readonly T[]): _et.List<T> {
     if (!(source instanceof Array)) {
-        throw new Error("invalid input in 'array_literal'")
+        throw new Error("invalid input in 'list_literal'")
     }
     const data = source.slice() //create a copy
-    return new Array_Class(data)
+    return new List_Class(data)
 }

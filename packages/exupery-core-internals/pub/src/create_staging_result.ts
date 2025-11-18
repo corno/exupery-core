@@ -12,7 +12,7 @@ type Executer<Output, Error> = (
     on_error: ($: Error) => void,
 ) => void
 
-class Data_Preparation_Result_Class<Output, Error> implements _et.Data_Preparation_Result<Output, Error> {
+class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, Error> {
     private executer: Executer<Output, Error>
     constructor(executer: Executer<Output, Error>) {
         this.executer = executer
@@ -20,8 +20,8 @@ class Data_Preparation_Result_Class<Output, Error> implements _et.Data_Preparati
 
     transform<New_Output>(
         transformer: _et.Transformer_Without_Parameters<New_Output, Output>
-    ): _et.Data_Preparation_Result<New_Output, Error> {
-        return new Data_Preparation_Result_Class<New_Output, Error>((on_result, on_error) => {
+    ): _et.Staging_Result<New_Output, Error> {
+        return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
                     on_result(transformer($))
@@ -33,8 +33,8 @@ class Data_Preparation_Result_Class<Output, Error> implements _et.Data_Preparati
 
     transform_error_temp<New_Error>(
         error_transformer: _et.Transformer_Without_Parameters<New_Error, Error>,
-    ): _et.Data_Preparation_Result<Output, New_Error> {
-        return new Data_Preparation_Result_Class<Output, New_Error>((on_result, on_error) => {
+    ): _et.Staging_Result<Output, New_Error> {
+        return new Staging_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
                 on_result,
                 ($) => {
@@ -44,13 +44,13 @@ class Data_Preparation_Result_Class<Output, Error> implements _et.Data_Preparati
         })
     }
 
-    process_without_error_transformation<New_Output>(
-        processor: _et.Data_Preparer<New_Output, Error, Output>
-    ): _et.Data_Preparation_Result<New_Output, Error> {
-        return new Data_Preparation_Result_Class<New_Output, Error>((on_result, on_error) => {
+    stage_without_error_transformation<New_Output>(
+        stager: _et.Stager<New_Output, Error, Output>
+    ): _et.Staging_Result<New_Output, Error> {
+        return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
-                    processor($).__extract_data(
+                    stager($).__extract_data(
                         on_result,
                         on_error,
                     )
@@ -60,17 +60,17 @@ class Data_Preparation_Result_Class<Output, Error> implements _et.Data_Preparati
         })
     }
 
-    process<New_Output, Processor_Error>(
-        processor: _et.Data_Preparer<New_Output, Processor_Error, Output>,
-        transform_error: (error: Processor_Error) => Error,
-    ): _et.Data_Preparation_Result<New_Output, Error> {
-        return new Data_Preparation_Result_Class<New_Output, Error>((on_result, on_error) => {
+    stage<New_Output, Stager_Error>(
+        stager: _et.Stager<New_Output, Stager_Error, Output>,
+        transform_error: (error: Stager_Error) => Error,
+    ): _et.Staging_Result<New_Output, Error> {
+        return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
-                    processor($).__extract_data(
+                    stager($).__extract_data(
                         on_result,
-                        (processor_error) => {
-                            on_error(transform_error(processor_error))
+                        (stager_error) => {
+                            on_error(transform_error(stager_error))
                         },
                     )
                 },
@@ -80,10 +80,10 @@ class Data_Preparation_Result_Class<Output, Error> implements _et.Data_Preparati
     }
 
     rework_error_temp<New_Error, Rework_Error>(
-        error_reworker: _et.Data_Preparer<New_Error, Rework_Error, Error>,
+        error_reworker: _et.Stager<New_Error, Rework_Error, Error>,
         rework_error_transformer: _et.Transformer_Without_Parameters<New_Error, Rework_Error>,
-    ): _et.Data_Preparation_Result<Output, New_Error> {
-        return new Data_Preparation_Result_Class<Output, New_Error>((on_result, on_error) => {
+    ): _et.Staging_Result<Output, New_Error> {
+        return new Staging_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
                 on_result,
                 ($) => {
@@ -111,9 +111,9 @@ class Data_Preparation_Result_Class<Output, Error> implements _et.Data_Preparati
 }
 
 
-export function __create_data_preparation_result<T, E>(
+export function __create_staging_result<T, E>(
     executer: Executer<T, E>,
-): _et.Data_Preparation_Result<T, E> {
-    return new Data_Preparation_Result_Class<T, E>(executer)
+): _et.Staging_Result<T, E> {
+    return new Staging_Result_Class<T, E>(executer)
 
 }

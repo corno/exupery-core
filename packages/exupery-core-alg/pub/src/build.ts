@@ -3,7 +3,7 @@ import * as _ei from 'exupery-core-internals'
 
 export type List_Builder<T> = {
     'add element': ($: T) => void
-    'add list': ($: _et.Array<T>) => void
+    'add list': ($: _et.List<T>) => void
 }
 
 export type Text_Builder = {
@@ -15,7 +15,7 @@ export type Dictionary_Builder<T> = {
     'add entry': (key: string, value: T) => void
 }
 
-export const build_list = <T>($: ($c: List_Builder<T>) => void): _et.Array<T> => {
+export const build_list = <T>($: ($c: List_Builder<T>) => void): _et.List<T> => {
     const temp: T[] = []
     $({
         'add element': ($) => {
@@ -25,7 +25,7 @@ export const build_list = <T>($: ($c: List_Builder<T>) => void): _et.Array<T> =>
             temp.push(...$.__get_raw_copy())
         }
     })
-    return _ei.array_literal(temp)
+    return _ei.list_literal(temp)
 }
 
 export const build_text = (

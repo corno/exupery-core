@@ -7,8 +7,8 @@ export type Key_Value_Pair<T> = {
 }
 
 export const group_list = <T>(
-    list: _et.Array<Key_Value_Pair<T>>,
-): _et.Dictionary<_et.Array<T>> => {
+    list: _et.List<Key_Value_Pair<T>>,
+): _et.Dictionary<_et.List<T>> => {
     const temp: { [key: string]: T[] } = {}
     list.__for_each(($) => {
         if (temp[$.key] === undefined) {
@@ -16,7 +16,7 @@ export const group_list = <T>(
         }
         temp[$.key].push($.value)
     })
-    return _ei.dictionary_literal(temp).map(($) => _ei.array_literal($))
+    return _ei.dictionary_literal(temp).map(($) => _ei.list_literal($))
 }
 
 export const group_dictionary = <T>(

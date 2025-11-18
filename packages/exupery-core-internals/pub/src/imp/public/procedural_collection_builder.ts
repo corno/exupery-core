@@ -1,6 +1,6 @@
 import * as _et from 'exupery-core-types'
 import { dictionary_literal } from './dictionary_literal'
-import { array_literal } from './array_literal'
+import { list_literal } from './list_literal'
 
 export type Procedural_Dictionary_Builder<Entry> = {
     'add entry': (key: string, entry: Entry) => void,
@@ -23,8 +23,8 @@ export const create_procedural_dictionary_builder = <Entry>(): Procedural_Dictio
 
 export type Procedural_List_Builder<Item> = {
     'add item': (item: Item) => void,
-    'add list': (list: _et.Array<Item>) => void,
-    'get list': () => _et.Array<Item>,
+    'add list': (list: _et.List<Item>) => void,
+    'get list': () => _et.List<Item>,
 }
 
 export const create_procedural_list_builder = <Item>(): Procedural_List_Builder<Item> => {
@@ -34,14 +34,14 @@ export const create_procedural_list_builder = <Item>(): Procedural_List_Builder<
         'add item': (item: Item) => {
             items.push(item)
         },
-        'add list': (list: _et.Array<Item>) => {
+        'add list': (list: _et.List<Item>) => {
             list.__for_each(($) => {
                 items.push($)
             })
         },
 
         'get list': () => {
-            return array_literal(items)
+            return list_literal(items)
         },
     }
 }

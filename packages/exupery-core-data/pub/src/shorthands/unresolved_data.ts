@@ -32,7 +32,7 @@ export type Dictionary<G_Source, T_D> = {
 }
 
 export type List<G_Source, T_L> = {
-    readonly 'list': _et.Array<{
+    readonly 'list': _et.List<{
         readonly 'element': T_L
         readonly 'location': G_Source
     }>
@@ -70,8 +70,8 @@ export const wrap_list = <T>(
     $: Raw_Or_Normal_Array<T>,
 ): List<Source_Location, T> => {
     const location = get_location_info(depth + 1)
-    const decorated: _et.Array<T> = $ instanceof Array
-        ? _ei.array_literal($)
+    const decorated: _et.List<T> = $ instanceof Array
+        ? _ei.list_literal($)
         : $
 
     if (!(decorated.__for_each instanceof Function)) {

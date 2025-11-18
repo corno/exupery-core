@@ -11,7 +11,7 @@ export const to_raw_array = <T>($: pt.Array<T>): readonly T[] => $.__get_raw_cop
 
 export type Dictionary<T_D> = _et.Dictionary<T_D>
 
-export type List<T_L> = _et.Array<T_L>
+export type List<T_L> = _et.List<T_L>
 
 
 export const wrap_dictionary = <T>($: Raw_Or_Normal_Dictionary<T>): Dictionary<T> => {
@@ -27,7 +27,7 @@ export const wrap_dictionary = <T>($: Raw_Or_Normal_Dictionary<T>): Dictionary<T
 
 export const wrap_list = <T>($: Raw_Or_Normal_Array<T>): List<T> => {
     if ($ instanceof Array) {
-        return _ei.array_literal($)
+        return _ei.list_literal($)
     }
     if (!($.__for_each instanceof Function)) {
         throw new Error("invalid input in 'wrap_list'")

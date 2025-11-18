@@ -17,7 +17,7 @@ export {
     panic as deprecated_panic,
 
 
-    array_literal,
+    list_literal,
     dictionary_literal,
     block,
     data_processing,

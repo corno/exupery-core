@@ -24,7 +24,7 @@ export namespace p {
         }
 
         export const query = <Error>(
-            assertion: _et.Data_Preparation_Result<boolean, Error>,
+            assertion: _et.Staging_Result<boolean, Error>,
             error_if_failed: Error,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
@@ -74,7 +74,7 @@ export namespace p {
         }
 
         export const query = <Error>(
-            precondition: _et.Data_Preparation_Result<boolean, Error>,
+            precondition: _et.Staging_Result<boolean, Error>,
             procedure: _et.Command_Promise<Error>,
             else_procedure?: _et.Command_Promise<Error>,
         ): _et.Command_Promise<Error> => {
@@ -105,7 +105,7 @@ export namespace p {
         }
 
         export const procedure = <Procedure_Input, Error>(
-            precondition: _et.Data_Preparation_Result<Procedure_Input, Error>,
+            precondition: _et.Staging_Result<Procedure_Input, Error>,
             procedure: Basic_Command<Error, Procedure_Input>, // ($: Procedure_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
@@ -127,8 +127,8 @@ export namespace p {
 
     export namespace list {
         export const parallel = <Error, Element_Error>(
-            the_array: _et.Array<_et.Command_Promise<Element_Error>>,
-            aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Array<Element_Error>>,
+            the_array: _et.List<_et.Command_Promise<Element_Error>>,
+            aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.List<Element_Error>>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (
@@ -168,7 +168,7 @@ export namespace p {
         }
 
         export const serie = <Error>(
-            array: _et.Array<_et.Command_Promise<Error>>,
+            array: _et.List<_et.Command_Promise<Error>>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
@@ -245,7 +245,7 @@ export namespace p {
 
 
             export const query = <T, Error, Entry_Error>(
-                query: _et.Data_Preparation_Result<_et.Dictionary<T>, Error>,
+                query: _et.Staging_Result<_et.Dictionary<T>, Error>,
                 callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>,
                 aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Dictionary<Entry_Error>>,
             ): _et.Command_Promise<Error> => {
@@ -383,7 +383,7 @@ export namespace p {
                 on_error,
             ) => {
 
-                const length = _ei.array_literal(steps).__get_number_of_elements()
+                const length = _ei.list_literal(steps).__get_number_of_elements()
                 const runStep = (index: number) => {
                     if (index >= length) {
                         on_success()
@@ -401,7 +401,7 @@ export namespace p {
 
 
     export const prepare_data = <Error, Query_Result>(
-        data_preparation_result: _et.Data_Preparation_Result<Query_Result, Error>,
+        data_preparation_result: _et.Staging_Result<Query_Result, Error>,
         command: ($v: Query_Result) => _et.Command_Promise<Error>,
     ): _et.Command_Promise<Error> => {
         return __create_command_promise({
@@ -430,7 +430,7 @@ export namespace p {
 
 
     export const prepare_stacked_data = <Error, Query_Result, Parent_Data>(
-        data_preparation_result: _et.Data_Preparation_Result<Query_Result, Error>,
+        data_preparation_result: _et.Staging_Result<Query_Result, Error>,
         parent_data: Parent_Data,
         command: ($v: Query_Result, $parent: Parent_Data) => _et.Command_Promise<Error>,
     ): _et.Command_Promise<Error> => {
