@@ -3,12 +3,12 @@ import { __create_command_promise } from './create_command_promise'
 
 export type Basic_Command<Parameters, Error> = ($: Parameters) => _et.Command_Promise<Error>
 
-export const __create_command = <Parameters, Error, Query_Resources, Command_Resources>(
+export const __create_resource_command = <Parameters, Error, Query_Resources, Command_Resources>(
     handler: Basic_Command<Parameters, Error>,
 ): _et.Command<Parameters, Error> => {
     return {
 
-        'execute': (transform_error, parameters) => {
+        'execute': (parameters, transform_error) => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
                     handler(parameters).__start(

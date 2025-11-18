@@ -3,7 +3,7 @@ import * as _ei from 'exupery-core-internals'
 
 import { __create_command_promise } from "./creaters/create_command_promise"
 import { create_asynchronous_processes_monitor } from '../create_asynchronous_processes_monitor'
-import { Basic_Command } from './creaters/create_command'
+import { Basic_Command } from './creaters/create_resource_command'
 
 export namespace p {
 
