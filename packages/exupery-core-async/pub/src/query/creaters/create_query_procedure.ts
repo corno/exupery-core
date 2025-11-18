@@ -2,11 +2,11 @@ import * as _et from 'exupery-core-types'
 
 import { __create_query } from './create_query'
 
-export const create_query_procedure = <Parameters, Result, Error, Queries>(
+export const create_query_procedure = <Result, Parameters, Error, Queries>(
     handler: (
         $q: Queries,
         $p: Parameters,
     ) => _et.Data_Preparation_Result<Result, Error>
-): _et.Query_Procedure<Parameters, Result, Error, Queries> => {
+): _et.Query_Procedure<Result, Parameters, Error, Queries> => {
     return ($q) => __create_query(($p) => handler($q, $p))
 }
