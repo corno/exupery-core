@@ -61,7 +61,7 @@ class Data_Preparation_Result_Class<Output, Error> implements _et.Data_Preparati
     }
 
     process<New_Output, Processor_Error>(
-        processor: _et.Data_Preparer<New_Output, Output, Processor_Error>,
+        processor: _et.Data_Preparer<New_Output, Processor_Error, Output>,
         transform_error: (error: Processor_Error) => Error,
     ): _et.Data_Preparation_Result<New_Output, Error> {
         return new Data_Preparation_Result_Class<New_Output, Error>((on_result, on_error) => {
@@ -79,20 +79,20 @@ class Data_Preparation_Result_Class<Output, Error> implements _et.Data_Preparati
         })
     }
 
-    rework_error_temp<New_Target_Error, Rework_Error>(
-        rework_error: _et.Data_Preparer<New_Target_Error, Error, Rework_Error>,
-        transform_rework_error: _et.Transformer_Without_Parameters<New_Target_Error, Rework_Error>,
-    ): _et.Data_Preparation_Result<Output, New_Target_Error> {
-        return new Data_Preparation_Result_Class<Output, New_Target_Error>((on_result, on_error) => {
+    rework_error_temp<New_Error, Rework_Error>(
+        error_reworker: _et.Data_Preparer<New_Error, Rework_Error, Error>,
+        rework_error_transformer: _et.Transformer_Without_Parameters<New_Error, Rework_Error>,
+    ): _et.Data_Preparation_Result<Output, New_Error> {
+        return new Data_Preparation_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
                 on_result,
                 ($) => {
-                    rework_error($).__extract_data(
+                    error_reworker($).__extract_data(
                         (new_target_error) => {
                             on_error(new_target_error)
                         },
                         (rework_error) => {
-                            on_error(transform_rework_error(rework_error))
+                            on_error(rework_error_transformer(rework_error))
                         },
                     )
                 },
