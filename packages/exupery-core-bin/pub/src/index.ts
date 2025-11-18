@@ -43,22 +43,22 @@ type temp_instream_parameters = null
 
 export type Available_Standard_Resources = {
     'commands': {
-        'copy': _et.Command<d_copy.Parameters, d_copy.Error>
-        'execute any procedure executable': _et.Command<d_execute_any_procedure_executable.Parameters, d_execute_any_procedure_executable.Error>
-        'execute any smelly procedure executable': _et.Command<d_execute_any_smelly_procedure_executable.Parameters, d_execute_any_smelly_procedure_executable.Error>
-        'log error': _et.Command<d_log_error.Parameters, null>
-        'log': _et.Command<d_log.Parameters, null>
-        'make directory': _et.Command<d_make_directory.Parameters, d_make_directory.Error>
-        'remove': _et.Command<d_remove.Parameters, d_remove.Error>
-        'write file': _et.Command<d_write_file.Parameters, d_write_file.Error>
-        'write to stderr': _et.Command<d_write_to_stderr.Parameters, null>
-        'write to stdout': _et.Command<d_write_to_stdout.Parameters, null>
+        'copy': _et.Command<d_copy.Error, d_copy.Parameters>
+        'execute any procedure executable': _et.Command<d_execute_any_procedure_executable.Error, d_execute_any_procedure_executable.Parameters>
+        'execute any smelly procedure executable': _et.Command<d_execute_any_smelly_procedure_executable.Error, d_execute_any_smelly_procedure_executable.Parameters>
+        'log error': _et.Command<null, d_log_error.Parameters>
+        'log': _et.Command<null, d_log.Parameters>
+        'make directory': _et.Command<d_make_directory.Error, d_make_directory.Parameters>
+        'remove': _et.Command<d_remove.Error, d_remove.Parameters>
+        'write file': _et.Command<d_write_file.Error, d_write_file.Parameters>
+        'write to stderr': _et.Command<null, d_write_to_stderr.Parameters>
+        'write to stdout': _et.Command<null, d_write_to_stdout.Parameters>
     },
     'queries': {
-        'execute any query executable': _et.Data_Preparer<d_execute_any_query_executable.Result, d_execute_any_query_executable.Parameters, d_execute_any_query_executable.Error>
-        'get instream data': _et.Data_Preparer<d_get_instream_data.Result, temp_instream_parameters, null>
-        'read directory': _et.Data_Preparer<d_read_directory.Result, d_read_directory.Parameters, d_read_directory.Error>
-        'read file': _et.Data_Preparer<d_read_file.Result, d_read_file.Parameters, d_read_file.Error>
+        'execute any query executable': _et.Data_Preparer<d_execute_any_query_executable.Result, d_execute_any_query_executable.Error, d_execute_any_query_executable.Parameters>
+        'get instream data': _et.Data_Preparer<d_get_instream_data.Result, null, temp_instream_parameters>
+        'read directory': _et.Data_Preparer<d_read_directory.Result, d_read_directory.Error, d_read_directory.Parameters>
+        'read file': _et.Data_Preparer<d_read_file.Result, d_read_file.Error, d_read_file.Parameters>
         //'stat': _et.Query<d_stat.Parameters, d_stat.Result, d_stat.Error>
     }
 }
@@ -94,7 +94,7 @@ const create_available_resources = (): Available_Standard_Resources => {
  * returned value when the async value completes.
  */
 export const run_main_procedure = (
-    get_main: ($r: Available_Standard_Resources) => _et.Command<d_main.Parameters, d_main.Error>,
+    get_main: ($r: Available_Standard_Resources) => _et.Command<d_main.Error, d_main.Parameters>,
 ): void => {
     get_main(create_available_resources()).execute(
         {

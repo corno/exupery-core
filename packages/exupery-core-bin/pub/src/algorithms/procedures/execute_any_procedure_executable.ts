@@ -13,7 +13,7 @@ import { Signature } from "exupery-resources/dist/interface/algorithms/procedure
  * The executable being executed is assumed to only cause side effects
  * and not return any meaningful data, std::out is therefor ignored
  */
-export const $$: _et.Command<d.Parameters, d.Error> = _easync.__create_resource_command( (
+export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_command( (
     $p,
 ) => {
     const args = $p.args.__get_raw_copy()
