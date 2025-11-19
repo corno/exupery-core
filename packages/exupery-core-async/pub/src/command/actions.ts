@@ -4,6 +4,7 @@ import * as _ei from 'exupery-core-internals'
 import { __create_command_promise } from "./creaters/create_command_promise"
 import { create_asynchronous_processes_monitor } from '../create_asynchronous_processes_monitor'
 import { Basic_Command } from './creaters/create_resource_command'
+import { __sequence } from './sequence'
 
 export namespace p {
 
@@ -50,19 +51,19 @@ export namespace p {
 
     export const conditional = <Error>(
         precondition: boolean,
-        command: _et.Command_Promise<Error>,
-        else_command?: _et.Command_Promise<Error>,
+        command_block: _et.Command_Promise<Error>[],
+        else_command_block?: _et.Command_Promise<Error>[],
     ): _et.Command_Promise<Error> => {
         return __create_command_promise({
             'execute': (on_success, on_error) => {
                 if (precondition) {
-                    command.__start(
+                    __sequence(command_block).__start(
                         on_success,
                         on_error
                     )
                 } else {
-                    if (else_command !== undefined) {
-                        else_command.__start(
+                    if (else_command_block !== undefined) {
+                        __sequence(else_command_block).__start(
                             on_success,
                             on_error
                         )
@@ -100,25 +101,6 @@ export namespace p {
                                     on_success()
                                 }
                             }
-                        },
-                        on_error
-                    )
-                }
-            })
-        }
-
-        export const command = <Command_Input, Error>(
-            precondition: _et.Staging_Result<Command_Input, Error>,
-            command: Basic_Command<Error, Command_Input>, // ($: Command_Input) => _et.Command_Promise<Error> (maybe it is better to have the non-basic one here?)
-        ): _et.Command_Promise<Error> => {
-            return __create_command_promise({
-                'execute': (on_success, on_error) => {
-                    precondition.__extract_data(
-                        ($) => {
-                            command($).__start(
-                                on_success,
-                                on_error
-                            )
                         },
                         on_error
                     )
@@ -205,7 +187,7 @@ export namespace p {
 
         export const parallel = <T, Error, Entry_Error>(
             dictionary: _et.Dictionary<T>,
-            callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>,
+            callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>[],
             aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Dictionary<Entry_Error>>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
@@ -221,7 +203,7 @@ export namespace p {
                             dictionary.map(($, key) => {
                                 monitor['report process started']()
 
-                                callback($, key).__start(
+                                __sequence(callback($, key)).__start(
                                     () => {
                                         monitor['report process finished']()
                                     },
@@ -249,7 +231,7 @@ export namespace p {
 
             export const query = <T, Error, Entry_Error>(
                 staging_result: _et.Staging_Result<_et.Dictionary<T>, Error>,
-                callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>,
+                callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>[],
                 aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Dictionary<Entry_Error>>,
             ): _et.Command_Promise<Error> => {
                 return __create_command_promise({
@@ -269,7 +251,7 @@ export namespace p {
                                         dictionary.map(($, key) => {
                                             monitor['report process started']()
 
-                                            callback($, key).__start(
+                                            __sequence(callback($, key)).__start(
                                                 () => {
                                                     monitor['report process finished']()
                                                 },
@@ -405,7 +387,7 @@ export namespace p {
 
     export const stage = <Error, Staging_Output>(
         staging_result: _et.Staging_Result<Staging_Output, Error>,
-        command: ($v: Staging_Output) => _et.Command_Promise<Error>,
+        command_block: ($v: Staging_Output) => _et.Command_Promise<Error>[],
     ): _et.Command_Promise<Error> => {
         return __create_command_promise({
             'execute': (
@@ -414,7 +396,7 @@ export namespace p {
             ) => {
                 staging_result.__extract_data(
                     (output) => {
-                        command(output).__start(
+                        __sequence(command_block(output)).__start(
                             () => {
                                 on_success()
                             },
@@ -434,7 +416,7 @@ export namespace p {
     export const stage_stacked = <Error, Staging_Output, Parent_Data>(
         staging_result: _et.Staging_Result<Staging_Output, Error>,
         parent_data: Parent_Data,
-        command: ($v: Staging_Output, $parent: Parent_Data) => _et.Command_Promise<Error>,
+        command_block: ($v: Staging_Output, $parent: Parent_Data) => _et.Command_Promise<Error>[],
     ): _et.Command_Promise<Error> => {
         return __create_command_promise({
             'execute': (
@@ -443,7 +425,7 @@ export namespace p {
             ) => {
                 staging_result.__extract_data(
                     (output) => {
-                        command(output, parent_data).__start(
+                      __sequence(command_block(output, parent_data)).__start(
                             () => {
                                 on_success()
                             },
