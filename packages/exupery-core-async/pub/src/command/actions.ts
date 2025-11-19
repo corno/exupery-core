@@ -114,7 +114,7 @@ export namespace p {
 
         export const parallel = <Error, Element_Error>(
             the_array: _et.List<_et.Command_Promise<Element_Error>>,
-            errors_aggregator: _et.Transformer_Without_Parameters<Error, _et.List<Element_Error>>,
+            errors_aggregator: _et.Transformer<Error, _et.List<Element_Error>>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (
@@ -188,7 +188,7 @@ export namespace p {
         export const parallel = <T, Error, Entry_Error>(
             dictionary: _et.Dictionary<T>,
             block: (value: T, key: string) => Command_Block<Entry_Error>,
-            aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Dictionary<Entry_Error>>,
+            aggregate_errors: _et.Transformer<Error, _et.Dictionary<Entry_Error>>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (
@@ -232,7 +232,7 @@ export namespace p {
             export const query = <T, Error, Entry_Error>(
                 staging_result: _et.Staging_Result<_et.Dictionary<T>, Error>,
                 block: (value: T, key: string) => Command_Block<Entry_Error>,
-                aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Dictionary<Entry_Error>>,
+                aggregate_errors: _et.Transformer<Error, _et.Dictionary<Entry_Error>>,
             ): _et.Command_Promise<Error> => {
                 return __create_command_promise({
                     'execute': (
@@ -281,7 +281,7 @@ export namespace p {
 
         export const serie = <Error, Entry_Error>(
             dictionary: _et.Dictionary<_et.Command_Promise<Entry_Error>>,
-            transform_error: _et.Transformer_Without_Parameters<Error, _et.Key_Value_Pair<Entry_Error>>,
+            transform_error: _et.Transformer<Error, _et.Key_Value_Pair<Entry_Error>>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {

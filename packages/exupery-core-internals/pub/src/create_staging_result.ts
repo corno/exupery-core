@@ -19,7 +19,7 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
     }
 
     transform<New_Output>(
-        transformer: _et.Transformer_Without_Parameters<New_Output, Output>
+        transformer: _et.Transformer<New_Output, Output>
     ): _et.Staging_Result<New_Output, Error> {
         return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
@@ -32,7 +32,7 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
     }
 
     transform_error_temp<New_Error>(
-        error_transformer: _et.Transformer_Without_Parameters<New_Error, Error>,
+        error_transformer: _et.Transformer<New_Error, Error>,
     ): _et.Staging_Result<Output, New_Error> {
         return new Staging_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
@@ -50,7 +50,7 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
         return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
-                    stager($).__extract_data(
+                    stager($, ($) => $).__extract_data(
                         on_result,
                         on_error,
                     )
@@ -62,12 +62,12 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
 
     stage<New_Output, Stager_Error>(
         stager: _et.Stager<New_Output, Stager_Error, Output>,
-        error_transformer: _et.Transformer_Without_Parameters<Error, Stager_Error>,
+        error_transformer: _et.Transformer<Error, Stager_Error>,
     ): _et.Staging_Result<New_Output, Error> {
         return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
-                    stager($).__extract_data(
+                    stager($, ($) => $).__extract_data(
                         on_result,
                         (stager_error) => {
                             on_error(error_transformer(stager_error))
@@ -81,13 +81,13 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
 
     rework_error_temp<New_Error, Rework_Error>(
         error_reworker: _et.Stager<New_Error, Rework_Error, Error>,
-        rework_error_transformer: _et.Transformer_Without_Parameters<New_Error, Rework_Error>,
+        rework_error_transformer: _et.Transformer<New_Error, Rework_Error>,
     ): _et.Staging_Result<Output, New_Error> {
         return new Staging_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
                 on_result,
                 ($) => {
-                    error_reworker($).__extract_data(
+                    error_reworker($, ($) => $).__extract_data(
                         (new_target_error) => {
                             on_error(new_target_error)
                         },
