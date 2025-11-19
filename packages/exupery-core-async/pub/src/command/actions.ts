@@ -5,6 +5,7 @@ import { __create_command_promise } from "./creaters/create_command_promise"
 import { create_asynchronous_processes_monitor } from '../create_asynchronous_processes_monitor'
 import { Basic_Command } from './creaters/create_resource_command'
 import { __sequence } from './sequence'
+import { Command_Block } from './Command_Block'
 
 export namespace p {
 
@@ -51,8 +52,8 @@ export namespace p {
 
     export const conditional = <Error>(
         precondition: boolean,
-        command_block: _et.Command_Promise<Error>[],
-        else_command_block?: _et.Command_Promise<Error>[],
+        command_block: Command_Block<Error>,
+        else_command_block?: Command_Block<Error>,
     ): _et.Command_Promise<Error> => {
         return __create_command_promise({
             'execute': (on_success, on_error) => {
@@ -187,7 +188,7 @@ export namespace p {
 
         export const parallel = <T, Error, Entry_Error>(
             dictionary: _et.Dictionary<T>,
-            callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>[],
+            block: (value: T, key: string) => Command_Block<Entry_Error>,
             aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Dictionary<Entry_Error>>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
@@ -203,7 +204,7 @@ export namespace p {
                             dictionary.map(($, key) => {
                                 monitor['report process started']()
 
-                                __sequence(callback($, key)).__start(
+                                __sequence(block($, key)).__start(
                                     () => {
                                         monitor['report process finished']()
                                     },
@@ -231,7 +232,7 @@ export namespace p {
 
             export const query = <T, Error, Entry_Error>(
                 staging_result: _et.Staging_Result<_et.Dictionary<T>, Error>,
-                callback: (value: T, key: string) => _et.Command_Promise<Entry_Error>[],
+                block: (value: T, key: string) => Command_Block<Entry_Error>,
                 aggregate_errors: _et.Transformer_Without_Parameters<Error, _et.Dictionary<Entry_Error>>,
             ): _et.Command_Promise<Error> => {
                 return __create_command_promise({
@@ -251,7 +252,7 @@ export namespace p {
                                         dictionary.map(($, key) => {
                                             monitor['report process started']()
 
-                                            __sequence(callback($, key)).__start(
+                                            __sequence(block($, key)).__start(
                                                 () => {
                                                     monitor['report process finished']()
                                                 },
@@ -360,7 +361,7 @@ export namespace p {
 
     // Sequencing function:
     export const sequence = <Error>(
-        steps: _et.Command_Promise<Error>[]
+        block: Command_Block<Error>
     ): _et.Command_Promise<Error> => {
         return __create_command_promise({
             'execute': (
@@ -368,13 +369,13 @@ export namespace p {
                 on_error,
             ) => {
 
-                const length = _ei.list_literal(steps).__get_number_of_elements()
+                const length = _ei.list_literal(block).__get_number_of_elements()
                 const runStep = (index: number) => {
                     if (index >= length) {
                         on_success()
                         return
                     }
-                    steps[index].__start(
+                    block[index].__start(
                         () => runStep(index + 1),
                         on_error,
                     )
@@ -387,7 +388,7 @@ export namespace p {
 
     export const stage = <Error, Staging_Output>(
         staging_result: _et.Staging_Result<Staging_Output, Error>,
-        command_block: ($v: Staging_Output) => _et.Command_Promise<Error>[],
+        command_block: ($v: Staging_Output) => Command_Block<Error>,
     ): _et.Command_Promise<Error> => {
         return __create_command_promise({
             'execute': (
@@ -416,7 +417,7 @@ export namespace p {
     export const stage_stacked = <Error, Staging_Output, Parent_Data>(
         staging_result: _et.Staging_Result<Staging_Output, Error>,
         parent_data: Parent_Data,
-        command_block: ($v: Staging_Output, $parent: Parent_Data) => _et.Command_Promise<Error>[],
+        command_block: ($v: Staging_Output, $parent: Parent_Data) => Command_Block<Error>,
     ): _et.Command_Promise<Error> => {
         return __create_command_promise({
             'execute': (
