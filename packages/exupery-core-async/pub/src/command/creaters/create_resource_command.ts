@@ -1,10 +1,8 @@
 import * as _et from 'exupery-core-types'
 import { __create_command_promise } from './create_command_promise'
 
-export type Basic_Command<Error, Parameters> = ($: Parameters) => _et.Command_Promise<Error>
-
 export const __create_resource_command = <Error, Parameters, Query_Resources, Command_Resources>(
-    handler: Basic_Command<Error, Parameters>,
+    handler: ($: Parameters) => _et.Command_Promise<Error>,
 ): _et.Command<Error, Parameters> => {
     return {
 

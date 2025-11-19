@@ -3,7 +3,6 @@ import * as _ei from 'exupery-core-internals'
 
 import { __create_command_promise } from "./creaters/create_command_promise"
 import { create_asynchronous_processes_monitor } from '../create_asynchronous_processes_monitor'
-import { Basic_Command } from './creaters/create_resource_command'
 import { __sequence } from './sequence'
 import { Command_Block } from './Command_Block'
 
@@ -50,7 +49,7 @@ export namespace p {
     }
 
 
-    export const conditional = <Error>(
+    export const if_ = <Error>(
         precondition: boolean,
         command_block: Command_Block<Error>,
         else_command_block?: Command_Block<Error>,

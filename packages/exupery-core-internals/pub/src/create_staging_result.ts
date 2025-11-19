@@ -62,7 +62,7 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
 
     stage<New_Output, Stager_Error>(
         stager: _et.Stager<New_Output, Stager_Error, Output>,
-        transform_error: (error: Stager_Error) => Error,
+        error_transformer: _et.Transformer_Without_Parameters<Error, Stager_Error>,
     ): _et.Staging_Result<New_Output, Error> {
         return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
@@ -70,7 +70,7 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
                     stager($).__extract_data(
                         on_result,
                         (stager_error) => {
-                            on_error(transform_error(stager_error))
+                            on_error(error_transformer(stager_error))
                         },
                     )
                 },
@@ -99,8 +99,6 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
             )
         })
     }
-
-
 
     __extract_data(
         on_result: ($: Output) => void,
