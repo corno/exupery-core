@@ -15,7 +15,7 @@ export const create_command_procedure = <Error, Parameters, Command_Resources, Q
 ): _et.Command_Procedure<Error, Parameters, Command_Resources, Query_Resources> => {
     return ($cr, $qr) => {
         return {
-            'execute': (parameters, transform_error) => {
+            'execute': (parameters, error_transformer) => {
                 return __create_command_promise({
                     'execute': (on_success, on_error) => {
 
@@ -23,7 +23,7 @@ export const create_command_procedure = <Error, Parameters, Command_Resources, Q
                             on_success,
                             ($) => {
                                 on_error(
-                                    transform_error($)
+                                    error_transformer($)
                                 )
                             }
                         )

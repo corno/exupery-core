@@ -6,14 +6,14 @@ export const __create_resource_command = <Error, Parameters, Query_Resources, Co
 ): _et.Command<Error, Parameters> => {
     return {
 
-        'execute': (parameters, transform_error) => {
+        'execute': (parameters, error_transformer) => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
                     handler(parameters).__start(
                         on_success,
                         (error) => {
                             on_error(
-                                transform_error(error)
+                                error_transformer(error)
                             )
                         }
                     )

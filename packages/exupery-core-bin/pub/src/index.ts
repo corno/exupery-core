@@ -55,10 +55,10 @@ export type Available_Standard_Resources = {
         'write to stdout': _et.Command<null, d_write_to_stdout.Parameters>
     },
     'queries': {
-        'execute any query executable': _et.Stager<d_execute_any_query_executable.Result, d_execute_any_query_executable.Error, d_execute_any_query_executable.Parameters>
-        'get instream data': _et.Stager<d_get_instream_data.Result, null, temp_instream_parameters>
-        'read directory': _et.Stager<d_read_directory.Result, d_read_directory.Error, d_read_directory.Parameters>
-        'read file': _et.Stager<d_read_file.Result, d_read_file.Error, d_read_file.Parameters>
+        'execute any query executable': _et.Query<d_execute_any_query_executable.Result, d_execute_any_query_executable.Error, d_execute_any_query_executable.Parameters>
+        'get instream data': _et.Query<d_get_instream_data.Result, null, temp_instream_parameters>
+        'read directory': _et.Query<d_read_directory.Result, d_read_directory.Error, d_read_directory.Parameters>
+        'read file': _et.Query<d_read_file.Result, d_read_file.Error, d_read_file.Parameters>
         //'stat': _et.Query<d_stat.Parameters, d_stat.Result, d_stat.Error>
     }
 }

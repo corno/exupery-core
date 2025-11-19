@@ -281,7 +281,7 @@ export namespace p {
 
         export const serie = <Error, Entry_Error>(
             dictionary: _et.Dictionary<_et.Command_Promise<Entry_Error>>,
-            transform_error: _et.Transformer<Error, _et.Key_Value_Pair<Entry_Error>>,
+            error_transformer: _et.Transformer<Error, _et.Key_Value_Pair<Entry_Error>>,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
@@ -299,7 +299,7 @@ export namespace p {
                                         do_next()
                                     },
                                     ($) => {
-                                        on_error(transform_error({
+                                        on_error(error_transformer({
                                             'value': $,
                                             'key': key,
                                         }))
