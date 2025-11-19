@@ -1,6 +1,6 @@
 {
   "name": "exupery-core-async",
-  "version": "0.3.62",
+  "version": "0.3.63",
   "license": "Apache-2.0",
   "author": "Corno",
   "description": "async types for Exupery",
