@@ -2,11 +2,11 @@ import * as _easync from 'exupery-core-async'
 import * as _et from 'exupery-core-types'
 import * as _ei from 'exupery-core-internals'
 
-import { stat as fs_stat } from "fs"
-
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/stat/data_types/target"
 import { Signature } from "exupery-resources/dist/interface/algorithms/queries/stat"
 
+
+import { stat as fs_stat } from "fs"
 
 export const $$: _et.Stager<d.Result, d.Error, d.Parameters> = _easync.__create_query((
     $p
