@@ -1,4 +1,4 @@
 import { Staging_Result } from "./Staging_Result"
-import { Stager } from "./Stager"
+import { Query } from "./Stager"
 
-export type Query_Procedure<Result, Error, Parameters, Query_Resources> = ($q: Query_Resources) => Stager<Result, Error, Parameters>
+export type Query_Procedure<Result, Error, Parameters, Query_Resources> = ($q: Query_Resources) => Query<Result, Error, Parameters>
