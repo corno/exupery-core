@@ -50,7 +50,7 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
         return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
-                    stager($, ($) => $).__extract_data(
+                    stager($).__extract_data(
                         on_result,
                         on_error,
                     )
@@ -67,7 +67,7 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
         return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
-                    stager($, ($) => $).__extract_data(
+                    stager($).__extract_data(
                         on_result,
                         (stager_error) => {
                             on_error(error_transformer(stager_error))
@@ -87,7 +87,7 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
             this.executer(
                 on_result,
                 ($) => {
-                    error_reworker($, ($) => $).__extract_data(
+                    error_reworker($).__extract_data(
                         (new_target_error) => {
                             on_error(new_target_error)
                         },
