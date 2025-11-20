@@ -18,7 +18,7 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
         this.executer = executer
     }
 
-    transform<New_Output>(
+    transform_result<New_Output>(
         transformer: _et.Transformer<New_Output, Output>
     ): _et.Staging_Result<New_Output, Error> {
         return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
