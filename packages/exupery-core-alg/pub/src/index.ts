@@ -20,7 +20,6 @@ export {
     list_literal,
     dictionary_literal,
     block,
-    data_processing,
 } from "exupery-core-internals"
 
 export * from "./build"
