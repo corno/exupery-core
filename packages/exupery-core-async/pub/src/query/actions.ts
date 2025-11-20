@@ -1,5 +1,6 @@
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
+import { create_asynchronous_processes_monitor } from '../create_asynchronous_processes_monitor'
 
 
 export namespace q {
@@ -12,34 +13,35 @@ export namespace q {
 
         ): _et.Staging_Result<_et.Dictionary<Result>, Error> => {
             return _ei.__create_staging_result((on_success, on_error) => {
-                let count_down = dictionary.__get_number_of_entries()
                 let has_errors = false
+                const errors_builder = _ei.create_procedural_dictionary_builder<Entry_Error>()
+                const results_builder = _ei.create_procedural_dictionary_builder<Result>()
 
-                const errors: { [key: string]: Entry_Error } = {}
-                const results: { [key: string]: Result } = {}
-                const decrement_and_wrap_up_if_done = () => {
-                    count_down -= 1
-                    if (count_down === 0) {
+                create_asynchronous_processes_monitor(
+                    (monitor) => {
+                        dictionary.map(($, key) => {
+                            monitor['report process started']()
+                            $.__extract_data(
+                                ($) => {
+                                    results_builder['add entry'](key, $)
+                                    monitor['report process finished']()
+                                },
+                                ($) => {
+                                    has_errors = true
+                                    errors_builder['add entry'](key, $)
+                                    monitor['report process finished']()
+                                },
+                            )
+                        })
+                    },
+                    () => {
                         if (has_errors) {
-                            on_error(aggregate_errors(_ei.dictionary_literal(errors)))
+                            on_error(aggregate_errors(errors_builder['get dictionary']()))
                         } else {
-                            on_success(_ei.dictionary_literal(results))
+                            on_success(results_builder['get dictionary']())
                         }
                     }
-                }
-                dictionary.map(($, key) => {
-                    $.__extract_data(
-                        ($) => {
-                            results[key] = $
-                            decrement_and_wrap_up_if_done()
-                        },
-                        ($) => {
-                            has_errors = true
-                            errors[key] = $
-                            decrement_and_wrap_up_if_done()
-                        },
-                    )
-                })
+                )
             })
         }
 
@@ -47,34 +49,35 @@ export namespace q {
             $: _et.Dictionary<_et.Staging_Result<Result, Error>>,
         ): _et.Staging_Result<_et.Dictionary<Result>, _et.Dictionary<Error>> => {
             return _ei.__create_staging_result((on_success, on_error) => {
-                let count_down = $.__get_number_of_entries()
                 let has_errors = false
+                const errors_builder = _ei.create_procedural_dictionary_builder<Error>()
+                const results_builder = _ei.create_procedural_dictionary_builder<Result>()
 
-                const errors: { [key: string]: Error } = {}
-                const results: { [key: string]: Result } = {}
-                const decrement_and_wrap_up_if_done = () => {
-                    count_down -= 1
-                    if (count_down === 0) {
+                create_asynchronous_processes_monitor(
+                    (monitor) => {
+                        $.map(($, key) => {
+                            monitor['report process started']()
+                            $.__extract_data(
+                                ($) => {
+                                    results_builder['add entry'](key, $)
+                                    monitor['report process finished']()
+                                },
+                                ($) => {
+                                    has_errors = true
+                                    errors_builder['add entry'](key, $)
+                                    monitor['report process finished']()
+                                },
+                            )
+                        })
+                    },
+                    () => {
                         if (has_errors) {
-                            on_error(_ei.dictionary_literal(errors))
+                            on_error(errors_builder['get dictionary']())
                         } else {
-                            on_success(_ei.dictionary_literal(results))
+                            on_success(results_builder['get dictionary']())
                         }
                     }
-                }
-                $.map(($, key) => {
-                    $.__extract_data(
-                        ($) => {
-                            results[key] = $
-                            decrement_and_wrap_up_if_done()
-                        },
-                        ($) => {
-                            has_errors = true
-                            errors[key] = $
-                            decrement_and_wrap_up_if_done()
-                        },
-                    )
-                })
+                )
             })
         }
 

@@ -431,9 +431,7 @@ export namespace p {
                             }
                         )
                     },
-                    (e) => {
-                        on_error(e)
-                    }
+                    on_error
                 )
             }
         })
