@@ -3,7 +3,12 @@ import { Transformer } from "./Transformer"
 
 export interface Staging_Result<Output, Error> {
 
-    transform<New_Output>(
+    transform<Target>(
+        result_transformer: Transformer<Target, Output>,
+        error_transformer: Transformer<Target, Error>,
+    ): Target
+
+    transform_result<New_Output>(
         transformer: Transformer<New_Output, Output>
     ): Staging_Result<New_Output, Error>
 
