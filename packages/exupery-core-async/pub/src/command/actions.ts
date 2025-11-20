@@ -297,10 +297,10 @@ export namespace p {
         }
     }
 
-    export const create_error_handling_context = <Error, New_Error>(
-        command_block: Command_Block<Error>,
-        processor: (error: Error) => _et.Command_Promise<New_Error>,
-    ): _et.Command_Promise<New_Error> => {
+    export const create_error_handling_context = <Target_Error, Block_Error>(
+        command_block: Command_Block<Block_Error>,
+        processor: (error: Block_Error) => _et.Command_Promise<Target_Error>,
+    ): _et.Command_Promise<Target_Error> => {
         return __create_command_promise({
             'execute': (
                 on_success,
