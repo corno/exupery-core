@@ -33,9 +33,12 @@ export const $$: _et.Query<d.Result, d.Error, d.Parameters> = _easync.__create_q
                     return _ei.panic(`unhandled fs.readdir error code: ${err.code}`)
                 }))
             } else {
-                const out: { [key: string]: d.Node_Type } = {}
+                const out: { [key: string]: d.Result.D } = {}
                 files.forEach((file) => {
-                    out[($p['prepend results with path'] ? ($p.path.path + "/") : "") + file.name] = file.isFile() ? ['file', null] : ['directory', null]
+                    out[file.name] = {
+                        'node type': file.isFile() ? ['file', null] : ['directory', null],
+                        'concatenated path': $p.path.path + "/" + file.name 
+                    }
                 })
                 on_value(_ei.dictionary_literal(out))
             }
