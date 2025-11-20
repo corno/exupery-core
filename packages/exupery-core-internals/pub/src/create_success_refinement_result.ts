@@ -16,24 +16,29 @@ type Executer<Output, Error> = (
 type Refiner<Output, Error, Input> = (
     $: Input,
 ) => _et.Refinement_Result<Output, Error>
-
 class Failure_Refinement_Result_Class<Output, Error> implements _et.Refinement_Result<Output, Error> {
-    constructor(error: Error) {
-        this.error = error
+    private executer: Executer<Output, Error>
+    constructor(executer: Executer<Output, Error>) {
+        this.executer = executer
     }
-    private error: Error
 
     transform<Target>(
         result_transformer: _et.Transformer<Target, Output>,
         error_transformer: _et.Transformer<Target, Error>,
     ): Target {
-        return error_transformer(this.error)
-    }
+        let final_result: Target | null = null
 
     transform_result<New_Output>(
         transformer: _et.Transformer<New_Output, Output>
     ): _et.Refinement_Result<New_Output, Error> {
-        return this
+        return new Failure_Refinement_Result_Class<New_Output, Error>((on_result, on_error) => {
+            this.executer(
+                ($) => {
+                    on_result(transformer($))
+                },
+                on_error,
+            )
+        })
     }
 
     transform_error_temp<New_Error>(

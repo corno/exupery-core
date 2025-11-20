@@ -16,29 +16,30 @@ type Executer<Output, Error> = (
 type Refiner<Output, Error, Input> = (
     $: Input,
 ) => _et.Refinement_Result<Output, Error>
-class Refinement_Result_Class<Output, Error> implements _et.Refinement_Result<Output, Error> {
-    private executer: Executer<Output, Error>
-    constructor(executer: Executer<Output, Error>) {
-        this.executer = executer
+
+class Failure_Refinement_Result_Class<Output, Error> implements _et.Refinement_Result<Output, Error> {
+    constructor(error: Error) {
+        this.error = error
+    }
+    private error: Error
+
+    transform<Target>(
+        result_transformer: _et.Transformer<Target, Output>,
+        error_transformer: _et.Transformer<Target, Error>,
+    ): Target {
+        return error_transformer(this.error)
     }
 
     transform_result<New_Output>(
         transformer: _et.Transformer<New_Output, Output>
     ): _et.Refinement_Result<New_Output, Error> {
-        return new Refinement_Result_Class<New_Output, Error>((on_result, on_error) => {
-            this.executer(
-                ($) => {
-                    on_result(transformer($))
-                },
-                on_error,
-            )
-        })
+        return this
     }
 
     transform_error_temp<New_Error>(
         error_transformer: _et.Transformer<New_Error, Error>,
     ): _et.Refinement_Result<Output, New_Error> {
-        return new Refinement_Result_Class<Output, New_Error>((on_result, on_error) => {
+        return new Failure_Refinement_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
                 on_result,
                 ($) => {
@@ -51,7 +52,7 @@ class Refinement_Result_Class<Output, Error> implements _et.Refinement_Result<Ou
     refine_without_error_transformation<New_Output>(
         refiner: Refiner<New_Output, Error, Output>
     ): _et.Refinement_Result<New_Output, Error> {
-        return new Refinement_Result_Class<New_Output, Error>((on_result, on_error) => {
+        return new Failure_Refinement_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
                     refiner($).__extract_data(
@@ -64,11 +65,11 @@ class Refinement_Result_Class<Output, Error> implements _et.Refinement_Result<Ou
         })
     }
 
-    stage<New_Output, Stager_Error>(
+    refine<New_Output, Stager_Error>(
         stager: _et.Stager<New_Output, Stager_Error, Output>,
         error_transformer: _et.Transformer<Error, Stager_Error>,
     ): _et.Refinement_Result<New_Output, Error> {
-        return new Refinement_Result_Class<New_Output, Error>((on_result, on_error) => {
+        return new Failure_Refinement_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
                     stager($).__extract_data(
@@ -87,7 +88,7 @@ class Refinement_Result_Class<Output, Error> implements _et.Refinement_Result<Ou
         error_reworker: _et.Stager<New_Error, Rework_Error, Error>,
         rework_error_transformer: _et.Transformer<New_Error, Rework_Error>,
     ): _et.Refinement_Result<Output, New_Error> {
-        return new Refinement_Result_Class<Output, New_Error>((on_result, on_error) => {
+        return new Failure_Refinement_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
                 on_result,
                 ($) => {
@@ -116,6 +117,6 @@ class Refinement_Result_Class<Output, Error> implements _et.Refinement_Result<Ou
 export function __create_Refinement_Result<T, E>(
     executer: Executer<T, E>,
 ): _et.Refinement_Result<T, E> {
-    return new Refinement_Result_Class<T, E>(executer)
+    return new Failure_Refinement_Result_Class<T, E>(executer)
 
 }
