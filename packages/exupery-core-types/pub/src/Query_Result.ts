@@ -1,10 +1,15 @@
+import { Refinement_Result } from "./Refinement_Result"
 import { Transformer } from "./Transformer"
 
 //Shoutout to Reinout for helping me with the naming here :)
 
-type Stager<Output, Error, Input> = (
+type Queryer<Output, Error, Input> = (
     $: Input,
 ) => Query_Result<Output, Error>
+
+type Refiner<Output, Error, Input> = (
+    $: Input,
+) => Refinement_Result<Output, Error>
 
 export interface Query_Result<Output, Error> {
     query_result: null
@@ -18,31 +23,31 @@ export interface Query_Result<Output, Error> {
     ): Query_Result<Output, New_Error>
 
     query_without_error_transformation<New_Output>(
-        query: Stager<New_Output, Error, Output>
+        query: Queryer<New_Output, Error, Output>
     ): Query_Result<New_Output, Error>
     
-    query<New_Output, Stager_Error>(
-        query: Stager<New_Output, Stager_Error, Output>,
+    query<New_Output, Query_Error>(
+        query: Queryer<New_Output, Query_Error, Output>,
         /**
-         * if the stager fails, rework its error into the desired error type
+         * if the query fails, rework its error into the desired error type
          */
-        error_transformer: Transformer<Error, Stager_Error>,
+        error_transformer: Transformer<Error, Query_Error>,
     ): Query_Result<New_Output, Error>
 
     refine_without_error_transformation<New_Output>(
-        refiner: Stager<New_Output, Error, Output>
+        refiner: Refiner<New_Output, Error, Output>
     ): Query_Result<New_Output, Error>
     
-    refine<New_Output, Stager_Error>(
-        refiner: Stager<New_Output, Stager_Error, Output>,
+    refine<New_Output, Refiner_Error>(
+        refiner: Refiner<New_Output, Refiner_Error, Output>,
         /**
-         * if the stager fails, rework its error into the desired error type
+         * if the refiner fails, rework its error into the desired error type
          */
-        error_transformer: Transformer<Error, Stager_Error>,
+        error_transformer: Transformer<Error, Refiner_Error>,
     ): Query_Result<New_Output, Error>
 
     rework_error_temp<New_Error, Rework_Error>(
-        error_reworker: Stager<New_Error, Rework_Error, Error>,
+        error_reworker: Queryer<New_Error, Rework_Error, Error>,
         /**
          * if the reworker fails, we need to transform *that* error into the New_Error
          */

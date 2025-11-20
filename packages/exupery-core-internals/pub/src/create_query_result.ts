@@ -12,16 +12,25 @@ type Executer<Output, Error> = (
     on_error: ($: Error) => void,
 ) => void
 
-class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, Error> {
+
+type Stager<Output, Error, Input> = (
+    $: Input,
+) => _et.Query_Result<Output, Error>
+
+class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Error> {
     private executer: Executer<Output, Error>
     constructor(executer: Executer<Output, Error>) {
         this.executer = executer
+        this.query_result = null
     }
+
+    public query_result: null
+
 
     transform_result<New_Output>(
         transformer: _et.Transformer<New_Output, Output>
-    ): _et.Staging_Result<New_Output, Error> {
-        return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
+    ): _et.Query_Result<New_Output, Error> {
+        return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
                     on_result(transformer($))
@@ -33,8 +42,8 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
 
     transform_error_temp<New_Error>(
         error_transformer: _et.Transformer<New_Error, Error>,
-    ): _et.Staging_Result<Output, New_Error> {
-        return new Staging_Result_Class<Output, New_Error>((on_result, on_error) => {
+    ): _et.Query_Result<Output, New_Error> {
+        return new Query_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
                 on_result,
                 ($) => {
@@ -44,10 +53,10 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
         })
     }
 
-    stage_without_error_transformation<New_Output>(
-        stager: _et.Stager<New_Output, Error, Output>
-    ): _et.Staging_Result<New_Output, Error> {
-        return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
+    query_without_error_transformation<New_Output>(
+        stager: Stager<New_Output, Error, Output>
+    ): _et.Query_Result<New_Output, Error> {
+        return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
                     stager($).__extract_data(
@@ -60,11 +69,47 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
         })
     }
 
-    stage<New_Output, Stager_Error>(
-        stager: _et.Stager<New_Output, Stager_Error, Output>,
+    query<New_Output, Stager_Error>(
+        stager: Stager<New_Output, Stager_Error, Output>,
         error_transformer: _et.Transformer<Error, Stager_Error>,
-    ): _et.Staging_Result<New_Output, Error> {
-        return new Staging_Result_Class<New_Output, Error>((on_result, on_error) => {
+    ): _et.Query_Result<New_Output, Error> {
+        return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
+            this.executer(
+                ($) => {
+                    stager($).__extract_data(
+                        on_result,
+                        (stager_error) => {
+                            on_error(error_transformer(stager_error))
+                        },
+                    )
+                },
+                on_error,
+            )
+        })
+    }
+
+
+    refine_without_error_transformation<New_Output>(
+        refiner: Stager<New_Output, Error, Output>
+    ): _et.Query_Result<New_Output, Error> {
+        return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
+            this.executer(
+                ($) => {
+                    stager($).__extract_data(
+                        on_result,
+                        on_error,
+                    )
+                },
+                on_error,
+            )
+        })
+    }
+
+    query<New_Output, Stager_Error>(
+        stager: Stager<New_Output, Stager_Error, Output>,
+        error_transformer: _et.Transformer<Error, Stager_Error>,
+    ): _et.Query_Result<New_Output, Error> {
+        return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
                     stager($).__extract_data(
@@ -80,10 +125,10 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
     }
 
     rework_error_temp<New_Error, Rework_Error>(
-        error_reworker: _et.Stager<New_Error, Rework_Error, Error>,
+        error_reworker: Stager<New_Error, Rework_Error, Error>,
         rework_error_transformer: _et.Transformer<New_Error, Rework_Error>,
-    ): _et.Staging_Result<Output, New_Error> {
-        return new Staging_Result_Class<Output, New_Error>((on_result, on_error) => {
+    ): _et.Query_Result<Output, New_Error> {
+        return new Query_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
                 on_result,
                 ($) => {
@@ -109,9 +154,9 @@ class Staging_Result_Class<Output, Error> implements _et.Staging_Result<Output, 
 }
 
 
-export function __create_staging_result<T, E>(
+export function __create_Query_Result<T, E>(
     executer: Executer<T, E>,
-): _et.Staging_Result<T, E> {
-    return new Staging_Result_Class<T, E>(executer)
+): _et.Query_Result<T, E> {
+    return new Query_Result_Class<T, E>(executer)
 
 }
