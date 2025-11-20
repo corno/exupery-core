@@ -10,7 +10,7 @@ export interface Refinement_Result<Output, Error> {
     transform<Target>(
         output_transformer: Transformer<Target, Output>,
         error_transformer: Transformer<Target, Error>,
-    ): Refinement_Result<Target, Target>
+    ): Target
 
     transform_result<New_Output>(
         transformer: Transformer<New_Output, Output>

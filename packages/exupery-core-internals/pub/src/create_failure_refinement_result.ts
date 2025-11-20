@@ -12,28 +12,20 @@ type Executer<Output, Error> = (
     on_error: ($: Error) => void,
 ) => void
 
-type Queryer<Output, Error, Input> = (
-    $: Input,
-) => _et.Query_Result<Output, Error>
 
 type Refiner<Output, Error, Input> = (
     $: Input,
 ) => _et.Refinement_Result<Output, Error>
-
-class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Error> {
+class Refinement_Result_Class<Output, Error> implements _et.Refinement_Result<Output, Error> {
     private executer: Executer<Output, Error>
     constructor(executer: Executer<Output, Error>) {
         this.executer = executer
-        this.query_result = null
     }
-
-    public query_result: null
-
 
     transform_result<New_Output>(
         transformer: _et.Transformer<New_Output, Output>
-    ): _et.Query_Result<New_Output, Error> {
-        return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
+    ): _et.Refinement_Result<New_Output, Error> {
+        return new Refinement_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
                     on_result(transformer($))
@@ -45,8 +37,8 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
 
     transform_error_temp<New_Error>(
         error_transformer: _et.Transformer<New_Error, Error>,
-    ): _et.Query_Result<Output, New_Error> {
-        return new Query_Result_Class<Output, New_Error>((on_result, on_error) => {
+    ): _et.Refinement_Result<Output, New_Error> {
+        return new Refinement_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
                 on_result,
                 ($) => {
@@ -56,46 +48,10 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
         })
     }
 
-    query_without_error_transformation<New_Output>(
-        queryer: Queryer<New_Output, Error, Output>
-    ): _et.Query_Result<New_Output, Error> {
-        return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
-            this.executer(
-                ($) => {
-                    queryer($).__extract_data(
-                        on_result,
-                        on_error,
-                    )
-                },
-                on_error,
-            )
-        })
-    }
-
-    query<New_Output, Query_Error>(
-        queryer: Queryer<New_Output, Query_Error, Output>,
-        error_transformer: _et.Transformer<Error, Query_Error>,
-    ): _et.Query_Result<New_Output, Error> {
-        return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
-            this.executer(
-                ($) => {
-                    queryer($).__extract_data(
-                        on_result,
-                        (queryer_error) => {
-                            on_error(error_transformer(queryer_error))
-                        },
-                    )
-                },
-                on_error,
-            )
-        })
-    }
-
-
     refine_without_error_transformation<New_Output>(
         refiner: Refiner<New_Output, Error, Output>
-    ): _et.Query_Result<New_Output, Error> {
-        return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
+    ): _et.Refinement_Result<New_Output, Error> {
+        return new Refinement_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
                     refiner($).__extract_data(
@@ -108,14 +64,14 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
         })
     }
 
-    refine<New_Output, Refiner_Error>(
-        refiner: Refiner<New_Output, Refiner_Error, Output>,
-        error_transformer: _et.Transformer<Error, Refiner_Error>,
-    ): _et.Query_Result<New_Output, Error> {
-        return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
+    stage<New_Output, Stager_Error>(
+        stager: _et.Stager<New_Output, Stager_Error, Output>,
+        error_transformer: _et.Transformer<Error, Stager_Error>,
+    ): _et.Refinement_Result<New_Output, Error> {
+        return new Refinement_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
                 ($) => {
-                    refiner($).__extract_data(
+                    stager($).__extract_data(
                         on_result,
                         (stager_error) => {
                             on_error(error_transformer(stager_error))
@@ -128,10 +84,10 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
     }
 
     rework_error_temp<New_Error, Rework_Error>(
-        error_reworker: Queryer<New_Error, Rework_Error, Error>,
+        error_reworker: _et.Stager<New_Error, Rework_Error, Error>,
         rework_error_transformer: _et.Transformer<New_Error, Rework_Error>,
-    ): _et.Query_Result<Output, New_Error> {
-        return new Query_Result_Class<Output, New_Error>((on_result, on_error) => {
+    ): _et.Refinement_Result<Output, New_Error> {
+        return new Refinement_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
                 on_result,
                 ($) => {
@@ -157,9 +113,9 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
 }
 
 
-export function __create_Query_Result<T, E>(
+export function __create_Refinement_Result<T, E>(
     executer: Executer<T, E>,
-): _et.Query_Result<T, E> {
-    return new Query_Result_Class<T, E>(executer)
+): _et.Refinement_Result<T, E> {
+    return new Refinement_Result_Class<T, E>(executer)
 
 }
