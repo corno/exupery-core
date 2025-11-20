@@ -300,6 +300,7 @@ export namespace p {
     export const create_error_handling_context = <Target_Error, Block_Error>(
         command_block: Command_Block<Block_Error>,
         processor: (error: Block_Error) => _et.Command_Promise<Target_Error>,
+        new_error: Target_Error,
     ): _et.Command_Promise<Target_Error> => {
         return __create_command_promise({
             'execute': (
@@ -307,12 +308,12 @@ export namespace p {
                 on_error,
             ) => {
                 __sequence(command_block).__start(
-                    () => {
-                        on_error(_ei.panic("no error to process"))
-                    },
+                    on_success,
                     (e) => {
                         processor(e).__start(
-                            on_success,
+                            () => {
+                                on_error(new_error)
+                            },
                             on_error,
                         )
                     }
