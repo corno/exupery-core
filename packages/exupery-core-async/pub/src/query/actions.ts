@@ -8,11 +8,11 @@ export namespace q {
     export namespace dictionary {
 
         export const parallel = <Result, Error, Entry_Error>(
-            dictionary: _et.Dictionary<_et.Staging_Result<Result, Entry_Error>>,
+            dictionary: _et.Dictionary<_et.Query_Result<Result, Entry_Error>>,
             aggregate_errors: _et.Transformer<Error, _et.Dictionary<Entry_Error>>,
 
-        ): _et.Staging_Result<_et.Dictionary<Result>, Error> => {
-            return _ei.__create_staging_result((on_success, on_error) => {
+        ): _et.Query_Result<_et.Dictionary<Result>, Error> => {
+            return _ei.__create_query_result((on_success, on_error) => {
                 let has_errors = false
                 const errors_builder = _ei.create_procedural_dictionary_builder<Entry_Error>()
                 const results_builder = _ei.create_procedural_dictionary_builder<Result>()
@@ -46,9 +46,9 @@ export namespace q {
         }
 
         export const parallel_without_error_aggregation = <Result, Error>(
-            $: _et.Dictionary<_et.Staging_Result<Result, Error>>,
-        ): _et.Staging_Result<_et.Dictionary<Result>, _et.Dictionary<Error>> => {
-            return _ei.__create_staging_result((on_success, on_error) => {
+            $: _et.Dictionary<_et.Query_Result<Result, Error>>,
+        ): _et.Query_Result<_et.Dictionary<Result>, _et.Dictionary<Error>> => {
+            return _ei.__create_query_result((on_success, on_error) => {
                 let has_errors = false
                 const errors_builder = _ei.create_procedural_dictionary_builder<Error>()
                 const results_builder = _ei.create_procedural_dictionary_builder<Result>()
@@ -85,16 +85,16 @@ export namespace q {
 
     export const fixed = <Result, Error>(
         result: Result,
-    ): _et.Staging_Result<Result, Error> => {
-        return _ei.__create_staging_result((on_success, on_error) => {
+    ): _et.Query_Result<Result, Error> => {
+        return _ei.__create_query_result((on_success, on_error) => {
             on_success(result)
         })
     }
 
     export const raise_error = <T, E>(
         $: E
-    ): _et.Staging_Result<T, E> => {
-        return _ei.__create_staging_result((on_value, on_error) => {
+    ): _et.Query_Result<T, E> => {
+        return _ei.__create_query_result((on_value, on_error) => {
             on_error($)
         })
     }
