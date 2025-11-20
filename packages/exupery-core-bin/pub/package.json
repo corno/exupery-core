@@ -1,6 +1,6 @@
 {
   "name": "exupery-core-bin",
-  "version": "0.3.30",
+  "version": "0.3.31",
   "license": "ISC",
   "description": "this is one of the core packages for Exupery. it provides functionality to create executables",
   "author": "Corno",
