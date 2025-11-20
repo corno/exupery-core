@@ -23,6 +23,16 @@ export namespace p {
         })
     }
 
+    export const fail = <Error>(
+        error: Error,
+    ): _et.Command_Promise<Error> => {
+        return __create_command_promise({
+            'execute': (on_success, on_error) => {
+                on_error(error)
+            }
+        })
+    }
+
 
     export const if_ = <Error>(
         precondition: boolean,
