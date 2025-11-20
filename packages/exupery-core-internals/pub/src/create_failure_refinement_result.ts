@@ -33,90 +33,50 @@ class Failure_Refinement_Result_Class<Output, Error> implements _et.Refinement_R
     transform_result<New_Output>(
         transformer: _et.Transformer<New_Output, Output>
     ): _et.Refinement_Result<New_Output, Error> {
-        return this
+        return new Failure_Refinement_Result_Class<New_Output, Error>(this.error)
     }
 
     transform_error_temp<New_Error>(
         error_transformer: _et.Transformer<New_Error, Error>,
     ): _et.Refinement_Result<Output, New_Error> {
-        return new Failure_Refinement_Result_Class<Output, New_Error>((on_result, on_error) => {
-            this.executer(
-                on_result,
-                ($) => {
-                    on_error(error_transformer($))
-                },
-            )
-        })
+        return new Failure_Refinement_Result_Class<Output, New_Error>(error_transformer(this.error))
     }
 
     refine_without_error_transformation<New_Output>(
         refiner: Refiner<New_Output, Error, Output>
     ): _et.Refinement_Result<New_Output, Error> {
-        return new Failure_Refinement_Result_Class<New_Output, Error>((on_result, on_error) => {
-            this.executer(
-                ($) => {
-                    refiner($).__extract_data(
-                        on_result,
-                        on_error,
-                    )
-                },
-                on_error,
-            )
-        })
+        return new Failure_Refinement_Result_Class<New_Output, Error>(this.error)
     }
 
     refine<New_Output, Stager_Error>(
-        stager: _et.Stager<New_Output, Stager_Error, Output>,
+        stager: Refiner<New_Output, Stager_Error, Output>,
         error_transformer: _et.Transformer<Error, Stager_Error>,
     ): _et.Refinement_Result<New_Output, Error> {
-        return new Failure_Refinement_Result_Class<New_Output, Error>((on_result, on_error) => {
-            this.executer(
-                ($) => {
-                    stager($).__extract_data(
-                        on_result,
-                        (stager_error) => {
-                            on_error(error_transformer(stager_error))
-                        },
-                    )
-                },
-                on_error,
-            )
-        })
+        return new Failure_Refinement_Result_Class<New_Output, Error>(this.error)
     }
 
     rework_error_temp<New_Error, Rework_Error>(
-        error_reworker: _et.Stager<New_Error, Rework_Error, Error>,
+        error_reworker: Refiner<New_Error, Rework_Error, Error>,
         rework_error_transformer: _et.Transformer<New_Error, Rework_Error>,
     ): _et.Refinement_Result<Output, New_Error> {
-        return new Failure_Refinement_Result_Class<Output, New_Error>((on_result, on_error) => {
-            this.executer(
-                on_result,
-                ($) => {
-                    error_reworker($).__extract_data(
-                        (new_target_error) => {
-                            on_error(new_target_error)
-                        },
-                        (rework_error) => {
-                            on_error(rework_error_transformer(rework_error))
-                        },
-                    )
-                },
-            )
-        })
+        return error_reworker(this.error).transform(
+            ($) => new Failure_Refinement_Result_Class<Output, New_Error>($),
+            ($) => new Failure_Refinement_Result_Class<Output, New_Error>(rework_error_transformer($))
+        )
     }
 
     __extract_data(
         on_result: ($: Output) => void,
         on_error: ($: Error) => void,
     ): void {
-        this.executer(on_result, on_error)
+        on_error(this.error)
     }
 }
 
 
-export function __create_Refinement_Result<T, E>(
-    executer: Executer<T, E>,
+export function __create_failure_refinement_result<T, E>(
+    error: E,
 ): _et.Refinement_Result<T, E> {
-    return new Failure_Refinement_Result_Class<T, E>(executer)
+    return new Failure_Refinement_Result_Class<T, E>(error)
 
 }
