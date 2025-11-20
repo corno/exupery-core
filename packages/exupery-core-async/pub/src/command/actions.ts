@@ -385,7 +385,7 @@ export namespace p {
     }
 
 
-    export const stage = <Error, Staging_Output>(
+    export const stage_without_error_transformation = <Error, Staging_Output>(
         staging_result: _et.Staging_Result<Staging_Output, Error>,
         command_block: ($v: Staging_Output) => Command_Block<Error>,
     ): _et.Command_Promise<Error> => {
@@ -412,6 +412,38 @@ export namespace p {
             }
         })
     }
+
+
+    export const stage_with_error_transformation = <Error, Staging_Output, Staging_Error>(
+        staging_result: _et.Staging_Result<Staging_Output, Staging_Error>,
+        error_transformer: _et.Transformer<Error, Staging_Error>,
+        command_block: ($v: Staging_Output) => Command_Block<Error>,
+    ): _et.Command_Promise<Error> => {
+        return __create_command_promise({
+            'execute': (
+                on_success,
+                on_error,
+            ) => {
+                staging_result.__extract_data(
+                    (output) => {
+                        __sequence(command_block(output)).__start(
+                            () => {
+                                on_success()
+                            },
+                            (e) => {
+                                on_error(e)
+                            }
+                        )
+                    },
+                    (e) => {
+                        on_error(error_transformer(e))
+                    }
+                )
+            }
+        })
+    }
+
+
 
     export const stage_stacked = <Error, Staging_Output, Parent_Data>(
         staging_result: _et.Staging_Result<Staging_Output, Error>,
