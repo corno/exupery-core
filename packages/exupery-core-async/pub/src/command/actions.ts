@@ -23,31 +23,6 @@ export namespace p {
         })
     }
 
-    export namespace deprecated_assert {
-
-        export const query = <Error>(
-            assertion: _et.Staging_Result<boolean, Error>,
-            error_if_failed: Error,
-        ): _et.Command_Promise<Error> => {
-            return __create_command_promise({
-                'execute': (on_success, on_error) => {
-                    assertion.__extract_data(
-                        ($) => {
-                            if ($) {
-                                on_success()
-                            } else {
-                                on_error(error_if_failed)
-                            }
-                        },
-                        ($) => {
-                            on_error($)
-                        }
-                    )
-                }
-            })
-        }
-    }
-
 
     export const if_ = <Error>(
         precondition: boolean,
@@ -73,41 +48,6 @@ export namespace p {
                 }
             }
         })
-    }
-
-    export namespace deprecated_conditional {
-
-        export const query = <Error>(
-            precondition: _et.Staging_Result<boolean, Error>,
-            command: _et.Command_Promise<Error>,
-            else_command?: _et.Command_Promise<Error>,
-        ): _et.Command_Promise<Error> => {
-            return __create_command_promise({
-                'execute': (on_success, on_error) => {
-                    precondition.__extract_data(
-                        ($) => {
-                            if ($) {
-                                command.__start(
-                                    on_success,
-                                    on_error
-                                )
-                            } else {
-                                if (else_command !== undefined) {
-                                    else_command.__start(
-                                        on_success,
-                                        on_error
-                                    )
-                                } else {
-                                    on_success()
-                                }
-                            }
-                        },
-                        on_error
-                    )
-                }
-            })
-        }
-
     }
 
     export namespace list {
@@ -357,6 +297,30 @@ export namespace p {
         }
     }
 
+    export const create_error_handling_context = <Error, New_Error>(
+        command_block: Command_Block<Error>,
+        processor: (error: Error) => _et.Command_Promise<New_Error>,
+    ): _et.Command_Promise<New_Error> => {
+        return __create_command_promise({
+            'execute': (
+                on_success,
+                on_error,
+            ) => {
+                __sequence(command_block).__start(
+                    () => {
+                        on_error(_ei.panic("no error to process"))
+                    },
+                    (e) => {
+                        processor(e).__start(
+                            on_success,
+                            on_error,
+                        )
+                    }
+                )
+            }
+        })
+    }
+
 
     // Sequencing function:
     export const sequence = <Error>(
@@ -457,7 +421,7 @@ export namespace p {
             ) => {
                 staging_result.__extract_data(
                     (output) => {
-                      __sequence(command_block(output, parent_data)).__start(
+                        __sequence(command_block(output, parent_data)).__start(
                             () => {
                                 on_success()
                             },
@@ -474,5 +438,68 @@ export namespace p {
         })
     }
 
+
+
+
+    export namespace deprecated_conditional {
+
+        export const query = <Error>(
+            precondition: _et.Staging_Result<boolean, Error>,
+            command: _et.Command_Promise<Error>,
+            else_command?: _et.Command_Promise<Error>,
+        ): _et.Command_Promise<Error> => {
+            return __create_command_promise({
+                'execute': (on_success, on_error) => {
+                    precondition.__extract_data(
+                        ($) => {
+                            if ($) {
+                                command.__start(
+                                    on_success,
+                                    on_error
+                                )
+                            } else {
+                                if (else_command !== undefined) {
+                                    else_command.__start(
+                                        on_success,
+                                        on_error
+                                    )
+                                } else {
+                                    on_success()
+                                }
+                            }
+                        },
+                        on_error
+                    )
+                }
+            })
+        }
+
+    }
+
+
+    export namespace deprecated_assert {
+
+        export const query = <Error>(
+            assertion: _et.Staging_Result<boolean, Error>,
+            error_if_failed: Error,
+        ): _et.Command_Promise<Error> => {
+            return __create_command_promise({
+                'execute': (on_success, on_error) => {
+                    assertion.__extract_data(
+                        ($) => {
+                            if ($) {
+                                on_success()
+                            } else {
+                                on_error(error_if_failed)
+                            }
+                        },
+                        ($) => {
+                            on_error($)
+                        }
+                    )
+                }
+            })
+        }
+    }
 
 }
