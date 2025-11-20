@@ -1,9 +1,5 @@
+import { Refiner } from "./Refiner"
 import { Transformer } from "./Transformer"
-
-
-type Refiner<Output, Error, Input> = (
-    $: Input,
-) => Refinement_Result<Output, Error>
 
 export interface Refinement_Result<Output, Error> {
     transform<Target>(

@@ -1,15 +1,9 @@
+import { Queryer } from "./Queryer"
 import { Refinement_Result } from "./Refinement_Result"
+import { Refiner } from "./Refiner"
 import { Transformer } from "./Transformer"
 
 //Shoutout to Reinout for helping me with the naming here :)
-
-type Queryer<Output, Error, Input> = (
-    $: Input,
-) => Query_Result<Output, Error>
-
-type Refiner<Output, Error, Input> = (
-    $: Input,
-) => Refinement_Result<Output, Error>
 
 export interface Query_Result<Output, Error> {
     query_result: null
