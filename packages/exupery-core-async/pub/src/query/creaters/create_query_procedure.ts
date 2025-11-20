@@ -6,7 +6,7 @@ export const create_query_procedure = <Result, Error, Parameters, Queries>(
     handler: (
         $p: Parameters,
         $q: Queries,
-    ) => _et.Staging_Result<Result, Error>
+    ) => _et.Query_Result<Result, Error>
 ): _et.Query_Procedure<Result, Error, Parameters, Queries> => {
     return ($q) => ($p, error_transformer) => handler($p, $q).transform_error_temp(error_transformer)
 }

@@ -180,7 +180,7 @@ export namespace p {
         export namespace deprecated_parallel {
 
             export const query = <T, Error, Entry_Error>(
-                staging_result: _et.Staging_Result<_et.Dictionary<T>, Error>,
+                staging_result: _et.Query_Result<_et.Dictionary<T>, Error>,
                 block: (value: T, key: string) => Command_Block<Entry_Error>,
                 aggregate_errors: _et.Transformer<Error, _et.Dictionary<Entry_Error>>,
             ): _et.Command_Promise<Error> => {
@@ -360,8 +360,8 @@ export namespace p {
     }
 
 
-    export const stage_without_error_transformation = <Error, Staging_Output>(
-        staging_result: _et.Staging_Result<Staging_Output, Error>,
+    export const query_without_error_transformation = <Error, Staging_Output>(
+        staging_result: _et.Query_Result<Staging_Output, Error>,
         command_block: ($v: Staging_Output) => Command_Block<Error>,
     ): _et.Command_Promise<Error> => {
         return __create_command_promise({
@@ -389,8 +389,8 @@ export namespace p {
     }
 
 
-    export const stage_with_error_transformation = <Error, Staging_Output, Staging_Error>(
-        staging_result: _et.Staging_Result<Staging_Output, Staging_Error>,
+    export const query_with_error_transformation = <Error, Staging_Output, Staging_Error>(
+        staging_result: _et.Query_Result<Staging_Output, Staging_Error>,
         error_transformer: _et.Transformer<Error, Staging_Error>,
         command_block: ($v: Staging_Output) => Command_Block<Error>,
     ): _et.Command_Promise<Error> => {
@@ -420,8 +420,96 @@ export namespace p {
 
 
 
-    export const stage_stacked = <Error, Staging_Output, Parent_Data>(
-        staging_result: _et.Staging_Result<Staging_Output, Error>,
+    export const query_stacked = <Error, Staging_Output, Parent_Data>(
+        staging_result: _et.Query_Result<Staging_Output, Error>,
+        parent_data: Parent_Data,
+        command_block: ($v: Staging_Output, $parent: Parent_Data) => Command_Block<Error>,
+    ): _et.Command_Promise<Error> => {
+        return __create_command_promise({
+            'execute': (
+                on_success,
+                on_error,
+            ) => {
+                staging_result.__extract_data(
+                    (output) => {
+                        __sequence(command_block(output, parent_data)).__start(
+                            () => {
+                                on_success()
+                            },
+                            (e) => {
+                                on_error(e)
+                            }
+                        )
+                    },
+                    on_error
+                )
+            }
+        })
+    }
+
+
+    export const refine_without_error_transformation = <Error, Staging_Output>(
+        staging_result: _et.Refinement_Result<Staging_Output, Error>,
+        command_block: ($v: Staging_Output) => Command_Block<Error>,
+    ): _et.Command_Promise<Error> => {
+        return __create_command_promise({
+            'execute': (
+                on_success,
+                on_error,
+            ) => {
+                staging_result.__extract_data(
+                    (output) => {
+                        __sequence(command_block(output)).__start(
+                            () => {
+                                on_success()
+                            },
+                            (e) => {
+                                on_error(e)
+                            }
+                        )
+                    },
+                    (e) => {
+                        on_error(e)
+                    }
+                )
+            }
+        })
+    }
+
+
+    export const refine_with_error_transformation = <Error, Staging_Output, Staging_Error>(
+        staging_result: _et.Refinement_Result<Staging_Output, Staging_Error>,
+        error_transformer: _et.Transformer<Error, Staging_Error>,
+        command_block: ($v: Staging_Output) => Command_Block<Error>,
+    ): _et.Command_Promise<Error> => {
+        return __create_command_promise({
+            'execute': (
+                on_success,
+                on_error,
+            ) => {
+                staging_result.__extract_data(
+                    (output) => {
+                        __sequence(command_block(output)).__start(
+                            () => {
+                                on_success()
+                            },
+                            (e) => {
+                                on_error(e)
+                            }
+                        )
+                    },
+                    (e) => {
+                        on_error(error_transformer(e))
+                    }
+                )
+            }
+        })
+    }
+
+
+
+    export const refine_stacked = <Error, Staging_Output, Parent_Data>(
+        staging_result: _et.Refinement_Result<Staging_Output, Error>,
         parent_data: Parent_Data,
         command_block: ($v: Staging_Output, $parent: Parent_Data) => Command_Block<Error>,
     ): _et.Command_Promise<Error> => {
@@ -453,7 +541,7 @@ export namespace p {
     export namespace deprecated_conditional {
 
         export const query = <Error>(
-            precondition: _et.Staging_Result<boolean, Error>,
+            precondition: _et.Query_Result<boolean, Error>,
             command: _et.Command_Promise<Error>,
             else_command?: _et.Command_Promise<Error>,
         ): _et.Command_Promise<Error> => {
@@ -489,7 +577,7 @@ export namespace p {
     export namespace deprecated_assert {
 
         export const query = <Error>(
-            assertion: _et.Staging_Result<boolean, Error>,
+            assertion: _et.Query_Result<boolean, Error>,
             error_if_failed: Error,
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
