@@ -1,5 +1,5 @@
 import * as _et from 'exupery-core-types'
-import { __create_staging_result } from './create_staging_result'
+import { __create_staging_result } from './create_query_result'
 
 
 export namespace data_processing {
