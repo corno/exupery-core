@@ -35,7 +35,7 @@ class Success_Refinement_Result_Class<Output, Error> implements _et.Refinement_R
         return new Success_Refinement_Result_Class<New_Output, Error>(transformer(this.output))
     }
 
-    transform_error_temp<New_Error>(
+    deprecated_transform_error<New_Error>(
         error_transformer: _et.Transformer<New_Error, Error>,
     ): _et.Refinement_Result<Output, New_Error> {
         return new Success_Refinement_Result_Class<Output, New_Error>(this.output)
@@ -52,7 +52,7 @@ class Success_Refinement_Result_Class<Output, Error> implements _et.Refinement_R
         error_transformer: _et.Transformer<Error, Stager_Error>,
     ): _et.Refinement_Result<New_Output, Error> {
         //the error transform operation is here to satisfy the signature
-        return refiner(this.output).transform_error_temp(error_transformer)
+        return refiner(this.output).deprecated_transform_error(error_transformer)
     }
 
     rework_error_temp<New_Error, Rework_Error>(

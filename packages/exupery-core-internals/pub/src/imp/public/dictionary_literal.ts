@@ -25,9 +25,8 @@ class Dictionary<T> implements _et.Dictionary<T> {
         }))
     }
     deprecated_to_array(
-        compare: _et.Compare_Function<T>,
     ): _et.List<_et.Key_Value_Pair<T>> {
-        const sorted_keys = this.source.slice().sort(compare)
+        const sorted_keys = this.source.slice()
         return list_literal(sorted_keys)
     }
     __get_entry(

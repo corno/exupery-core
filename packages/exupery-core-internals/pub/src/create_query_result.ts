@@ -43,7 +43,7 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
         })
     }
 
-    transform_error_temp<New_Error>(
+    deprecated_transform_error<New_Error>(
         error_transformer: _et.Transformer<New_Error, Error>,
     ): _et.Query_Result<Output, New_Error> {
         return new Query_Result_Class<Output, New_Error>((on_result, on_error) => {
