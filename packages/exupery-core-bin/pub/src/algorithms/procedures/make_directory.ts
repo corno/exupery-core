@@ -5,8 +5,11 @@ import * as _et from 'exupery-core-types'
 import { mkdir as fs_mkdir } from "fs"
 
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/make_directory/data_types/target"
+
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/make_directory"
 
+
+import * as t_path from "exupery-resources/dist/implementation/transformers/path/text"
 
 export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_command((
     $p,
@@ -20,7 +23,7 @@ export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_
     return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
             fs_mkdir(
-                __possibly_escape_filename($p.path, $p['escape spaces in path']),
+                __possibly_escape_filename(t_path.Directory_Path($p.path), $p['escape spaces in path']),
                 {
                     'recursive': true,
                 },
