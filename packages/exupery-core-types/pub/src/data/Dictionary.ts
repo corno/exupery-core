@@ -6,8 +6,6 @@ export type Key_Value_Pair<T> = {
     readonly 'value': T
 }
 
-export type Compare_Function<T> = (a: Key_Value_Pair<T>, b: Key_Value_Pair<T>) => number
-
 /**
  * A Exupery dictionary.
  * unmutable and minimal by design
@@ -26,7 +24,7 @@ export interface Dictionary<T> {
      * iterates over all entries in a sorted manner
      */
     deprecated_to_array(
-        compare: Compare_Function<T>,
+        compare: (a: Key_Value_Pair<T>, b: Key_Value_Pair<T>) => number,
     ): List<Key_Value_Pair<T>>
 
     /**

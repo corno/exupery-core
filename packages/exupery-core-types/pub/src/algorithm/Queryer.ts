@@ -1,4 +1,4 @@
-import { Query_Result } from "./Query_Result";
+import { Query_Result } from "./Query_Result"
 
 export type Queryer<Output, Error, Input> = (
     $: Input,

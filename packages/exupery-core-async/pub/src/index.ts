@@ -1,6 +1,6 @@
 
 export * from "./query/creaters/create_query"
-export * from "./query/creaters/create_query_procedure"
+export * from "./query/creaters/create_query_function"
 
 export * from "./query/actions"
 

@@ -1,5 +1,4 @@
 import { Queryer } from "./Queryer"
-import { Refinement_Result } from "./Refinement_Result"
 import { Refiner } from "./Refiner"
 import { Transformer } from "./Transformer"
 
@@ -12,7 +11,7 @@ export interface Query_Result<Output, Error> {
         transformer: Transformer<New_Output, Output>
     ): Query_Result<New_Output, Error>
 
-    transform_error_temp<New_Error>(
+    deprecated_transform_error<New_Error>(
         error_transformer: Transformer<New_Error, Error>,
     ): Query_Result<Output, New_Error>
 

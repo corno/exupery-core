@@ -1,13 +1,9 @@
-import * as pt from "exupery-core-types"
+import * as _et from "exupery-core-types"
 
 /**
  * this is an implementation, not public by design
  */
-class Not_Set_Value<T> implements pt.Optional_Value<T> {
-
-    constructor() {
-        this.__raw = [false]
-    }
+class Not_Set_Value<T> implements _et.Optional_Value<T> {
 
     public transform<NT>(
         set: ($: T) => NT,
@@ -17,11 +13,9 @@ class Not_Set_Value<T> implements pt.Optional_Value<T> {
     }
 
     public map<NT>(
-        set: ($: T) => NT,
     ) {
         return not_set<NT>()
     }
-    __raw: pt.Raw_Optional_Value<T>
 }
 
 /**
@@ -30,6 +24,6 @@ class Not_Set_Value<T> implements pt.Optional_Value<T> {
  * creates a not set Optional_Value
  * @returns Optional_Value of type T
  */
-export function not_set<T>(): pt.Optional_Value<T> {
+export function not_set<T>(): _et.Optional_Value<T> {
     return new Not_Set_Value()
 }

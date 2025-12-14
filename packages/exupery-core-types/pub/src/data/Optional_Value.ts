@@ -1,10 +1,4 @@
 
-/**
- * this is literal data type, either [false] or [true, T]
- * the first entry of the tuple is thus 'false' or 'true'. If the first one is 'true',
- * then there is a second one containing the value T
- */
-export type Raw_Optional_Value<T> = readonly [false] | readonly [true, T]
 
 /**
  * Why this type and not use for example 'null | T'?
@@ -28,5 +22,4 @@ export interface Optional_Value<T> {
         set: ($: T) => NT,
     ): Optional_Value<NT>
 
-    __raw: Raw_Optional_Value<T>
 }

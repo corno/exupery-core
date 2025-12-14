@@ -1,4 +1,4 @@
-import { Optional_Value } from "./Optional_Value"
+import { Optional_Value } from "./data/Optional_Value"
 
 /**
  * A lookup is similar to a Dictionary, but much more basic.
