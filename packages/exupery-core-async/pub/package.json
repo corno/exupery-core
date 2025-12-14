@@ -22,7 +22,7 @@
     "url": "git+https://github.com/corno/exupery-core.git"
   },
   "dependencies": {
-    "exupery-core-internals": "^0.3.16",
-    "exupery-core-types": "^0.3.53"
+    "exupery-core-internals": "^0.3.17",
+    "exupery-core-types": "^0.3.55"
   }
 }
