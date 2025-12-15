@@ -23,7 +23,7 @@ export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_
     return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
             fs_mkdir(
-                __possibly_escape_filename(t_path.Directory_Path($p.path), $p['escape spaces in path']),
+                __possibly_escape_filename(t_path.Context_Path($p.path.context) + `/${$p.path.node}`, $p['escape spaces in path']),
                 {
                     'recursive': true,
                 },
