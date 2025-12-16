@@ -2,13 +2,14 @@ import * as _easync from 'exupery-core-async'
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
-import { rm as fs_rm } from "fs"
-
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/remove/data_types/target"
 import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/remove"
 
+import { rm as fs_rm } from "fs"
+import * as t_path_to_text from "exupery-resources/dist/implementation/transformers/path/text"
 
-export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_command( (
+
+export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_command((
     $p,
 ) => {
     const __possibly_escape_filename = (path: string, escape: boolean): string => {
@@ -20,7 +21,10 @@ export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_
     return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
             fs_rm(
-                __possibly_escape_filename($p.path.path, $p.path['escape spaces in path']),
+                __possibly_escape_filename(
+                    t_path_to_text.Node_Path($p.path.path),
+                    $p.path['escape spaces in path']
+                ),
                 {
                     'recursive': true,
                 },
