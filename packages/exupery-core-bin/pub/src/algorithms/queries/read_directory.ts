@@ -46,6 +46,10 @@ export const $$: _et.Query<d.Result, d.Error, d.Parameters> = _easync.__create_q
                         out[file.name] = {
                             'node type': file.isFile() ? ['file', null] : ['directory', null],
                             'context directory': t_path_to_path.node_path_to_context_path($p.path.path),
+                            'path': t_path_to_path.create_node_path(
+                                t_path_to_path.node_path_to_context_path($p.path.path),
+                                file.name,
+                            )
                         }
                     })
                     on_value(_ei.dictionary_literal(out))
