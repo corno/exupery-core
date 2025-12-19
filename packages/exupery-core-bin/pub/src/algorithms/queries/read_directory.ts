@@ -42,14 +42,16 @@ export const $$: _et.Query<d.Result, d.Error, d.Parameters> = _easync.__create_q
                     }))
                 } else {
                     const out: { [key: string]: d.Result.D } = {}
-                    files.forEach((file) => {
-                        out[file.name] = {
-                            'node type': file.isFile() ? ['file', null] : ['directory', null],
+                    files.forEach((node) => {
+                        out[node.name] = {
+                            'node type': node.isFile() 
+                            ? ['file', null] 
+                            : node.isDirectory() ? ['directory', null] : ['other', null],
                             'context directory': t_path_to_path.node_path_to_context_path($p.path.path),
                             'path': t_path_to_path.create_node_path(
                                 t_path_to_path.node_path_to_context_path($p.path.path),
                                 __possibly_escape_filename(
-                                    file.name,
+                                    node.name,
                                     $p.path['escape spaces in path']
                                 )
                             )
