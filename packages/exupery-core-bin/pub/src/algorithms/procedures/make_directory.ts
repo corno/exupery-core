@@ -14,16 +14,10 @@ import * as t_path from "exupery-resources/dist/implementation/transformers/path
 export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_command((
     $p,
 ) => {
-    const __possibly_escape_filename = (path: string, escape: boolean): string => {
-        if (escape) {
-            return path.replace(/ /g, '_')
-        }
-        return path
-    }
     return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
             fs_mkdir(
-                __possibly_escape_filename(t_path.Context_Path($p.path.context) + `/${$p.path.node}`, $p['escape spaces in path']),
+                t_path.Node_Path($p),
                 {
                     'recursive': true,
                 },

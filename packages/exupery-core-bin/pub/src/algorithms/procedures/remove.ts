@@ -12,19 +12,10 @@ import * as t_path_to_text from "exupery-resources/dist/implementation/transform
 export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_command((
     $p,
 ) => {
-    const __possibly_escape_filename = (path: string, escape: boolean): string => {
-        if (escape) {
-            return path.replace(/ /g, '_')
-        }
-        return path
-    }
     return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
             fs_rm(
-                __possibly_escape_filename(
-                    t_path_to_text.Node_Path($p.path.path),
-                    $p.path['escape spaces in path']
-                ),
+                t_path_to_text.Node_Path($p.path),
                 {
                     'recursive': true,
                 },

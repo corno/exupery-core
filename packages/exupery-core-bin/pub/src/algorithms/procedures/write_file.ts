@@ -17,17 +17,8 @@ export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_
     return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
 
-            const __possibly_escape_filename = (path: string, escape: boolean): string => {
-                if (escape) {
-                    return path.replace(/ /g, '_')
-                }
-                return path
-            }
             fs_mkdir(
-                __possibly_escape_filename(
-                    t_path_to_text.Context_Path($p.path.path.context),
-                    $p.path['escape spaces in path']
-                ),
+                t_path_to_text.Context_Path($p.path.context),
                 {
                     'recursive': true
                 },
@@ -42,10 +33,7 @@ export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_
                         return
                     }
                     fs_writeFile(
-                        __possibly_escape_filename(
-                            t_path_to_text.Node_Path($p.path.path),
-                            $p.path['escape spaces in path']
-                        ),
+                        t_path_to_text.Node_Path($p.path),
                         $p.data,
                         (err) => {
                             if (err) {
