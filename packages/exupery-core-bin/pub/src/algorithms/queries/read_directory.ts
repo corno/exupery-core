@@ -48,7 +48,10 @@ export const $$: _et.Query<d.Result, d.Error, d.Parameters> = _easync.__create_q
                             'context directory': t_path_to_path.node_path_to_context_path($p.path.path),
                             'path': t_path_to_path.create_node_path(
                                 t_path_to_path.node_path_to_context_path($p.path.path),
-                                file.name,
+                                __possibly_escape_filename(
+                                    file.name,
+                                    $p.path['escape spaces in path']
+                                )
                             )
                         }
                     })

@@ -388,38 +388,6 @@ export namespace p {
         })
     }
 
-
-    export const query_with_error_transformation = <Error, Staging_Output, Staging_Error>(
-        staging_result: _et.Query_Result<Staging_Output, Staging_Error>,
-        error_transformer: _et.Transformer<Error, Staging_Error>,
-        command_block: ($v: Staging_Output) => Command_Block<Error>,
-    ): _et.Command_Promise<Error> => {
-        return __create_command_promise({
-            'execute': (
-                on_success,
-                on_error,
-            ) => {
-                staging_result.__extract_data(
-                    (output) => {
-                        __sequence(command_block(output)).__start(
-                            () => {
-                                on_success()
-                            },
-                            (e) => {
-                                on_error(e)
-                            }
-                        )
-                    },
-                    (e) => {
-                        on_error(error_transformer(e))
-                    }
-                )
-            }
-        })
-    }
-
-
-
     export const query_stacked = <Error, Staging_Output, Parent_Data>(
         staging_result: _et.Query_Result<Staging_Output, Error>,
         parent_data: Parent_Data,
