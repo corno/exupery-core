@@ -38,10 +38,12 @@ export const $$: _et.Query<d.Result, d.Error, d.Parameters> = _easync.__create_q
                             'node type': node.isFile()
                                 ? ['file', null]
                                 : node.isDirectory() ? ['directory', null] : ['other', null],
-                            'context directory': t_path_to_path.node_path_to_context_path($p.path),
-                            'path': t_path_to_path.create_node_path(
-                                t_path_to_path.node_path_to_context_path($p.path),
-                                node.name,
+                            'context directory': t_path_to_path.deprecated_node_path_to_context_path($p.path),
+                            'path': t_path_to_path.extend_node_path(
+                                $p.path,
+                                {
+                                    'addition': node.name,
+                                }
                             )
                         }
                     })
