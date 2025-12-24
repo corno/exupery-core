@@ -1,12 +1,6 @@
+import { Refiner, Refiner_With_Parameters } from "./Refiner"
 
-export type Refiner_With_Parameters<Result, Error, Input, Parameters> = (
-    $: Input,
-    $p: Parameters,
-    abort: ($: Error) => never
-) => Result
+export type Deserializer_With_Parameters<Result, Error, Parameters> = Refiner_With_Parameters<Result, Error, string, Parameters>
 
 
-export type Refiner<Result, Error, Input> = (
-    $: Input,
-    abort: ($: Error) => never
-) => Result
+export type Deserializer<Result, Error> = Refiner<Result, Error, string>
