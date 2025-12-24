@@ -31,7 +31,7 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
 
 
     transform_result<New_Output>(
-        transformer: _et.Transformer<New_Output, Output>
+        transformer: _et.Transformer_New<Output, New_Output>
     ): _et.Query_Result<New_Output, Error> {
         return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
@@ -44,7 +44,7 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
     }
 
     deprecated_transform_error<New_Error>(
-        error_transformer: _et.Transformer<New_Error, Error>,
+        error_transformer: _et.Transformer_New<Error, New_Error>,
     ): _et.Query_Result<Output, New_Error> {
         return new Query_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
@@ -74,7 +74,7 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
 
     query<New_Output, Query_Error>(
         queryer: Queryer<New_Output, Query_Error, Output>,
-        error_transformer: _et.Transformer<Error, Query_Error>,
+        error_transformer: _et.Transformer_New<Query_Error, Error>,
     ): _et.Query_Result<New_Output, Error> {
         return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
@@ -110,7 +110,7 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
 
     refine<New_Output, Refiner_Error>(
         refiner: Refiner<New_Output, Refiner_Error, Output>,
-        error_transformer: _et.Transformer<Error, Refiner_Error>,
+        error_transformer: _et.Transformer_New<Refiner_Error, Error>,
     ): _et.Query_Result<New_Output, Error> {
         return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
             this.executer(
@@ -129,7 +129,7 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
 
     rework_error_temp<New_Error, Rework_Error>(
         error_reworker: Queryer<New_Error, Rework_Error, Error>,
-        rework_error_transformer: _et.Transformer<New_Error, Rework_Error>,
+        rework_error_transformer: _et.Transformer_New<Rework_Error, New_Error>,
     ): _et.Query_Result<Output, New_Error> {
         return new Query_Result_Class<Output, New_Error>((on_result, on_error) => {
             this.executer(
