@@ -92,7 +92,7 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
     }
 
 
-    refine_without_error_transformation<New_Output>(
+    deprecated_refine_old_without_error_transformation<New_Output>(
         refiner: Refiner<New_Output, Error, Output>
     ): _et.Query_Result<New_Output, Error> {
         return new Query_Result_Class<New_Output, Error>((on_result, on_error) => {
@@ -108,7 +108,7 @@ class Query_Result_Class<Output, Error> implements _et.Query_Result<Output, Erro
         })
     }
 
-    refine<New_Output, Refiner_Error>(
+    deprecated_refine_old<New_Output, Refiner_Error>(
         refiner: Refiner<New_Output, Refiner_Error, Output>,
         error_transformer: _et.Transformer<Refiner_Error, Error>,
     ): _et.Query_Result<New_Output, Error> {

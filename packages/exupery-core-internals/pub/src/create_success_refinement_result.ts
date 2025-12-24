@@ -41,13 +41,13 @@ class Success_Refinement_Result_Class<Output, Error> implements _et.Refinement_R
         return new Success_Refinement_Result_Class<Output, New_Error>(this.output)
     }
 
-    refine_without_error_transformation<New_Output>(
+    deprecated_refine_old_without_error_transformation<New_Output>(
         refiner: Refiner<New_Output, Error, Output>
     ): _et.Refinement_Result<New_Output, Error> {
         return refiner(this.output)
     }
 
-    refine<New_Output, Stager_Error>(
+    deprecated_refine_old<New_Output, Stager_Error>(
         refiner: Refiner<New_Output, Stager_Error, Output>,
         error_transformer: _et.Transformer<Stager_Error, Error>,
     ): _et.Refinement_Result<New_Output, Error> {
