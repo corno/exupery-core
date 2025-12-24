@@ -2,20 +2,24 @@ import * as _easync from 'exupery-core-async'
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
+//interface
+import * as resources from "exupery-resources/dist/interface/resources"
+
+//data types
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/remove/data_types/target"
-import { Signature } from "exupery-resources/dist/interface/algorithms/commands/remove"
 
+//dependencies
 import { rm as fs_rm } from "fs"
-import * as t_path_to_text from "exupery-resources/dist/implementation/transformers/path/text"
+import * as s_path from "exupery-resources/dist/implementation/serializers/schemas/path"
 
 
-export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_command((
+export const $$: resources.commands.remove = _easync.__create_resource_command((
     $p,
 ) => {
     return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
             fs_rm(
-                t_path_to_text.Node_Path($p.path),
+                s_path.Node_Path($p.path),
                 {
                     'recursive': true,
                 },

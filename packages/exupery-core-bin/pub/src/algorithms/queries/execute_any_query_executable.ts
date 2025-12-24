@@ -2,11 +2,14 @@ import * as _easync from 'exupery-core-async'
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
+//interface
+import * as resources from "exupery-resources/dist/interface/resources"
+
+//data types
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/execute_any_query_executable/data_types/target"
 
-
+//dependencies
 import { spawn } from "node:child_process"
-import { Signature } from "exupery-resources/dist/interface/algorithms/queries/execute_query_executable"
 
 
 /**
@@ -14,7 +17,7 @@ import { Signature } from "exupery-resources/dist/interface/algorithms/queries/e
  * The executable being executed is assumed to be side effect free
  * There is no way to give guarantees about that though
  */
-export const $$: _et.Query<d.Result, d.Error, d.Parameters> = _easync.__create_query(
+export const $$: resources.queries.execute_any_query_executable = _easync.__create_query(
     ($p,) => {
         const args = $p.args.__get_raw_copy()
         return _ei.__create_query_result((on_value, on_error) => {

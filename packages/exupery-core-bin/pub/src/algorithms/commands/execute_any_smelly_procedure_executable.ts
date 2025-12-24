@@ -2,8 +2,13 @@ import * as _easync from 'exupery-core-async'
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
-import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/execute_any_smelly_procedure_executable/data_types/target"
+//interface
+import * as resources from "exupery-resources/dist/interface/resources"
 
+//data types
+import * as d_easce from "exupery-resources/dist/interface/generated/pareto/schemas/execute_any_smelly_procedure_executable/data_types/target"
+
+//dependencies
 import { spawn } from "node:child_process"
 
 // import { Signature } from "exupery-resources/dist/interface/algorithms/commands/execute_smelly_procedure_executable"
@@ -14,7 +19,7 @@ import { spawn } from "node:child_process"
  * The executable being executed is assumed to only cause side effects
  * and not return any meaningful data, std::out is therefor ignored
  */
-export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_command( (
+export const $$: resources.commands.execute_any_smelly_command_executable = _easync.__create_resource_command( (
     $p,
 ) => {
     const args = $p.args.__get_raw_copy()
@@ -38,7 +43,7 @@ export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_
             })
 
             child.on("error", err => {
-                on_error(_ei.block((): d.Error => {
+                on_error(_ei.block((): d_easce.Error => {
                     return ['failed to spawn', { message: err instanceof Error ? err.message : `${err}` }]
                 }))
             })
@@ -49,7 +54,7 @@ export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_
                 if (exitCode === 0) {
                     on_success()
                 } else {
-                    on_error(_ei.block((): d.Error => {
+                    on_error(_ei.block((): d_easce.Error => {
                         return ['non zero exit code', {
                              'exit code': exitCode === null ? _ei.not_set() : _ei.set(exitCode),
                             'stderr': stderrData,

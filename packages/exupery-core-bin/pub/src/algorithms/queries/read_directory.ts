@@ -2,20 +2,24 @@ import * as _easync from 'exupery-core-async'
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
+//interface
+import * as resources from "exupery-resources/dist/interface/resources"
+
+//data types
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/read_directory/data_types/target"
-import { Signature } from "exupery-resources/dist/interface/algorithms/queries/read_directory"
 
+//dependencies
 import { readdir as fs_readdir } from "fs"
-import * as t_path_to_text from "exupery-resources/dist/implementation/transformers/path/text"
-import * as t_path_to_path from "exupery-resources/dist/implementation/transformers/path/path"
+import * as s_path from "exupery-resources/dist/implementation/serializers/schemas/path"
+import * as t_path_to_path from "exupery-resources/dist/implementation/transformers/schemas/path/path"
 
 
-export const $$: _et.Query<d.Result, d.Error, d.Parameters> = _easync.__create_query((
+export const $$: resources.queries.read_directory = _easync.__create_query((
     $p
 ) => {
     return _ei.__create_query_result((on_value, on_error) => {
         fs_readdir(
-            t_path_to_text.Node_Path($p.path),
+            s_path.Node_Path($p.path),
             {
                 'encoding': 'utf-8',
                 'withFileTypes': true,

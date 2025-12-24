@@ -2,18 +2,22 @@ import * as _easync from 'exupery-core-async'
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
-import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/read_file/data_types/target"
-import { Signature } from "exupery-resources/dist/interface/algorithms/queries/read_file"
+//interface
+import * as resources from "exupery-resources/dist/interface/resources"
 
-import * as t_path_to_text from "exupery-resources/dist/implementation/transformers/path/text"
+//data types
+import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/read_file/data_types/target"
+
+//dependencies
+import * as s_path from "exupery-resources/dist/implementation/serializers/schemas/path"
 import { readFile as fs_readFile } from "fs"
 
-export const $$: _et.Query<d.Result, d.Error, d.Parameters> = _easync.__create_query((
+export const $$: resources.queries.read_file = _easync.__create_query((
     $p
 ) => {
     return _ei.__create_query_result((on_value, on_error) => {
         fs_readFile(
-            t_path_to_text.Node_Path($p),
+            s_path.Node_Path($p),
             { 'encoding': 'utf-8' },
             (err, data) => {
                 if (err) {

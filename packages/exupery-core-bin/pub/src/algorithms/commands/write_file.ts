@@ -2,23 +2,24 @@ import * as _easync from 'exupery-core-async'
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
+//interface
+import * as resources from "exupery-resources/dist/interface/resources"
+
+//data types
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/write_file/data_types/target"
-import { Signature } from "exupery-resources/dist/interface/algorithms/commands/write_file"
 
+//dependencies
 import { mkdir as fs_mkdir, writeFile as fs_writeFile } from "fs"
+import * as s_path from "exupery-resources/dist/implementation/serializers/schemas/path"
 
-import { dirname as path_dirname } from "path"
-
-import * as t_path_to_text from "exupery-resources/dist/implementation/transformers/path/text"
-
-export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_command((
+export const $$: resources.commands.write_file = _easync.__create_resource_command((
     $p,
 ) => {
     return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
 
             fs_mkdir(
-                t_path_to_text.Context_Path($p.path.context),
+                s_path.Context_Path($p.path.context),
                 {
                     'recursive': true
                 },
@@ -33,7 +34,7 @@ export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_
                         return
                     }
                     fs_writeFile(
-                        t_path_to_text.Node_Path($p.path),
+                        s_path.Node_Path($p.path),
                         $p.data,
                         (err) => {
                             if (err) {

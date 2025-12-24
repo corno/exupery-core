@@ -2,22 +2,23 @@ import * as _easync from 'exupery-core-async'
 import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
-import { mkdir as fs_mkdir } from "fs"
+//interface
+import * as resources from "exupery-resources/dist/interface/resources"
 
+//data types
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/make_directory/data_types/target"
 
-import { Signature } from "exupery-resources/dist/interface/algorithms/commands/make_directory"
+//dependencies
+import { mkdir as fs_mkdir } from "fs"
+import * as s_path from "exupery-resources/dist/implementation/serializers/schemas/path"
 
-
-import * as t_path from "exupery-resources/dist/implementation/transformers/path/text"
-
-export const $$: _et.Command<d.Error, d.Parameters> = _easync.__create_resource_command((
+export const $$: resources.commands.make_directory = _easync.__create_resource_command((
     $p,
 ) => {
     return _easync.__create_command_promise({
         'execute': (on_success, on_error) => {
             fs_mkdir(
-                t_path.Node_Path($p),
+                s_path.Node_Path($p),
                 {
                     'recursive': true,
                 },

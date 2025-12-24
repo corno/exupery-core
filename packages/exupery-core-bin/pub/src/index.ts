@@ -19,7 +19,7 @@ import * as d_write_file from "exupery-resources/dist/interface/generated/pareto
 import * as d_write_to_stderr from "exupery-resources/dist/interface/generated/pareto/schemas/write_to_stderr/data_types/target"
 import * as d_write_to_stdout from "exupery-resources/dist/interface/generated/pareto/schemas/write_to_stdout/data_types/target"
 
-import * as d_main from "exupery-resources/dist/interface/temp_main"
+import * as d_main from "exupery-resources/dist/interface/to_be_generated/temp_main"
 
 import { $$ as p_copy_signature } from "./algorithms/commands/copy"
 import { $$ as p_execute_any_procedure_executable } from "./algorithms/commands/execute_any_procedure_executable"
