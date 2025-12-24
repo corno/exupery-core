@@ -9,7 +9,7 @@ export namespace q {
 
         export const parallel = <Result, Error, Entry_Error>(
             dictionary: _et.Dictionary<_et.Query_Result<Result, Entry_Error>>,
-            aggregate_errors: _et.Transformer_New<_et.Dictionary<Entry_Error>, Error>,
+            aggregate_errors: _et.Transformer<_et.Dictionary<Entry_Error>, Error>,
 
         ): _et.Query_Result<_et.Dictionary<Result>, Error> => {
             return _ei.__create_query_result((on_success, on_error) => {

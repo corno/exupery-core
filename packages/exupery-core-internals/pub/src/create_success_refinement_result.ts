@@ -23,20 +23,20 @@ class Success_Refinement_Result_Class<Output, Error> implements _et.Refinement_R
     }
 
     transform<Target>(
-        result_transformer: _et.Transformer_New<Output, Target>,
-        error_transformer: _et.Transformer_New<Error, Target>,
+        result_transformer: _et.Transformer<Output, Target>,
+        error_transformer: _et.Transformer<Error, Target>,
     ): Target {
         return result_transformer(this.output)
     }
 
     transform_result<New_Output>(
-        transformer: _et.Transformer_New<Output, New_Output>
+        transformer: _et.Transformer<Output, New_Output>
     ): _et.Refinement_Result<New_Output, Error> {
         return new Success_Refinement_Result_Class<New_Output, Error>(transformer(this.output))
     }
 
     deprecated_transform_error<New_Error>(
-        error_transformer: _et.Transformer_New<Error, New_Error>,
+        error_transformer: _et.Transformer<Error, New_Error>,
     ): _et.Refinement_Result<Output, New_Error> {
         return new Success_Refinement_Result_Class<Output, New_Error>(this.output)
     }
@@ -49,7 +49,7 @@ class Success_Refinement_Result_Class<Output, Error> implements _et.Refinement_R
 
     refine<New_Output, Stager_Error>(
         refiner: Refiner<New_Output, Stager_Error, Output>,
-        error_transformer: _et.Transformer_New<Stager_Error, Error>,
+        error_transformer: _et.Transformer<Stager_Error, Error>,
     ): _et.Refinement_Result<New_Output, Error> {
         //the error transform operation is here to satisfy the signature
         return refiner(this.output).deprecated_transform_error(error_transformer)
@@ -57,7 +57,7 @@ class Success_Refinement_Result_Class<Output, Error> implements _et.Refinement_R
 
     rework_error_temp<New_Error, Rework_Error>(
         error_reworker: Refiner<New_Error, Rework_Error, Error>,
-        rework_error_transformer: _et.Transformer_New<Rework_Error, New_Error>,
+        rework_error_transformer: _et.Transformer<Rework_Error, New_Error>,
     ): _et.Refinement_Result<Output, New_Error> {
         return new Success_Refinement_Result_Class<Output, New_Error>(this.output)
     }

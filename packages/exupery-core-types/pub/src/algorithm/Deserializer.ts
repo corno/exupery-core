@@ -1,5 +1,4 @@
 
-
 export type Refiner_With_Parameters<Result, Error, Input, Parameters> = (
     $: Input,
     $p: Parameters,
