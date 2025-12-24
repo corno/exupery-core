@@ -5,7 +5,7 @@ import * as _et from 'exupery-core-types'
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/execute_any_procedure_executable/data_types/target"
 
 import { spawn } from "node:child_process"
-import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/execute_procedure_executable"
+import { Signature } from "exupery-resources/dist/interface/algorithms/commands/execute_procedure_executable"
 
 
 /**

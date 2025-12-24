@@ -21,16 +21,16 @@ import * as d_write_to_stdout from "exupery-resources/dist/interface/generated/p
 
 import * as d_main from "exupery-resources/dist/interface/temp_main"
 
-import { $$ as p_copy_signature } from "./algorithms/procedures/copy"
-import { $$ as p_execute_any_procedure_executable } from "./algorithms/procedures/execute_any_procedure_executable"
-import { $$ as p_execute_any_smelly_procedure_executable } from "./algorithms/procedures/execute_any_smelly_procedure_executable"
-import { $$ as p_log } from "./algorithms/procedures/log"
-import { $$ as p_log_error } from "./algorithms/procedures/log_error"
-import { $$ as p_make_directory } from "./algorithms/procedures/make_directory"
-import { $$ as p_remove } from "./algorithms/procedures/remove"
-import { $$ as p_write_file } from "./algorithms/procedures/write_file"
-import { $$ as p_write_to_stderr } from "./algorithms/procedures/write_to_stderr"
-import { $$ as p_write_to_stdout } from "./algorithms/procedures/write_to_stdout"
+import { $$ as p_copy_signature } from "./algorithms/commands/copy"
+import { $$ as p_execute_any_procedure_executable } from "./algorithms/commands/execute_any_procedure_executable"
+import { $$ as p_execute_any_smelly_procedure_executable } from "./algorithms/commands/execute_any_smelly_procedure_executable"
+import { $$ as p_log } from "./algorithms/commands/log"
+import { $$ as p_log_error } from "./algorithms/commands/log_error"
+import { $$ as p_make_directory } from "./algorithms/commands/make_directory"
+import { $$ as p_remove } from "./algorithms/commands/remove"
+import { $$ as p_write_file } from "./algorithms/commands/write_file"
+import { $$ as p_write_to_stderr } from "./algorithms/commands/write_to_stderr"
+import { $$ as p_write_to_stdout } from "./algorithms/commands/write_to_stdout"
 
 
 import { $$ as q_execute_any_query_executable } from "./algorithms/queries/execute_any_query_executable"

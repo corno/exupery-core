@@ -3,7 +3,7 @@ import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/write_file/data_types/target"
-import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/write_file"
+import { Signature } from "exupery-resources/dist/interface/algorithms/commands/write_file"
 
 import { mkdir as fs_mkdir, writeFile as fs_writeFile } from "fs"
 

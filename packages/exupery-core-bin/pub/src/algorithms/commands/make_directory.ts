@@ -6,7 +6,7 @@ import { mkdir as fs_mkdir } from "fs"
 
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/make_directory/data_types/target"
 
-import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/make_directory"
+import { Signature } from "exupery-resources/dist/interface/algorithms/commands/make_directory"
 
 
 import * as t_path from "exupery-resources/dist/implementation/transformers/path/text"

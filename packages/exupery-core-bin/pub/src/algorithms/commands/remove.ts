@@ -3,7 +3,7 @@ import * as _ei from 'exupery-core-internals'
 import * as _et from 'exupery-core-types'
 
 import * as d from "exupery-resources/dist/interface/generated/pareto/schemas/remove/data_types/target"
-import { Signature } from "exupery-resources/dist/interface/algorithms/procedures/remove"
+import { Signature } from "exupery-resources/dist/interface/algorithms/commands/remove"
 
 import { rm as fs_rm } from "fs"
 import * as t_path_to_text from "exupery-resources/dist/implementation/transformers/path/text"
