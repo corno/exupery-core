@@ -8,7 +8,7 @@ export namespace r {
 
         export const parallel = <Result, Error, Entry_Error>(
             dictionary: _et.Dictionary<_et.Refinement_Result<Result, Entry_Error>>,
-            aggregate_errors: _et.Transformer<Error, _et.Dictionary<Entry_Error>>,
+            aggregate_errors: _et.Transformer_New<_et.Dictionary<Entry_Error>, Error>,
 
         ): _et.Refinement_Result<_et.Dictionary<Result>, Error> => {
             let has_errors = false
