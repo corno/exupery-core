@@ -1,6 +1,6 @@
 import { Queryer } from "./Queryer"
-import { Refiner } from "./Refiner"
-import { Transformer } from "./Transformer"
+import { Refiner_Old } from "./Refiner"
+import { Transformer_New } from "./Transformer"
 
 //Shoutout to Reinout for helping me with the naming here :)
 
@@ -8,11 +8,11 @@ export interface Query_Result<Output, Error> {
     query_result: null
 
     transform_result<New_Output>(
-        transformer: Transformer<New_Output, Output>
+        transformer: Transformer_New<Output, New_Output>
     ): Query_Result<New_Output, Error>
 
     deprecated_transform_error<New_Error>(
-        error_transformer: Transformer<New_Error, Error>,
+        error_transformer: Transformer_New<Error, New_Error>,
     ): Query_Result<Output, New_Error>
 
     query_without_error_transformation<New_Output>(
@@ -24,19 +24,19 @@ export interface Query_Result<Output, Error> {
         /**
          * if the query fails, rework its error into the desired error type
          */
-        error_transformer: Transformer<Error, Query_Error>,
+        error_transformer: Transformer_New<Query_Error, Error>,
     ): Query_Result<New_Output, Error>
 
     refine_without_error_transformation<New_Output>(
-        refiner: Refiner<New_Output, Error, Output>
+        refiner: Refiner_Old<New_Output, Error, Output>
     ): Query_Result<New_Output, Error>
     
     refine<New_Output, Refiner_Error>(
-        refiner: Refiner<New_Output, Refiner_Error, Output>,
+        refiner: Refiner_Old<New_Output, Refiner_Error, Output>,
         /**
          * if the refiner fails, rework its error into the desired error type
          */
-        error_transformer: Transformer<Error, Refiner_Error>,
+        error_transformer: Transformer_New<Refiner_Error, Error>,
     ): Query_Result<New_Output, Error>
 
     rework_error_temp<New_Error, Rework_Error>(
@@ -44,7 +44,7 @@ export interface Query_Result<Output, Error> {
         /**
          * if the reworker fails, we need to transform *that* error into the New_Error
          */
-        rework_error_transformer: Transformer<New_Error, Rework_Error>,
+        rework_error_transformer: Transformer_New<Rework_Error, New_Error>,
     ): Query_Result<Output, New_Error>
 
     __extract_data: (

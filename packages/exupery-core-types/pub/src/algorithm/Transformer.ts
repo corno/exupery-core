@@ -1,10 +1,10 @@
 
-export type Transformer_With_Parameters<Out, In, Parameters> = (
-    $: In,
+export type Transformer_New_With_Parameters<Input, Result, Parameters> = (
+    $: Input,
     $p: Parameters,
-) => Out
+) => Result
 
-export type Transformer<Out, In> = (
-    $: In,
-) => Out
+export type Transformer_New<Input, Result> = (
+    $: Input,
+) => Result
 
