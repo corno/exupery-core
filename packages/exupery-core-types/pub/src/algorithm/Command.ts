@@ -1,6 +1,6 @@
 import { Transformer } from "./Transformer"
 
-export type Command_Procedure<Error, Parameters, Command_Resources, Query_Resources> = ($c: Command_Resources, $q: Query_Resources) => Command<Error, Parameters>
+export type Command_Procedure<Command, Command_Resources, Query_Resources> = ($c: Command_Resources, $q: Query_Resources) => Command
 
 export type Command<Error, Parameters> = {
     //these are actions, and should ideally be written like execute.direct(Command, error_transformer, parameters)
