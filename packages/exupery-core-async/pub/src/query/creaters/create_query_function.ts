@@ -7,6 +7,6 @@ export const create_query_function = <Result, Error, Parameters, Queries>(
         $p: Parameters,
         $q: Queries,
     ) => _et.Query_Result<Result, Error>
-): _et.Query_Function<Result, Error, Parameters, Queries> => {
+): _et.Query_Function<_et.Query<Result, Error, Parameters>, Queries> => {
     return ($q) => ($p, error_transformer) => handler($p, $q).deprecated_transform_error(error_transformer)
 }

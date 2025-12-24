@@ -23,6 +23,6 @@
   },
   "dependencies": {
     "exupery-core-internals": "^0.3.19",
-    "exupery-core-types": "^0.3.59"
+    "exupery-core-types": "^0.3.61"
   }
 }

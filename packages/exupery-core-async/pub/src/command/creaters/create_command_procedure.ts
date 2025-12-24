@@ -12,7 +12,7 @@ export const create_command_procedure = <Error, Parameters, Command_Resources, Q
         $cr: Command_Resources,
         $qr: Query_Resources,
     ) => Command_Block<Error>,
-): _et.Command_Procedure<Error, Parameters, Command_Resources, Query_Resources> => {
+): _et.Command_Procedure<_et.Command<Error, Parameters>, Command_Resources, Query_Resources> => {
     return ($cr, $qr) => {
         return {
             'execute': (parameters, error_transformer) => {
