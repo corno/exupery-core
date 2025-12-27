@@ -39,6 +39,37 @@ class List_Class<T> implements _et.List<T> {
         return this.data.length === 0
     }
 
+    append_element(new_element: T): _et.List<T> {
+        const new_data = this.data.slice()
+        new_data.push(new_element)
+        return new List_Class(new_data)
+    }
+
+    prepend_element(new_element: T): _et.List<T> {
+        const new_data = this.data.slice()
+        new_data.unshift(new_element)
+        return new List_Class(new_data)
+    }
+
+    reverse(): _et.List<T> {
+        const new_data = this.data.slice()
+        new_data.reverse()
+        return new List_Class(new_data)
+    }
+
+    flatten<New_Type>(
+        handle_element: ($: T) => _et.List<New_Type>
+    ): _et.List<New_Type> {
+        const out: New_Type[] = []
+        this.data.forEach(($) => {
+            const inner_list = handle_element($)
+            inner_list.__for_each((inner_entry) => {
+                out.push(inner_entry)
+            })
+        })
+        return list_literal(out)
+    }
+
 
     //internal methods
     __for_each($i: ($: T) => void) {
