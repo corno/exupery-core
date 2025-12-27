@@ -3,6 +3,8 @@ import { Optional_Value } from "./data/Optional_Value"
 /**
  * A lookup is similar to a Dictionary, but much more basic.
  * There is only 1 operation: __get_entry.
+ * 
+ * this interface should be moved to the only place it is used; resolve_ordered_dictionary
  */
 export interface Lookup<T> {
     /**
@@ -10,7 +12,7 @@ export interface Lookup<T> {
      * 
      * @param key 
      */
-    __get_entry(
+    get_entry(
         key: string
     ): Optional_Value<T>
 }
