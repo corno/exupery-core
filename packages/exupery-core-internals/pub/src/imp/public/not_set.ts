@@ -16,6 +16,10 @@ class Not_Set_Value<T> implements _et.Optional_Value<T> {
     ) {
         return not_set<NT>()
     }
+
+    public is_set(): boolean {
+        return false
+    }
 }
 
 /**

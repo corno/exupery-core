@@ -25,6 +25,10 @@ class Set_Value<T> implements _et.Optional_Value<T> {
         return set(if_set(this.value))
     }
 
+    public is_set(): boolean {
+        return true
+    }
+
     value: T
 }
 
