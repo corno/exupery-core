@@ -44,7 +44,7 @@ export const wrap_dictionary = <T>(
 ): Dictionary<Source_Location, T> => {
     const location = get_location_info(depth + 1)
     function is_normal($: Raw_Or_Normal_Dictionary<T>): $ is _et.Dictionary<T> {
-        return $.__get_number_of_entries !== undefined && typeof $.__get_number_of_entries === "function"
+        return $.get_number_of_entries !== undefined && typeof $.get_number_of_entries === "function"
     }
     if (is_normal($)) {
         return {

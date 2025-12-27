@@ -12,7 +12,7 @@ export const __sequence = <Error>(
             on_error,
         ) => {
 
-            const length = _ei.list_literal(block).__get_number_of_elements()
+            const length = _ei.list_literal(block).get_number_of_elements()
             const runStep = (index: number) => {
                 if (index >= length) {
                     on_success()

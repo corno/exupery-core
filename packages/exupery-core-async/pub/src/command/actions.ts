@@ -92,7 +92,7 @@ export namespace p {
                         },
                         () => {
                             const errors = errors_builder['get list']()
-                            if (errors.__get_number_of_elements() === 0) {
+                            if (errors.is_empty()) {
                                 on_success()
                             } else {
                                 on_error(errors_aggregator(errors))
@@ -166,7 +166,7 @@ export namespace p {
                         },
                         () => {
                             const errors = errors_builder['get dictionary']()
-                            if (errors.__get_number_of_entries() === 0) {
+                            if (errors.is_empty()) {
                                 on_success()
                             } else {
                                 on_error(aggregate_errors(errors))
@@ -214,7 +214,7 @@ export namespace p {
                                     },
                                     () => {
                                         const errors = errors_builder['get dictionary']()
-                                        if (errors.__get_number_of_entries() === 0) {
+                                        if (errors.is_empty()) {
                                             on_success()
                                         } else {
                                             on_error(aggregate_errors(errors))
@@ -235,7 +235,10 @@ export namespace p {
         ): _et.Command_Promise<Error> => {
             return __create_command_promise({
                 'execute': (on_success, on_error) => {
-                    const as_list = dictionary.deprecated_to_array(() => 1)
+                    const as_list = dictionary.to_list(($, key) => ({
+                        'key': key,
+                        'value': $,
+                    }))
 
                     let current = 0
 
@@ -295,7 +298,7 @@ export namespace p {
                         },
                         () => {
                             const errors = errors_builder['get dictionary']()
-                            if (errors.__get_number_of_entries() === 0) {
+                            if (errors.is_empty()) {
                                 on_success()
                             } else {
                                 on_error(errors)
@@ -343,7 +346,7 @@ export namespace p {
                 on_error,
             ) => {
 
-                const length = _ei.list_literal(block).__get_number_of_elements()
+                const length = _ei.list_literal(block).get_number_of_elements()
                 const runStep = (index: number) => {
                     if (index >= length) {
                         on_success()
