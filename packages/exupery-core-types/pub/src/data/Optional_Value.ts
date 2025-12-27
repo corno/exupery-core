@@ -22,4 +22,6 @@ export interface Optional_Value<T> {
         set: ($: T) => NT,
     ): Optional_Value<NT>
 
+    is_set(): boolean
+
 }
