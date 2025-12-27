@@ -1,3 +1,4 @@
+import { Dictionary } from "./Dictionary"
 import { Optional_Value } from "./Optional_Value"
 
 /**
@@ -7,19 +8,29 @@ import { Optional_Value } from "./Optional_Value"
 export interface List<T> {
     /**
      * 
-     * @param handle_value callback to transform an individual entry.
+     * @param handle_element callback to transform an individual entry.
      */
     map<NT>(
-        handle_value: ($: T) => NT
+        handle_element: ($: T) => NT
     ): List<NT>
 
     filter<New_Type>(
-        handle_value: ($: T) => Optional_Value<New_Type>
+        handle_element: ($: T) => Optional_Value<New_Type>
     ): List<New_Type>
 
     get_number_of_elements(): number
 
     is_empty(): boolean
+
+    append_element(new_element: T): List<T>
+
+    prepend_element(new_element: T): List<T>
+
+    reverse(): List<T>
+
+    flatten<New_Type>(
+        handle_element: ($: T) => List<New_Type>
+    ): List<New_Type>
 
     __get_element_at(index: number): Optional_Value<T>
 
@@ -32,7 +43,7 @@ export interface List<T> {
      * @param $handle_value callback to process the entry
      */
     __for_each(
-        handle_value: ($: T) => void
+        handle_element: ($: T) => void
     ): void
 
 }
