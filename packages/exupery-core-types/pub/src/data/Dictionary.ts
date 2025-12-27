@@ -19,13 +19,11 @@ export interface Dictionary<T> {
         handle_value: ($: T, key: string) => NT
     ): Dictionary<NT>
 
+
     /**
-     * This method is only to be used by resources
-     * iterates over all entries in a sorted manner
+     * the ordering of the list will be the same as the insertion order in the dictionary
      */
-    deprecated_to_array(
-        compare: (a: Key_Value_Pair<T>, b: Key_Value_Pair<T>) => number,
-    ): List<Key_Value_Pair<T>>
+    to_list<New_Type>(handle_value: (value: T, key: string) => New_Type): List<New_Type>
 
     /**
      * This method is only to be used by resources
@@ -33,10 +31,15 @@ export interface Dictionary<T> {
      * 
      * @param key 
      */
-    __get_entry(
+    get_entry(
         key: string
     ): Optional_Value<T>
 
-    __get_number_of_entries(): number
+    get_number_of_entries(): number
 
+    filter<New_Type>(
+        handle_value: (value: T, key: string) => Optional_Value<New_Type>
+    ): Dictionary<T>
+
+    is_empty(): boolean
 }

@@ -44,18 +44,22 @@ export const build_text = (
 }
 
 
-export const deprecated_build_dictionary = <T>(
-    $: ($c: Dictionary_Builder<T>) => void
-): _et.Dictionary<T> => {
+export const build_dictionary = <T>(
+    $i: ($c: Dictionary_Builder<T>) => void
+): _et.Optional_Value<_et.Dictionary<T>> => {
     const temp: { [key: string]: T } = {}
-    $({
+    let found_duplicate = false
+    $i({
         'add entry': (key, $) => {
             if (key in temp) {
-                _ei.panic(`duplicate key in dictionary literal: ${key}`)
+                found_duplicate = true
             }
             temp[key] = $
         }
     })
-    return _ei.dictionary_literal(temp)
+    if (found_duplicate) {
+        return _ei.not_set()
+    }
+    return _ei.set(_ei.dictionary_literal(temp))
 }
 
