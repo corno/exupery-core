@@ -21,14 +21,30 @@ class List_Class<T> implements _et.List<T> {
     }
 
 
+    get_number_of_elements() {
+        return this.data.length
+    }
+
+    filter<New_Type>(handle_value: ($: T) => _et.Optional_Value<New_Type>): _et.List<New_Type> {
+        const out: New_Type[] = []
+        this.data.forEach(($) => {
+            handle_value($).map(($) => {
+                out.push($)
+            })
+        })
+        return list_literal(out)    
+    }
+
+    is_empty() {    
+        return this.data.length === 0
+    }
+
+
     //internal methods
     __for_each($i: ($: T) => void) {
         this.data.forEach(($) => {
             $i($)
         })
-    }
-    __get_number_of_elements() {
-        return this.data.length
     }
     __get_element_at(index: number) {
         if (index < 0 || index >= this.data.length) {

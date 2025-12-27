@@ -24,12 +24,29 @@ class Dictionary<T> implements _et.Dictionary<T> {
             }
         }))
     }
-    deprecated_to_array(
-    ): _et.List<_et.Key_Value_Pair<T>> {
-        const sorted_keys = this.source.slice()
-        return list_literal(sorted_keys)
+    to_list<New_Type>(
+        handle_value: (value: T, key: string) => New_Type
+    ): _et.List<New_Type> {
+        return list_literal(this.source.map(($) => {
+            return handle_value($.value, $.key)
+        }))
     }
-    __get_entry(
+
+    filter<New_Type>(handle_value: (value: T, key: string) => _et.Optional_Value<New_Type>): _et.Dictionary<New_Type> {
+        const out: _et.Key_Value_Pair<New_Type>[] = []
+        this.source.forEach(($) => {
+            const result = handle_value($.value, $.key)
+            result.map((new_value) => {
+                out.push({
+                    key: $.key,
+                    value: new_value
+                })
+            })
+        })
+        return new Dictionary<New_Type>(out)   
+    }
+
+    get_entry(
         key: string,
     ): _et.Optional_Value<T> {
         for (let i = 0; i !== this.source.length; i += 1) {
@@ -41,8 +58,12 @@ class Dictionary<T> implements _et.Dictionary<T> {
         return not_set()
     }
 
-    __get_number_of_entries(): number {
+    get_number_of_entries(): number {
         return this.source.length
+    }
+
+    is_empty(): boolean {
+        return this.source.length === 0
     }
 
 }

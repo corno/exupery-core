@@ -39,7 +39,7 @@ export interface Dictionary<T> {
 
     filter<New_Type>(
         handle_value: (value: T, key: string) => Optional_Value<New_Type>
-    ): Dictionary<T>
+    ): Dictionary<New_Type>
 
     is_empty(): boolean
 }
