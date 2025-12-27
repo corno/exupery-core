@@ -45,22 +45,19 @@ export const build_text = (
 
 
 export const build_dictionary = <T>(
-    $i: ($c: Dictionary_Builder<T>) => void
-): _et.Optional_Value<_et.Dictionary<T>> => {
+    $i: ($c: Dictionary_Builder<T>) => void,
+    abort: () => never
+): _et.Dictionary<T> => {
     const temp: { [key: string]: T } = {}
-    let found_duplicate = false
     $i({
         'add entry': (key, $) => {
             if (key in temp) {
-                found_duplicate = true
+                abort()
             }
             temp[key] = $
         }
     })
-    if (found_duplicate) {
-        return _ei.not_set()
-    }
-    return _ei.set(_ei.dictionary_literal(temp))
+    return _ei.dictionary_literal(temp)
 }
 
 
