@@ -16,6 +16,8 @@ export {
      */
     panic as deprecated_panic,
 
+    panic as unreachable_code_path,
+
 
     list_literal,
     dictionary_literal,

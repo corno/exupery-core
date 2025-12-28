@@ -11,3 +11,12 @@ export type Refiner<Result, Error, Input> = (
     $: Input,
     abort: ($: Error) => never
 ) => Result
+
+export type Refiner_Without_Error<Result, Input> = (
+    $: Input,
+) => Result
+
+export type Refiner_Without_Error_With_Parameters<Result, Input, Parameters> = (
+    $: Input,
+    $p: Parameters
+) => Result
